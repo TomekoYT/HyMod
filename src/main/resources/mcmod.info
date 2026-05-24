@@ -1,0 +1,17 @@
+[
+  {
+    "modid": "${mod_id}",
+    "name": "${mod_name}",
+    "description": "${mod_description}",
+    "version": "${mod_version}",
+    "mcversion": "${minecraft_version}",
+    "url": "https://modrinth.com/mod/${mod_id}",
+    "updateUrl": "https://modrinth.com/mod/${mod_id}",
+    "authorList": [
+      "Tomeko"
+    ],
+    "credits": "",
+    "logoFile": "assets/${mod_id}/icon.png",
+    "screenshots": []
+  }
+]
