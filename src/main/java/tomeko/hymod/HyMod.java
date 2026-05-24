@@ -9,11 +9,9 @@ import tomeko.hymod.utils.Constants;
 
 @Mod(modid = Constants.MOD_ID, name = Constants.MOD_NAME, version = Constants.MOD_VERSION, modLanguageAdapter = "cc.polyfrost.oneconfig.utils.KotlinLanguageAdapter")
 public class HyMod {
-    public static HyModConfig config;
-
     @Mod.EventHandler
     public void onInit(FMLInitializationEvent event) {
-        config = new HyModConfig();
+        HyModConfig.INSTANCE.getClass();
         EventManager.INSTANCE.register(this);
 
         CloseInactiveConfigScreen.register();
