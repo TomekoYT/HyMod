@@ -1,4 +1,4 @@
-package tomeko.hymod.gui;
+package tomeko.hymod.config;
 
 //? if = 1.8.9 {
 
