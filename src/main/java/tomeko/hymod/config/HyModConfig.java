@@ -15,13 +15,17 @@ public class HyModConfig extends Config {
         initialize();
     }
 
+    private static final String BEDWARS_CATEGORY = "Bedwars";
+
     @Header(
-            text = "Bedwars Resource Display"
+            text = "Bedwars Resource Display",
+            category = BEDWARS_CATEGORY
     )
     private static boolean bedwarsResourceDisplayHeader;
 
     @Switch(
-            name = "Enabled"
+            name = "Enabled",
+            category = BEDWARS_CATEGORY
     )
     public static boolean bedwarsResourceDisplayEnabled = true;
 }
