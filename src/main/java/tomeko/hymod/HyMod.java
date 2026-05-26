@@ -1,15 +1,13 @@
 package tomeko.hymod;
 
 import cc.polyfrost.oneconfig.events.EventManager;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import tomeko.hymod.config.HyModConfig;
-import tomeko.hymod.config.CloseInactiveConfigScreen;
-import tomeko.hymod.gui.ItemTracker;
-import tomeko.hymod.utils.Constants;
+import tomeko.hymod.config.*;
+import tomeko.hymod.gui.*;
+import tomeko.hymod.utils.*;
 
-@Mod(modid = Constants.MOD_ID, name = Constants.MOD_NAME, version = Constants.MOD_VERSION, modLanguageAdapter = "cc.polyfrost.oneconfig.utils.KotlinLanguageAdapter")
+@Mod(modid = Constants.MOD_ID, name = Constants.MOD_NAME, version = Constants.MOD_VERSION, modLanguageAdapter = "cc.polyfrost.oneconfig.utils.KotlinLanguageAdapter", dependencies = "required-after:hypixel_mod_api")
 public class HyMod {
     @Mod.EventHandler
     public void onInit(FMLInitializationEvent event) {
@@ -20,5 +18,7 @@ public class HyMod {
         CloseInactiveConfigScreen.register();
 
         ItemTracker.register();
+
+        HypixelPackets.register();
     }
 }

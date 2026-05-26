@@ -11,6 +11,7 @@ val base_group: String by project
 val java_version: String by project
 val minecraft_version: String by project
 
+val hypixel_mod_api_version: String by project
 
 plugins {
     idea
@@ -63,6 +64,7 @@ repositories {
     mavenCentral()
     maven("https://repo.spongepowered.org/maven/")
     maven("https://repo.polyfrost.cc/releases")
+    maven("https://repo.hypixel.net/repository/Hypixel/")
 }
 
 val shadowImpl: Configuration by configurations.creating {
@@ -84,6 +86,8 @@ dependencies {
 
     compileOnly("cc.polyfrost:oneconfig-$minecraft_version-forge:0.2.2-alpha+")
     shadowImpl("cc.polyfrost:oneconfig-wrapper-launchwrapper:1.0.0-beta+")
+
+    modImplementation("net.hypixel:mod-api-forge:$hypixel_mod_api_version")
 }
 
 bloom {
