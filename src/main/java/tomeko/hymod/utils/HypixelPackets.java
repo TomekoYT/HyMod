@@ -23,6 +23,6 @@ public class HypixelPackets {
         onHypixel = true;
 
         inSkyblock = packet.getServerType().get().getName().equalsIgnoreCase("skyblock");
-        inBedwars = packet.getServerType().get().getName().equalsIgnoreCase("bedwars");
+        inBedwars = packet.getServerType().get().getName().equalsIgnoreCase("bed wars");
     }
 }

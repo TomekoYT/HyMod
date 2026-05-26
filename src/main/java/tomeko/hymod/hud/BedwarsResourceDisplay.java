@@ -14,6 +14,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import tomeko.hymod.gui.ItemTracker;
+import tomeko.hymod.utils.HypixelPackets;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class BedwarsResourceDisplay extends BasicHud {
     @Slider(name = "Item Padding", min = 0f, max = 10f)
     public int itemPadding = 5;
 
-    @Slider(name = "Icon Padding",  min = 0f, max = 10f)
+    @Slider(name = "Icon Padding", min = 0f, max = 10f)
     public int iconPadding = 5;
 
     @Dropdown(name = "Text Type", options = {"No Shadow", "Shadow", "Full Shadow"})
@@ -52,6 +53,8 @@ public class BedwarsResourceDisplay extends BasicHud {
 
     @Override
     public void draw(UMatrixStack matrices, float x, float y, float scale, boolean example) {
+        if (!example && !HypixelPackets.inBedwars) return;
+
         float iconSize = 16f;
         float offset = iconSize + itemPadding;
 

@@ -12,6 +12,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import tomeko.hymod.hud.BedwarsResourceDisplay;
+import tomeko.hymod.utils.HypixelPackets;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -111,6 +112,13 @@ public class ItemTracker {
 
         String id = "minecraft:" + name.toLowerCase().replace(" ", "_");
         enderChest.put(Item.getByNameOrId(id), amount);
+    }
+
+    @SubscribeEvent
+    public void stopTracking(TickEvent.ClientTickEvent event) {
+        if (event.phase != TickEvent.Phase.END || HypixelPackets.inBedwars) return;
+
+        resetTracker();
     }
 
     private static void resetTracker() {
