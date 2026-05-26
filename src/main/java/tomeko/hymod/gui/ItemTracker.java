@@ -38,10 +38,7 @@ public class ItemTracker {
     public static void register() {
         MinecraftForge.EVENT_BUS.register(new ItemTracker());
 
-        for (Item item : BedwarsResourceDisplay.items) {
-            inventory.put(item, 0);
-            enderChest.put(item, 0);
-        }
+        resetTracker();
     }
 
     @SubscribeEvent
@@ -114,5 +111,12 @@ public class ItemTracker {
 
         String id = "minecraft:" + name.toLowerCase().replace(" ", "_");
         enderChest.put(Item.getByNameOrId(id), amount);
+    }
+
+    private static void resetTracker() {
+        for (Item item : BedwarsResourceDisplay.items) {
+            inventory.put(item, 0);
+            enderChest.put(item, 0);
+        }
     }
 }
