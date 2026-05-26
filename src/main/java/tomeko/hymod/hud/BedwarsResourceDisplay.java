@@ -10,6 +10,7 @@ import cc.polyfrost.oneconfig.renderer.TextRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import tomeko.hymod.gui.ItemTracker;
 
@@ -38,13 +39,13 @@ public class BedwarsResourceDisplay extends BasicHud {
     private static final int iconPadding = 5;
 
     @Exclude
-    public static List<ItemStack> items = new ArrayList<>();
+    public static List<Item> items = new ArrayList<>();
 
     static {
-        items.add(new ItemStack(Items.iron_ingot));
-        items.add(new ItemStack(Items.gold_ingot));
-        items.add(new ItemStack(Items.diamond));
-        items.add(new ItemStack(Items.emerald));
+        items.add(Items.iron_ingot);
+        items.add(Items.gold_ingot);
+        items.add(Items.diamond);
+        items.add(Items.emerald);
     }
 
     @Override
@@ -53,7 +54,7 @@ public class BedwarsResourceDisplay extends BasicHud {
         float offset = iconSize + padding;
 
         int longestWidth = 0;
-        for (ItemStack item : items) {
+        for (Item item : items) {
             longestWidth = Math.max(longestWidth, mc.fontRendererObj.getStringWidth(getText(item)));
         }
 
@@ -63,7 +64,9 @@ public class BedwarsResourceDisplay extends BasicHud {
         UGraphics.GL.scale(scale, scale, 1f);
         UGraphics.GL.translate(x / scale, y / scale, 0f);
 
-        for (ItemStack item : items) {
+        for (Item item : items) {
+            ItemStack stack = new ItemStack(item);
+
             int itemY = (int) (size * offset);
             int iconX = 0;
 
@@ -72,9 +75,9 @@ public class BedwarsResourceDisplay extends BasicHud {
             RenderHelper.enableGUIStandardItemLighting();
             mc.getRenderItem().zLevel = 200f;
 
-            mc.getRenderItem().renderItemAndEffectIntoGUI(item, iconX, itemY);
+            mc.getRenderItem().renderItemAndEffectIntoGUI(stack, iconX, itemY);
 
-            mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRendererObj, item, 0, 0, "");
+            mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRendererObj, stack, 0, 0, "");
 
             RenderHelper.disableStandardItemLighting();
 
@@ -105,7 +108,7 @@ public class BedwarsResourceDisplay extends BasicHud {
         return actualHeight * scale;
     }
 
-    private String getText(ItemStack item) {
+    private String getText(Item item) {
         int inventoryAmount = ItemTracker.inventory.get(item);
         int enderChestAmount = ItemTracker.enderChest.get(item);
         return inventoryAmount + " + " + enderChestAmount + " (" + (inventoryAmount + enderChestAmount) + ")";
