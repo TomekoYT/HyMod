@@ -1,5 +1,6 @@
 package tomeko.hymod.hud;
 
+import cc.polyfrost.oneconfig.config.annotations.Exclude;
 import cc.polyfrost.oneconfig.config.core.OneColor;
 import cc.polyfrost.oneconfig.hud.BasicHud;
 import cc.polyfrost.oneconfig.libs.universal.UGraphics;
@@ -9,7 +10,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import tomeko.hymod.config.HyModConfig;
 import tomeko.hymod.gui.ItemTracker;
 
 import java.util.ArrayList;
@@ -20,16 +20,23 @@ public class BedwarsResourceDisplay extends BasicHud {
         super(true);
     }
 
+    @Exclude
     private static final Minecraft mc = Minecraft.getMinecraft();
 
+    @Exclude
     private static float actualWidth = 0.0f;
+    @Exclude
     private static float actualHeight = 0.0f;
 
+    @Exclude
     private static final int padding = 5;
+    @Exclude
     private static final int iconPadding = 5;
 
+    @Exclude
     private static final int textType = 2;
 
+    @Exclude
     public static List<ItemStack> items = new ArrayList<>();
 
     static {
@@ -41,8 +48,6 @@ public class BedwarsResourceDisplay extends BasicHud {
 
     @Override
     public void draw(UMatrixStack matrices, float x, float y, float scale, boolean example) {
-        if (!HyModConfig.bedwarsResourceDisplayEnabled) return;
-
         float iconSize = 16f;
         float offset = iconSize + padding;
 
