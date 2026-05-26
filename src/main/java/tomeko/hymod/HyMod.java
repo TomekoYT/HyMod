@@ -21,6 +21,6 @@ public class HyMod {
 
         CloseInactiveConfigScreen.register();
 
-        MinecraftForge.EVENT_BUS.register(new ItemTracker());
+        ItemTracker.register();
     }
 }

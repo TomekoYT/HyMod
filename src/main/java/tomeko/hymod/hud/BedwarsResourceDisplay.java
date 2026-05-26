@@ -1,5 +1,6 @@
 package tomeko.hymod.hud;
 
+import cc.polyfrost.oneconfig.config.annotations.Dropdown;
 import cc.polyfrost.oneconfig.config.annotations.Exclude;
 import cc.polyfrost.oneconfig.config.core.OneColor;
 import cc.polyfrost.oneconfig.hud.BasicHud;
@@ -20,6 +21,9 @@ public class BedwarsResourceDisplay extends BasicHud {
         super(true);
     }
 
+    @Dropdown(name = "Text Type", options = {"No Shadow", "Shadow", "Full Shadow"})
+    public final int textType = 0;
+
     @Exclude
     private static final Minecraft mc = Minecraft.getMinecraft();
 
@@ -32,9 +36,6 @@ public class BedwarsResourceDisplay extends BasicHud {
     private static final int padding = 5;
     @Exclude
     private static final int iconPadding = 5;
-
-    @Exclude
-    private static final int textType = 2;
 
     @Exclude
     public static List<ItemStack> items = new ArrayList<>();
@@ -52,11 +53,10 @@ public class BedwarsResourceDisplay extends BasicHud {
         float offset = iconSize + padding;
 
         int longestWidth = 0;
-        for (Integer amount : ItemTracker.inventory.values()) {
-            longestWidth = Math.max(longestWidth, mc.fontRendererObj.getStringWidth(amount.toString()));
+        for (ItemStack item : items) {
+            longestWidth = Math.max(longestWidth, mc.fontRendererObj.getStringWidth(getText(item)));
         }
 
-        int lastWidth = 0;
         int size = 0;
 
         UGraphics.GL.pushMatrix();
@@ -64,13 +64,8 @@ public class BedwarsResourceDisplay extends BasicHud {
         UGraphics.GL.translate(x / scale, y / scale, 0f);
 
         for (ItemStack item : items) {
-            int amount = ItemTracker.inventory.get(item);
-
-            String text = String.valueOf(amount);
-            int textWidth = mc.fontRendererObj.getStringWidth(text);
-
             int itemY = (int) (size * offset);
-            int iconX = lastWidth;
+            int iconX = 0;
 
             int textX = (int) (iconSize + iconPadding);
 
@@ -84,7 +79,7 @@ public class BedwarsResourceDisplay extends BasicHud {
             RenderHelper.disableStandardItemLighting();
 
             TextRenderer.drawScaledString(
-                    text,
+                    getText(item),
                     (float) textX, itemY + mc.fontRendererObj.FONT_HEIGHT / 2f,
                     new OneColor(255, 255, 255).getRGB(),
                     TextRenderer.TextType.toType(textType),
@@ -108,5 +103,11 @@ public class BedwarsResourceDisplay extends BasicHud {
     @Override
     public float getHeight(float scale, boolean example) {
         return actualHeight * scale;
+    }
+
+    private String getText(ItemStack item) {
+        int inventoryAmount = ItemTracker.inventory.get(item);
+        int enderChestAmount = ItemTracker.enderChest.get(item);
+        return inventoryAmount + " + " + enderChestAmount + " (" + (inventoryAmount + enderChestAmount) + ")";
     }
 }
