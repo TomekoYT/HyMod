@@ -1,10 +1,12 @@
 package tomeko.hymod.config;
 
 import cc.polyfrost.oneconfig.config.Config;
+import cc.polyfrost.oneconfig.config.annotations.HUD;
 import cc.polyfrost.oneconfig.config.annotations.Header;
 import cc.polyfrost.oneconfig.config.annotations.Switch;
 import cc.polyfrost.oneconfig.config.data.Mod;
 import cc.polyfrost.oneconfig.config.data.ModType;
+import tomeko.hymod.hud.BedwarsResourceDisplay;
 import tomeko.hymod.utils.Constants;
 
 public class HyModConfig extends Config {
@@ -17,11 +19,11 @@ public class HyModConfig extends Config {
 
     private static final String BEDWARS_CATEGORY = "Bedwars";
 
-    @Header(
-            text = "Bedwars Resource Display",
+    @HUD(
+            name = "Bedwars Resource Display",
             category = BEDWARS_CATEGORY
     )
-    private static boolean bedwarsResourceDisplayHeader;
+    public BedwarsResourceDisplay bedwarsResourceDisplay = new BedwarsResourceDisplay();
 
     @Switch(
             name = "Enabled",
