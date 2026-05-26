@@ -3,6 +3,7 @@ package tomeko.hymod;
 import cc.polyfrost.oneconfig.events.EventManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import tomeko.hymod.chat.*;
 import tomeko.hymod.config.*;
 import tomeko.hymod.gui.*;
 import tomeko.hymod.utils.*;
@@ -18,6 +19,9 @@ public class HyMod {
         CloseInactiveConfigScreen.register();
 
         ItemTracker.register();
+
+        HideGuildMOTD.register();
+        WhiteChatMessages.register();
 
         HypixelPackets.register();
     }
