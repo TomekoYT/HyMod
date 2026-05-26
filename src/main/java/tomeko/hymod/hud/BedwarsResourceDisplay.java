@@ -2,6 +2,7 @@ package tomeko.hymod.hud;
 
 import cc.polyfrost.oneconfig.config.annotations.Dropdown;
 import cc.polyfrost.oneconfig.config.annotations.Exclude;
+import cc.polyfrost.oneconfig.config.annotations.Slider;
 import cc.polyfrost.oneconfig.config.core.OneColor;
 import cc.polyfrost.oneconfig.hud.BasicHud;
 import cc.polyfrost.oneconfig.libs.universal.UGraphics;
@@ -22,8 +23,14 @@ public class BedwarsResourceDisplay extends BasicHud {
         super(true);
     }
 
+    @Slider(name = "Item Padding", min = 0f, max = 10f)
+    public int itemPadding = 5;
+
+    @Slider(name = "Icon Padding",  min = 0f, max = 10f)
+    public int iconPadding = 5;
+
     @Dropdown(name = "Text Type", options = {"No Shadow", "Shadow", "Full Shadow"})
-    public final int textType = 0;
+    public int textType = 0;
 
     @Exclude
     private static final Minecraft mc = Minecraft.getMinecraft();
@@ -32,11 +39,6 @@ public class BedwarsResourceDisplay extends BasicHud {
     private static float actualWidth = 0.0f;
     @Exclude
     private static float actualHeight = 0.0f;
-
-    @Exclude
-    private static final int padding = 5;
-    @Exclude
-    private static final int iconPadding = 5;
 
     @Exclude
     public static List<Item> items = new ArrayList<>();
@@ -51,7 +53,7 @@ public class BedwarsResourceDisplay extends BasicHud {
     @Override
     public void draw(UMatrixStack matrices, float x, float y, float scale, boolean example) {
         float iconSize = 16f;
-        float offset = iconSize + padding;
+        float offset = iconSize + itemPadding;
 
         int longestWidth = 0;
         for (Item item : items) {
@@ -95,7 +97,7 @@ public class BedwarsResourceDisplay extends BasicHud {
         UGraphics.GL.popMatrix();
 
         actualWidth = longestWidth + iconPadding + iconSize;
-        actualHeight = size * offset - padding;
+        actualHeight = size * offset - itemPadding;
     }
 
     @Override
