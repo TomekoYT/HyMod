@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import tomeko.hymod.gui.ItemTracker;
+import tomeko.hymod.utils.ItemTracker;
 import tomeko.hymod.utils.HypixelPackets;
 
 import java.util.ArrayList;
