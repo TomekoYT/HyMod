@@ -1,4 +1,4 @@
-package tomeko.hymod.gui;
+package tomeko.hymod.utils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiChest;
@@ -12,7 +12,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import tomeko.hymod.hud.BedwarsResourceDisplay;
-import tomeko.hymod.utils.HypixelPackets;
 
 import java.util.ArrayList;
 import java.util.HashMap;
