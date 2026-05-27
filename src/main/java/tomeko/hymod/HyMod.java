@@ -4,6 +4,7 @@ import cc.polyfrost.oneconfig.events.EventManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import tomeko.hymod.chat.*;
+import tomeko.hymod.commands.*;
 import tomeko.hymod.config.*;
 import tomeko.hymod.gui.*;
 import tomeko.hymod.utils.*;
@@ -14,14 +15,15 @@ public class HyMod {
     public void onInit(FMLInitializationEvent event) {
         EventManager.INSTANCE.register(this);
 
-        new HyModConfig();
-
-        CloseInactiveConfigScreen.register();
-
-        ItemTracker.register();
-
         HideGuildMOTD.register();
         WhiteChatMessages.register();
+
+        SendCoordsCommand.register();
+
+        CloseInactiveConfigScreen.register();
+        new HyModConfig();
+
+        ItemTracker.register();
 
         HypixelPackets.register();
     }
