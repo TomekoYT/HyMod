@@ -16,20 +16,22 @@ import java.awt.*;
 public class WaypointRenderer {
     private static final ResourceLocation beaconBeam = new ResourceLocation("textures/entity/beacon_beam.png");
 
-    public static void renderWaypoint(BlockPos pos, Color color, String text, float boxOpacity, float beamOpacity, boolean renderText, boolean renderDistance, RenderWorldLastEvent event) {
+    public static void renderWaypoint(Waypoint waypoint, RenderWorldLastEvent event) {
+        if (waypoint == null) return;
+
         Entity viewer = Minecraft.getMinecraft().getRenderViewEntity();
 
         double viewerX = viewer.lastTickPosX + (viewer.posX - viewer.lastTickPosX) * event.partialTicks;
         double viewerY = viewer.lastTickPosY + (viewer.posY - viewer.lastTickPosY) * event.partialTicks;
         double viewerZ = viewer.lastTickPosZ + (viewer.posZ - viewer.lastTickPosZ) * event.partialTicks;
 
-        double renderX = pos.getX() - viewerX;
-        double renderY = pos.getY() - viewerY;
-        double renderZ = pos.getZ() - viewerZ;
+        double renderX = waypoint.pos.getX() - viewerX;
+        double renderY = waypoint.pos.getY() - viewerY;
+        double renderZ = waypoint.pos.getZ() - viewerZ;
 
-        drawFilledBoundingBox(new AxisAlignedBB(renderX, renderY, renderZ, renderX + 1, renderY + 1, renderZ + 1), color, boxOpacity);
-        renderBeaconBeam(renderX, renderY + 1, renderZ, color.getRGB(), beamOpacity, event.partialTicks);
-        renderWaypointText(text, pos.up(2), renderText, renderDistance, event.partialTicks);
+        drawFilledBoundingBox(new AxisAlignedBB(renderX, renderY, renderZ, renderX + 1, renderY + 1, renderZ + 1), waypoint.color, waypoint.boxOpacity);
+        renderBeaconBeam(renderX, renderY + 1, renderZ, waypoint.color.getRGB(), waypoint.beamOpacity, event.partialTicks);
+        renderWaypointText(waypoint.text, waypoint.pos.up(2), waypoint.renderText, waypoint.renderDistance, event.partialTicks);
     }
 
     private static void renderBeaconBeam(double x, double y, double z, int rgb, float alphaMultiplier, float partialTicks) {
