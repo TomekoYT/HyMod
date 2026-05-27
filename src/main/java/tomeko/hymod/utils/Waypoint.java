@@ -1,18 +1,18 @@
-package tomeko.hymod.world;
+package tomeko.hymod.utils;
 
 import net.minecraft.util.BlockPos;
 
 import java.awt.*;
 
 public class Waypoint {
-    BlockPos pos;
-    Color color;
-    String text;
-    float boxOpacity;
-    float beamOpacity;
-    boolean renderText;
-    boolean renderDistance;
-    int tickTime;
+    public BlockPos pos;
+    public Color color;
+    public String text;
+    public float boxOpacity;
+    public float beamOpacity;
+    public boolean renderText;
+    public boolean renderDistance;
+    public int tickTime;
 
     public Waypoint(
             BlockPos pos,

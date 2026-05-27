@@ -1,10 +1,8 @@
 package tomeko.hymod.config;
 
 import cc.polyfrost.oneconfig.config.Config;
-import cc.polyfrost.oneconfig.config.annotations.DualOption;
-import cc.polyfrost.oneconfig.config.annotations.Exclude;
-import cc.polyfrost.oneconfig.config.annotations.HUD;
-import cc.polyfrost.oneconfig.config.annotations.Switch;
+import cc.polyfrost.oneconfig.config.annotations.*;
+import cc.polyfrost.oneconfig.config.core.OneColor;
 import cc.polyfrost.oneconfig.config.data.Mod;
 import cc.polyfrost.oneconfig.config.data.ModType;
 import tomeko.hymod.hud.BedwarsResourceDisplay;
@@ -32,11 +30,10 @@ public class HyModConfig extends Config {
     private static final String SUBCATEGORY_HIDE_GUILD_MOTD = "Hide Guild MOTD";
     @Exclude
     private static final String SUBCATEGORY_MVP_EMOJIS = "MVP++ Emojis";
-
-    @Exclude
-    private static final String CATEGORY_MISC = "Misc";
     @Exclude
     private static final String SUBCATEGORY_SENDCOORDS_COMMAND = "/sendcoords Command";
+    @Exclude
+    private static final String SUBCATEGORY_COORDS_WAYPOINT = "Coords Waypoint";
 
     @HUD(
             name = "Bedwars Resource Display",
@@ -73,19 +70,78 @@ public class HyModConfig extends Config {
     )
     public static boolean mvpEmojisEnabled = true;
 
+    @DualOption(
+            name = "Default /sendcoords mode",
+            left = "All",
+            right = "Party",
+            category = CATEGORY_CHAT,
+            subcategory = SUBCATEGORY_SENDCOORDS_COMMAND
+    )
+    public static boolean sendcoordsMode = true;
+
+    @Switch(
+            name = "Enabed",
+            category = CATEGORY_CHAT,
+            subcategory = SUBCATEGORY_COORDS_WAYPOINT
+    )
+    public static boolean coordsWaypointEnabled = true;
+
+    @Color(
+            name = "Color",
+            allowAlpha = false,
+            category = CATEGORY_CHAT,
+            subcategory = SUBCATEGORY_COORDS_WAYPOINT
+    )
+    public static OneColor coordsWaypointColor = new OneColor(255, 255, 255);
+
+    @Slider(
+            name = "Box Opacity",
+            min = 0,
+            max = 100,
+            step = 1,
+            category = CATEGORY_CHAT,
+            subcategory = SUBCATEGORY_COORDS_WAYPOINT
+    )
+    public static int coordsWaypointBoxOpacity = 50;
+
+    @Slider(
+            name = "Beam Opacity",
+            min = 0,
+            max = 100,
+            step = 1,
+            category = CATEGORY_CHAT,
+            subcategory = SUBCATEGORY_COORDS_WAYPOINT
+    )
+    public static int coordsWaypointBeamOpacity = 50;
+
+    @Switch(
+            name = "Render Text",
+            category = CATEGORY_CHAT,
+            subcategory = SUBCATEGORY_COORDS_WAYPOINT
+    )
+    public static boolean coordsWaypointRenderText = true;
+
+    @Switch(
+            name = "Render Distance",
+            category = CATEGORY_CHAT,
+            subcategory = SUBCATEGORY_COORDS_WAYPOINT
+    )
+    public static boolean coordsWaypointRenderDistance = true;
+
+    @Slider(
+            name = "Time",
+            min = 0,
+            max = 120,
+            step = 1,
+            category = CATEGORY_CHAT,
+            subcategory = SUBCATEGORY_COORDS_WAYPOINT
+    )
+    public static int coordsWaypointTime = 30;
+
     @Switch(
             name = "Enabled",
             category = CATEGORY_GUI,
             subcategory = SUBCATEGORY_MIDDLE_CLICK_GUI_ITEMS
     )
     public static boolean middleClickGUIItemsEnabled = true;
-
-    @DualOption(
-            name = "Default /sendcoords mode",
-            left = "All",
-            right = "Party",
-            category = CATEGORY_MISC,
-            subcategory = SUBCATEGORY_SENDCOORDS_COMMAND
-    )
-    public static boolean sendcoordsMode = true;
 }

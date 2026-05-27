@@ -1,4 +1,4 @@
-package tomeko.hymod.world;
+package tomeko.hymod.utils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -9,14 +9,48 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.*;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class WaypointRenderer {
     private static final ResourceLocation beaconBeam = new ResourceLocation("textures/entity/beacon_beam.png");
 
-    public static void renderWaypoint(Waypoint waypoint, RenderWorldLastEvent event) {
+    public static final List<Waypoint> waypoints = new ArrayList<>();
+
+    public static void register() {
+        MinecraftForge.EVENT_BUS.register(new WaypointRenderer());
+    }
+
+    @SubscribeEvent
+    public void onWorldRender(RenderWorldLastEvent event) {
+        for (Waypoint waypoint : waypoints) {
+            WaypointRenderer.renderWaypoint(waypoint, event);
+        }
+    }
+
+    @SubscribeEvent
+    public void onTick(TickEvent.ClientTickEvent event) {
+        if (event.phase != TickEvent.Phase.END) return;
+
+        Iterator<Waypoint> iterator = waypoints.iterator();
+        while (iterator.hasNext()) {
+            Waypoint waypoint = iterator.next();
+            waypoint.tickTime--;
+
+            if (waypoint.tickTime <= 0) {
+                iterator.remove();
+            }
+        }
+    }
+
+    private static void renderWaypoint(Waypoint waypoint, RenderWorldLastEvent event) {
         if (waypoint == null) return;
 
         Entity viewer = Minecraft.getMinecraft().getRenderViewEntity();
