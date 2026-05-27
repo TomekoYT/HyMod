@@ -98,7 +98,7 @@ public class ItemTracker {
     public void scanMessage(ClientChatReceivedEvent event) {
         if (event.type == 2 || event.message == null) return;
 
-        String message = event.message.getUnformattedText();
+        String message = StringFormatting.removeFormatting(event.message.getUnformattedText());
         Pattern pattern = Pattern.compile("^Deposited x\\d+ (.+) into Ender Chest! \\((\\d+) Total\\)$");
         Matcher matcher = pattern.matcher(message);
 
