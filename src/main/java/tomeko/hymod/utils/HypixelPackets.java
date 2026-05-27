@@ -2,6 +2,10 @@ package tomeko.hymod.utils;
 
 import net.hypixel.modapi.HypixelModAPI;
 import net.hypixel.modapi.packet.impl.clientbound.event.ClientboundLocationPacket;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class HypixelPackets {
     public static boolean onHypixel = false;
@@ -9,20 +13,37 @@ public class HypixelPackets {
     public static boolean inBedwars = false;
 
     public static void register() {
+        MinecraftForge.EVENT_BUS.register(new HypixelPackets());
         HypixelModAPI.getInstance().createHandler(ClientboundLocationPacket.class, HypixelPackets::onLocationPacket);
         HypixelModAPI.getInstance().subscribeToEventPacket(ClientboundLocationPacket.class);
     }
 
-    private static void onLocationPacket(ClientboundLocationPacket packet) {
-        if (!packet.getServerType().isPresent()) {
+    @SubscribeEvent
+    public void onTick(TickEvent.ClientTickEvent event) {
+        if (event.phase != TickEvent.Phase.END) return;
+
+        Minecraft mc = Minecraft.getMinecraft();
+        if (mc.getCurrentServerData() == null || mc.getCurrentServerData().serverIP == null) {
             onHypixel = false;
-            inSkyblock = false;
-            inBedwars = false;
+            disableModes();
             return;
         }
-        onHypixel = true;
+
+        onHypixel = mc.getCurrentServerData().serverIP.contains("hypixel");
+    }
+
+    private static void onLocationPacket(ClientboundLocationPacket packet) {
+        if (!packet.getServerType().isPresent()) {
+            disableModes();
+            return;
+        }
 
         inSkyblock = packet.getServerType().get().getName().equalsIgnoreCase("skyblock");
         inBedwars = packet.getServerType().get().getName().equalsIgnoreCase("bed wars");
+    }
+
+    private static void disableModes() {
+        inSkyblock = false;
+        inBedwars = false;
     }
 }
