@@ -1,6 +1,7 @@
 package tomeko.hymod.config;
 
 import cc.polyfrost.oneconfig.config.Config;
+import cc.polyfrost.oneconfig.config.annotations.DualOption;
 import cc.polyfrost.oneconfig.config.annotations.Exclude;
 import cc.polyfrost.oneconfig.config.annotations.HUD;
 import cc.polyfrost.oneconfig.config.annotations.Switch;
@@ -31,6 +32,11 @@ public class HyModConfig extends Config {
     private static final String SUBCATEGORY_HIDE_GUILD_MOTD = "Hide Guild MOTD";
     @Exclude
     private static final String SUBCATEGORY_MVP_EMOJIS = "MVP++ Emojis";
+
+    @Exclude
+    private static final String CATEGORY_MISC = "Misc";
+    @Exclude
+    private static final String SUBCATEGORY_SENDCOORDS_COMMAND = "/sendcoords Command";
 
     @HUD(
             name = "Bedwars Resource Display",
@@ -73,4 +79,13 @@ public class HyModConfig extends Config {
             subcategory = SUBCATEGORY_MIDDLE_CLICK_GUI_ITEMS
     )
     public static boolean middleClickGUIItemsEnabled = true;
+
+    @DualOption(
+            name = "Default /sendcoords mode",
+            left = "All",
+            right = "Party",
+            category = CATEGORY_MISC,
+            subcategory = SUBCATEGORY_SENDCOORDS_COMMAND
+    )
+    public static boolean sendcoordsMode = true;
 }
