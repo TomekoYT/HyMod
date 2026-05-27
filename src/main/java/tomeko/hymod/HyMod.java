@@ -14,7 +14,7 @@ public class HyMod {
     public void onInit(FMLInitializationEvent event) {
         EventManager.INSTANCE.register(this);
 
-        CoordsWaypoint.register();
+        CoordsWaypoints.register();
         HideGuildMOTD.register();
         WhiteChatMessages.register();
 

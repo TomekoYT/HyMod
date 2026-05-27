@@ -13,14 +13,14 @@ import java.awt.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CoordsWaypoint {
+public class CoordsWaypoints {
     public static void register() {
-        MinecraftForge.EVENT_BUS.register(new CoordsWaypoint());
+        MinecraftForge.EVENT_BUS.register(new CoordsWaypoints());
     }
 
     @SubscribeEvent
     public void onChatReceive(ClientChatReceivedEvent event) {
-        if (event.type == 2 || event.message == null) return;
+        if (event.type == 2 || event.message == null || !HyModConfig.coordsWaypointsEnabled) return;
 
         String message = StringFormatting.removeFormatting(event.message.getUnformattedText());
 
@@ -36,13 +36,13 @@ public class CoordsWaypoint {
         WaypointRenderer.waypoints.add(
                 new Waypoint(
                         new BlockPos(x, y, z),
-                        new Color(HyModConfig.coordsWaypointColor.getRed(), HyModConfig.coordsWaypointColor.getGreen(), HyModConfig.coordsWaypointColor.getBlue()),
+                        new Color(HyModConfig.coordsWaypointsColor.getRed(), HyModConfig.coordsWaypointsColor.getGreen(), HyModConfig.coordsWaypointsColor.getBlue()),
                         nickname,
-                        (float) HyModConfig.coordsWaypointBoxOpacity / 100f,
-                        (float) HyModConfig.coordsWaypointBeamOpacity / 100f,
-                        HyModConfig.coordsWaypointRenderText,
-                        HyModConfig.coordsWaypointRenderDistance,
-                        20 * HyModConfig.coordsWaypointTime
+                        (float) HyModConfig.coordsWaypointsBoxOpacity / 100f,
+                        (float) HyModConfig.coordsWaypointsBeamOpacity / 100f,
+                        HyModConfig.coordsWaypointsRenderText,
+                        HyModConfig.coordsWaypointsRenderDistance,
+                        20 * HyModConfig.coordsWaypointsTime
                 )
         );
     }

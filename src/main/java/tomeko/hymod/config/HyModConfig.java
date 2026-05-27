@@ -33,7 +33,7 @@ public class HyModConfig extends Config {
     @Exclude
     private static final String SUBCATEGORY_SENDCOORDS_COMMAND = "/sendcoords Command";
     @Exclude
-    private static final String SUBCATEGORY_COORDS_WAYPOINT = "Coords Waypoint";
+    private static final String SUBCATEGORY_COORDS_WAYPOINTS = "Coords Waypoints";
 
     @HUD(
             name = "Bedwars Resource Display",
@@ -82,17 +82,17 @@ public class HyModConfig extends Config {
     @Switch(
             name = "Enabed",
             category = CATEGORY_CHAT,
-            subcategory = SUBCATEGORY_COORDS_WAYPOINT
+            subcategory = SUBCATEGORY_COORDS_WAYPOINTS
     )
-    public static boolean coordsWaypointEnabled = true;
+    public static boolean coordsWaypointsEnabled = true;
 
     @Color(
             name = "Color",
             allowAlpha = false,
             category = CATEGORY_CHAT,
-            subcategory = SUBCATEGORY_COORDS_WAYPOINT
+            subcategory = SUBCATEGORY_COORDS_WAYPOINTS
     )
-    public static OneColor coordsWaypointColor = new OneColor(255, 255, 255);
+    public static OneColor coordsWaypointsColor = new OneColor(255, 255, 255);
 
     @Slider(
             name = "Box Opacity",
@@ -100,9 +100,9 @@ public class HyModConfig extends Config {
             max = 100,
             step = 1,
             category = CATEGORY_CHAT,
-            subcategory = SUBCATEGORY_COORDS_WAYPOINT
+            subcategory = SUBCATEGORY_COORDS_WAYPOINTS
     )
-    public static int coordsWaypointBoxOpacity = 50;
+    public static int coordsWaypointsBoxOpacity = 50;
 
     @Slider(
             name = "Beam Opacity",
@@ -110,23 +110,23 @@ public class HyModConfig extends Config {
             max = 100,
             step = 1,
             category = CATEGORY_CHAT,
-            subcategory = SUBCATEGORY_COORDS_WAYPOINT
+            subcategory = SUBCATEGORY_COORDS_WAYPOINTS
     )
-    public static int coordsWaypointBeamOpacity = 50;
+    public static int coordsWaypointsBeamOpacity = 50;
 
     @Switch(
             name = "Render Text",
             category = CATEGORY_CHAT,
-            subcategory = SUBCATEGORY_COORDS_WAYPOINT
+            subcategory = SUBCATEGORY_COORDS_WAYPOINTS
     )
-    public static boolean coordsWaypointRenderText = true;
+    public static boolean coordsWaypointsRenderText = true;
 
     @Switch(
             name = "Render Distance",
             category = CATEGORY_CHAT,
-            subcategory = SUBCATEGORY_COORDS_WAYPOINT
+            subcategory = SUBCATEGORY_COORDS_WAYPOINTS
     )
-    public static boolean coordsWaypointRenderDistance = true;
+    public static boolean coordsWaypointsRenderDistance = true;
 
     @Slider(
             name = "Time",
@@ -134,9 +134,9 @@ public class HyModConfig extends Config {
             max = 120,
             step = 1,
             category = CATEGORY_CHAT,
-            subcategory = SUBCATEGORY_COORDS_WAYPOINT
+            subcategory = SUBCATEGORY_COORDS_WAYPOINTS
     )
-    public static int coordsWaypointTime = 30;
+    public static int coordsWaypointsTime = 30;
 
     @Switch(
             name = "Enabled",
