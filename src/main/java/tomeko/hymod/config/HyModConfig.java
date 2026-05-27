@@ -18,9 +18,9 @@ public class HyModConfig extends Config {
     private static final String CATEGORY_BEDWARS = "Bedwars";
 
     @Exclude
-    private static final String CATEGORY_GUI = "GUI";
+    private static final String CATEGORY_ARCADE = "Arcade";
     @Exclude
-    private static final String SUBCATEGORY_MIDDLE_CLICK_GUI_ITEMS = "Middle Click GUI Items";
+    private static final String SUBCATEGORY_FARM_HUNT = "Farm Hunt";
 
     @Exclude
     private static final String CATEGORY_CHAT = "Chat";
@@ -35,12 +35,23 @@ public class HyModConfig extends Config {
     @Exclude
     private static final String SUBCATEGORY_COORDS_WAYPOINTS = "Coords Waypoints";
 
+    @Exclude
+    private static final String CATEGORY_GUI = "GUI";
+    @Exclude
+    private static final String SUBCATEGORY_MIDDLE_CLICK_GUI_ITEMS = "Middle Click GUI Items";
+
     @HUD(
             name = "Bedwars Resource Display",
             category = CATEGORY_BEDWARS
     )
     public BedwarsResourceDisplay bedwarsResourceDisplay = new BedwarsResourceDisplay();
 
+    @Switch(
+            name = "Dangerous Taunt Waypoint",
+            category = CATEGORY_ARCADE,
+            subcategory = SUBCATEGORY_FARM_HUNT
+    )
+    public static boolean dangerousTauntWaypointEnabled = true;
 
     @Switch(
             name = "White Private Messages",

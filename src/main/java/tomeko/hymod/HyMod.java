@@ -15,6 +15,7 @@ public class HyMod {
         EventManager.INSTANCE.register(this);
 
         CoordsWaypoints.register();
+        DangerousTauntWaypoint.register();
         HideGuildMOTD.register();
         WhiteChatMessages.register();
 
