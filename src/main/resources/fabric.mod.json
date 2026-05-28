@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${mod_version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": [
+    "Tomeko"
+  ],
+  "contact": {
+    "homepage": "https://modrinth.com/mod/${mod_id}",
+    "sources": "https://github.com/TomekoYT/${mod_name}",
+    "issues": "https://github.com/TomekoYT/${mod_name}/issues"
+  },
+  "license": "GPL-3.0",
+  "icon": "assets/${mod_id}/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "${base_group}.${mod_name}"
+    ],
+    "modmenu": [
+      "${base_group}.config.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "${mod_id}.mixins.json"
+  ],
+  "depends": {
+    "java": ">=${java_version}",
+    "minecraft": ">=${minecraft_version}",
+    "fabricloader": ">=${fabric_loader_version}",
+    "fabric-api": ">=${fabric_api_version}",
+
+    "yet_another_config_lib_v3": ">=${yacl_version}",
+    "modmenu": ">=${mod_menu_version}",
+    "hypixel-mod-api": ">=${hypixel_mod_api_version}"
+  },
+  "custom": {
+    "youtube": "https://www.youtube.com/@TomekoYT",
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.com/invite/FfzrbycDws",
+        "modmenu.modrinth": "https://modrinth.com/mod/${mod_id}"
+      },
+      "update_checker": true
+    }
+  }
+}
