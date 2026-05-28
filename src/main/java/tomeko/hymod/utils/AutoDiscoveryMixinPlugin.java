@@ -1,6 +1,5 @@
-package tomeko.hymod.init;
+package tomeko.hymod.utils;
 
-//? if = 1.8.9 {
 import org.spongepowered.asm.lib.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -146,4 +145,3 @@ public class AutoDiscoveryMixinPlugin implements IMixinConfigPlugin {
 
     }
 }
-//?}
