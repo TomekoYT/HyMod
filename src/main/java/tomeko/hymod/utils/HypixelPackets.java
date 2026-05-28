@@ -11,7 +11,6 @@ public class HypixelPackets {
     public static boolean onHypixel = false;
     public static boolean inSkyblock = false;
     public static boolean inBedwars = false;
-    public static boolean inMurderMystery = false;
     public static boolean inArcade = false;
 
     public static void register() {
@@ -44,14 +43,12 @@ public class HypixelPackets {
 
         inSkyblock = packetName.equalsIgnoreCase("skyblock");
         inBedwars = packetName.equalsIgnoreCase("bed wars");
-        inMurderMystery = packetName.equalsIgnoreCase("murder mystery");
         inArcade = packetName.equalsIgnoreCase("skyblock");
     }
 
     private static void disableModes() {
         inSkyblock = false;
         inBedwars = false;
-        inMurderMystery = false;
         inArcade = false;
     }
 }
