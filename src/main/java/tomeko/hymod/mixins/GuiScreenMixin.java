@@ -1,4 +1,4 @@
-package tomeko.hymod.mixin;
+package tomeko.hymod.mixins;
 
 import net.minecraft.client.gui.GuiScreen;
 import org.spongepowered.asm.mixin.Mixin;

@@ -1,4 +1,4 @@
-package tomeko.hymod.mixin;
+package tomeko.hymod.mixins;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiChest;
