@@ -8,7 +8,7 @@ import tomeko.hymod.commands.*;
 import tomeko.hymod.config.*;
 import tomeko.hymod.utils.*;
 
-@Mod(modid = Constants.MOD_ID, name = Constants.MOD_NAME, version = Constants.MOD_VERSION, modLanguageAdapter = "cc.polyfrost.oneconfig.utils.KotlinLanguageAdapter", dependencies = "required-after:hypixel_mod_api")
+@Mod(modid = Constants.MOD_ID, name = Constants.MOD_NAME, version = Constants.MOD_VERSION, dependencies = "required-after:hypixel_mod_api")
 public class HyMod {
     @Mod.EventHandler
     public void onInit(FMLInitializationEvent event) {
