@@ -76,21 +76,21 @@ dependencies {
     mappings("de.oceanlabs.mcp:mcp_stable:22-$minecraft_version")
     forge("net.minecraftforge:forge:$minecraft_version-11.15.1.2318-$minecraft_version")
 
-    shadowImpl("org.spongepowered:mixin:0.7.11-SNAPSHOT") {
-        isTransitive = false
-    }
-    annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT")
     annotationProcessor("org.ow2.asm:asm-debug-all:5.2")
     annotationProcessor("com.google.guava:guava:32.1.2-jre")
     annotationProcessor("com.google.code.gson:gson:2.8.9")
+
+    annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT")
+    shadowImpl("org.spongepowered:mixin:0.7.11-SNAPSHOT") {
+        isTransitive = false
+    }
+    annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.4")
+    shadowImpl("io.github.llamalad7:mixinextras-common:0.5.4")
 
     compileOnly("cc.polyfrost:oneconfig-$minecraft_version-forge:0.2.2-alpha+")
     shadowImpl("cc.polyfrost:oneconfig-wrapper-launchwrapper:1.0.0-beta+")
 
     modImplementation("net.hypixel:mod-api-forge:$hypixel_mod_api_version")
-
-    annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.4")
-    shadowImpl("io.github.llamalad7:mixinextras-common:0.5.4")
 }
 
 bloom {
