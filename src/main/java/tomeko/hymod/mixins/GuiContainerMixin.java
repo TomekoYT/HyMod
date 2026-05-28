@@ -1,5 +1,7 @@
 package tomeko.hymod.mixins;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -7,7 +9,6 @@ import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.Slot;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import tomeko.hymod.config.HyModConfig;
 import tomeko.hymod.utils.HypixelPackets;
 
@@ -17,20 +18,20 @@ import java.util.List;
 public class GuiContainerMixin {
     private static final Minecraft mc = Minecraft.getMinecraft();
 
-    @Redirect(
+    @WrapOperation(
             method = "mouseClicked",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/inventory/GuiContainer;handleMouseClick(Lnet/minecraft/inventory/Slot;III)V"
             )
     )
-    private void mouseClicked(GuiContainer instance, Slot slotIn, int slotId, int clickedButton, int clickType) {
+    private void mouseClicked(GuiContainer instance, Slot slotIn, int slotId, int clickedButton, int clickType, Operation<Void> original) {
         if (shouldCallOriginal(instance, slotIn, clickedButton, clickType)) {
-            mc.playerController.windowClick(instance.inventorySlots.windowId, slotId, clickedButton, clickType, mc.thePlayer);
+            original.call(instance, slotIn, slotId, clickedButton, clickType);
             return;
         }
 
-        mc.playerController.windowClick(instance.inventorySlots.windowId, slotId, 2, 3, mc.thePlayer);
+        original.call(instance, slotIn, slotId, 2, 3);
     }
 
     private static boolean shouldCallOriginal(GuiContainer instance, Slot slotIn, int clickedButton, int clickType) {
