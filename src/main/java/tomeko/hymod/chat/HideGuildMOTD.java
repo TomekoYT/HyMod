@@ -4,7 +4,6 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import tomeko.hymod.config.HyModConfig;
-import tomeko.hymod.utils.Constants;
 import tomeko.hymod.utils.StringFormatting;
 
 public class HideGuildMOTD {
@@ -16,23 +15,20 @@ public class HideGuildMOTD {
 
     @SubscribeEvent
     public void onChatReceive(ClientChatReceivedEvent event) {
-        if (event.type == 2 || event.message == null) return;
+        if (event.type == 2 || event.message == null || !HyModConfig.hideGuildMOTDEnabled) return;
 
         String message = StringFormatting.removeFormatting(event.message.getUnformattedText());
-        System.out.println(Constants.MOD_NAME + ": " + message);
 
-        if (HyModConfig.hideGuildMOTDEnabled) {
-            if (message.startsWith("--------------  Guild: Message Of The Day  --------------")) {
-                guildMOTD = true;
+        if (message.startsWith("--------------  Guild: Message Of The Day  --------------")) {
+            guildMOTD = true;
+        }
+
+        if (guildMOTD) {
+            if (message.endsWith("-----------------------------------------------------")) {
+                guildMOTD = false;
             }
 
-            if (guildMOTD) {
-                if (message.endsWith("-----------------------------------------------------")) {
-                    guildMOTD = false;
-                }
-
-                event.setCanceled(true);
-            }
+            event.setCanceled(true);
         }
     }
 }
