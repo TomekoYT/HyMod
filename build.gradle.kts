@@ -88,6 +88,9 @@ dependencies {
     shadowImpl("cc.polyfrost:oneconfig-wrapper-launchwrapper:1.0.0-beta+")
 
     modImplementation("net.hypixel:mod-api-forge:$hypixel_mod_api_version")
+
+    annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.4")
+    shadowImpl("io.github.llamalad7:mixinextras-common:0.5.4")
 }
 
 bloom {
