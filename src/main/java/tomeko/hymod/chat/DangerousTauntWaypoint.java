@@ -1,5 +1,8 @@
 package tomeko.hymod.chat;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -12,7 +15,6 @@ import tomeko.hymod.utils.WaypointRenderer;
 import java.awt.*;
 
 public class DangerousTauntWaypoint {
-    private static final int y = 50;
     private static final int seconds = 15;
 
     public static void register() {
@@ -69,15 +71,30 @@ public class DangerousTauntWaypoint {
 
         WaypointRenderer.waypoints.add(
                 new Waypoint(
-                        new BlockPos(x, y, z),
+                        getPos(x, z),
                         color,
                         animal,
-                        1f,
+                        0.5f,
                         1f,
                         true,
                         true,
                         20 * seconds
                 )
         );
+    }
+
+    private static BlockPos getPos(int x, int z) {
+        WorldClient world = Minecraft.getMinecraft().theWorld;
+
+        BlockPos pos = new BlockPos(x, 0, z);
+        while (world.getBlockState(pos).getBlock() == Blocks.air) {
+            pos = pos.up();
+        }
+
+        while (world.getBlockState(pos).getBlock() != Blocks.air) {
+            pos = pos.up();
+        }
+
+        return pos;
     }
 }
