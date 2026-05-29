@@ -3,7 +3,7 @@
   "refmap": "mixins.${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_${java_version}",
   "mixins": [
-    "ChatEmojiMixin",
-    "MiddleClickGUIItemsMixin"
+    "MiddleClickGUIItemsMixin",
+    "MVPEmojiMixin"
   ]
 }
