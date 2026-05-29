@@ -34,6 +34,9 @@ public class HyMod
         EventManager.INSTANCE.register(this);
         //?}
 
+        //? if >= 1.21.9 {
+        /*ChatEmoji.register();
+        *///?}
         CoordsWaypoints.register();
         DangerousTauntWaypoint.register();
         HideGuildMOTD.register();
