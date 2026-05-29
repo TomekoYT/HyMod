@@ -1,6 +1,9 @@
 {
-  "plugin": "${base_group}.utils.AutoDiscoveryMixinPlugin",
   "package": "${base_group}.mixins",
   "refmap": "mixins.${mod_id}.refmap.json",
-  "compatibilityLevel": "JAVA_${java_version}"
+  "compatibilityLevel": "JAVA_${java_version}",
+  "mixins": [
+    "ChatEmojiMixin",
+    "MiddleClickGUIItemsMixin"
+  ]
 }
