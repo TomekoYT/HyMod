@@ -34,8 +34,8 @@ plugins {
 stonecutter {
 	create(rootProject) {
 		version("1.8.9")
-		version("1.21.9").buildscript("build.fabric.gradle.kts")
-		version("26.1").buildscript("build.unobfuscated.gradle.kts")
+		//version("1.21.9").buildscript("build.fabric.gradle.kts")
+		//version("26.1").buildscript("build.unobfuscated.gradle.kts")
 		vcsVersion = "1.8.9"
 	}
 }

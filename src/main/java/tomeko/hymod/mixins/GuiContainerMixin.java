@@ -1,37 +1,40 @@
 package tomeko.hymod.mixins;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.Slot;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import tomeko.hymod.config.HyModConfig;
 import tomeko.hymod.utils.HypixelPackets;
 
 import java.util.List;
 
 @Mixin(GuiContainer.class)
-public class GuiContainerMixin {
+public abstract class GuiContainerMixin {
     private static final Minecraft mc = Minecraft.getMinecraft();
 
-    @WrapOperation(
+    @Shadow
+    protected abstract void handleMouseClick(Slot slotIn, int slotId, int clickedButton, int clickType);
+
+    @Redirect(
             method = "mouseClicked",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/inventory/GuiContainer;handleMouseClick(Lnet/minecraft/inventory/Slot;III)V"
             )
     )
-    private void mouseClicked(GuiContainer instance, Slot slotIn, int slotId, int clickedButton, int clickType, Operation<Void> original) {
+    private void mouseClicked(GuiContainer instance, Slot slotIn, int slotId, int clickedButton, int clickType) {
         if (shouldCallOriginal(instance, slotIn, clickedButton, clickType)) {
-            original.call(instance, slotIn, slotId, clickedButton, clickType);
+            handleMouseClick(slotIn, slotId, clickedButton, clickType);
             return;
         }
 
-        original.call(instance, slotIn, slotId, 2, 3);
+        handleMouseClick(slotIn, slotId, 2, 3);
     }
 
     private static boolean shouldCallOriginal(GuiContainer instance, Slot slotIn, int clickedButton, int clickType) {

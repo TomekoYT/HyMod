@@ -84,8 +84,6 @@ dependencies {
     shadowImpl("org.spongepowered:mixin:0.7.11-SNAPSHOT") {
         isTransitive = false
     }
-    annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.4")
-    shadowImpl("io.github.llamalad7:mixinextras-common:0.5.4")
 
     compileOnly("cc.polyfrost:oneconfig-$minecraft_version-forge:0.2.2-alpha+")
     shadowImpl("cc.polyfrost:oneconfig-wrapper-launchwrapper:1.0.0-beta+")
@@ -123,11 +121,10 @@ tasks.processResources {
         "mod_name" to mod_name,
         "mod_version" to mod_version,
         "mod_description" to mod_description,
+        "base_group" to base_group,
 
         "java_version" to java_version,
         "minecraft_version" to minecraft_version,
-
-        "base_group" to base_group
     )
 
     inputs.properties(props)
