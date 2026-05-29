@@ -1,6 +1,7 @@
 package tomeko.hymod.utils;
 
 import net.minecraft.client.Minecraft;
+//? if = 1.8.9 {
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -13,31 +14,87 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.opengl.GL11;
+//?} else {
+/*import net.minecraft.client.Camera;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BeaconRenderer;
+import net.minecraft.core.BlockBox;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import org.joml.Matrix4f;
+*///?}
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class WaypointRenderer {
-    private static final ResourceLocation beaconBeam = new ResourceLocation("textures/entity/beacon_beam.png");
+    private static final String BEACON_PNG = "textures/entity/beacon_beam.png";
+    private static final ResourceLocation BEAM_TEXTURE =
+            //? if = 1.8.9 {
+            new ResourceLocation(BEACON_PNG);
+             //?} else {
+            /*ResourceLocation.parse(BEACON_PNG);
+    *///?}
 
     public static final List<Waypoint> waypoints = new ArrayList<>();
 
     public static void register() {
+        //? if = 1.8.9 {
         MinecraftForge.EVENT_BUS.register(new WaypointRenderer());
+         //?} else {
+        /*WorldRenderEvents.AFTER_ENTITIES.register(WaypointRenderer::onWorldRender);
+        ClientTickEvents.END_CLIENT_TICK.register(WaypointRenderer::onTick);
+        *///?}
     }
 
+    //? if = 1.8.9 {
     @SubscribeEvent
-    public void onWorldRender(RenderWorldLastEvent event) {
+    //?} else {
+    /*static
+            *///?}
+    public void onWorldRender(
+            //? if = 1.8.9 {
+            RenderWorldLastEvent event
+            //?} else {
+            /*WorldRenderContext context
+            *///?}
+    ) {
         for (Waypoint waypoint : waypoints) {
-            WaypointRenderer.renderWaypoint(waypoint, event);
+            renderWaypoint(
+                    waypoint,
+                    //? if = 1.8.9 {
+                    event
+                    //?} else {
+                    /*context
+                    *///?}
+            );
         }
     }
 
+    //? if = 1.8.9 {
     @SubscribeEvent
-    public void onTick(TickEvent.ClientTickEvent event) {
+    //?} else {
+    /*static
+            *///?}
+    public void onTick(
+            //? if = 1.8.9 {
+            TickEvent.ClientTickEvent event
+            //?} else {
+            /*Minecraft mc
+            *///?}
+    ) {
+        //? if = 1.8.9 {
         if (event.phase != TickEvent.Phase.END) return;
+        //?}
 
         Iterator<Waypoint> iterator = waypoints.iterator();
         while (iterator.hasNext()) {
@@ -50,25 +107,251 @@ public class WaypointRenderer {
         }
     }
 
-    private static void renderWaypoint(Waypoint waypoint, RenderWorldLastEvent event) {
+    private static void renderWaypoint(
+            Waypoint waypoint,
+            //? if = 1.8.9 {
+            RenderWorldLastEvent event
+            //?} else {
+            /*WorldRenderContext context
+            *///?}
+    ) {
         if (waypoint == null) return;
 
-        Entity viewer = Minecraft.getMinecraft().getRenderViewEntity();
+        //? if >= 1.21.9 {
+        /*if (Minecraft.getInstance().player == null || Minecraft.getInstance().level == null) return;
+        *///?}
 
-        double viewerX = viewer.lastTickPosX + (viewer.posX - viewer.lastTickPosX) * event.partialTicks;
-        double viewerY = viewer.lastTickPosY + (viewer.posY - viewer.lastTickPosY) * event.partialTicks;
-        double viewerZ = viewer.lastTickPosZ + (viewer.posZ - viewer.lastTickPosZ) * event.partialTicks;
+        //? if = 1.8.9 {
+        Entity viewer = Minecraft.getMinecraft().getRenderViewEntity();
+        //?}
+
+        double viewerX =
+                //? if = 1.8.9 {
+                viewer.lastTickPosX + (viewer.posX - viewer.lastTickPosX) * event.partialTicks;
+                //?} else {
+                /*Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().x;
+        *///?}
+        double viewerY =
+                //? if = 1.8.9 {
+                viewer.lastTickPosY + (viewer.posY - viewer.lastTickPosY) * event.partialTicks;
+                //?} else {
+                /*Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().y;
+        *///?}
+        double viewerZ =
+                //? if = 1.8.9 {
+                viewer.lastTickPosZ + (viewer.posZ - viewer.lastTickPosZ) * event.partialTicks;
+                //?} else {
+                /*Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().z;
+        *///?}
 
         double renderX = waypoint.pos.getX() - viewerX;
         double renderY = waypoint.pos.getY() - viewerY;
         double renderZ = waypoint.pos.getZ() - viewerZ;
 
-        drawFilledBoundingBox(new AxisAlignedBB(renderX, renderY, renderZ, renderX + 1, renderY + 1, renderZ + 1), waypoint.color, waypoint.boxOpacity);
-        renderBeaconBeam(renderX, renderY + 1, renderZ, waypoint.color.getRGB(), waypoint.beamOpacity, event.partialTicks);
-        renderWaypointText(waypoint.text, waypoint.pos.up(2), waypoint.renderText, waypoint.renderDistance, event.partialTicks);
+        drawFilledBoundingBox(
+                //? if = 1.8.9 {
+                new AxisAlignedBB(renderX, renderY, renderZ, renderX + 1, renderY + 1, renderZ + 1),
+                //?} else {
+                /*context,
+                new BlockBox(new BlockPos((int) renderX, (int) renderY, (int) renderZ), new BlockPos((int) (renderX + 1), (int) (renderY + 1), (int) (renderZ + 1))),
+                *///?}
+                waypoint.color,
+                waypoint.boxOpacity
+        );
+        renderBeaconBeam(
+                //? if >= 1.21.9 {
+                /*context,
+                *///?}
+                renderX,
+                renderY + 1,
+                renderZ,
+                waypoint.color.getRGB(),
+                waypoint.beamOpacity
+                //? if = 1.8.9 {
+                , event.partialTicks
+                //?}
+        );
+        renderWaypointText(
+                //? if >= 1.21.9 {
+                /*context,
+                *///?}
+                waypoint.text,
+                //? if = 1.8.9 {
+                waypoint.pos.up(2),
+                //?} else {
+                /*waypoint.pos.above(2),
+                *///?}
+                waypoint.renderText,
+                waypoint.renderDistance
+                //? if = 1.8.9 {
+                , event.partialTicks
+                //?}
+        );
     }
 
-    private static void renderBeaconBeam(double x, double y, double z, int rgb, float alphaMultiplier, float partialTicks) {
+    private static void drawFilledBoundingBox(
+            //? if = 1.8.9 {
+            AxisAlignedBB aabb,
+            //?} else {
+            /*WorldRenderContext context,
+            BlockBox box,
+            *///?}
+            Color c,
+            float alphaMultiplier
+    ) {
+        //? if = 1.8.9 {
+        GlStateManager.enableBlend();
+        GlStateManager.disableLighting();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GlStateManager.disableTexture2D();
+
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+
+        GlStateManager.color(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, c.getAlpha() / 255f * alphaMultiplier);
+
+        worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+        worldrenderer.pos(aabb.minX, aabb.minY, aabb.minZ).endVertex();
+        worldrenderer.pos(aabb.maxX, aabb.minY, aabb.minZ).endVertex();
+        worldrenderer.pos(aabb.maxX, aabb.minY, aabb.maxZ).endVertex();
+        worldrenderer.pos(aabb.minX, aabb.minY, aabb.maxZ).endVertex();
+        tessellator.draw();
+        worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+        worldrenderer.pos(aabb.minX, aabb.maxY, aabb.maxZ).endVertex();
+        worldrenderer.pos(aabb.maxX, aabb.maxY, aabb.maxZ).endVertex();
+        worldrenderer.pos(aabb.maxX, aabb.maxY, aabb.minZ).endVertex();
+        worldrenderer.pos(aabb.minX, aabb.maxY, aabb.minZ).endVertex();
+        tessellator.draw();
+
+
+        GlStateManager.color(c.getRed() / 255f * 0.8f, c.getGreen() / 255f * 0.8f, c.getBlue() / 255f * 0.8f, c.getAlpha() / 255f * alphaMultiplier);
+
+        worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+        worldrenderer.pos(aabb.minX, aabb.minY, aabb.maxZ).endVertex();
+        worldrenderer.pos(aabb.minX, aabb.maxY, aabb.maxZ).endVertex();
+        worldrenderer.pos(aabb.minX, aabb.maxY, aabb.minZ).endVertex();
+        worldrenderer.pos(aabb.minX, aabb.minY, aabb.minZ).endVertex();
+        tessellator.draw();
+        worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+        worldrenderer.pos(aabb.maxX, aabb.minY, aabb.minZ).endVertex();
+        worldrenderer.pos(aabb.maxX, aabb.maxY, aabb.minZ).endVertex();
+        worldrenderer.pos(aabb.maxX, aabb.maxY, aabb.maxZ).endVertex();
+        worldrenderer.pos(aabb.maxX, aabb.minY, aabb.maxZ).endVertex();
+        tessellator.draw();
+
+
+        GlStateManager.color(c.getRed() / 255f * 0.9f, c.getGreen() / 255f * 0.9f, c.getBlue() / 255f * 0.9f, c.getAlpha() / 255f * alphaMultiplier);
+
+        worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+        worldrenderer.pos(aabb.minX, aabb.maxY, aabb.minZ).endVertex();
+        worldrenderer.pos(aabb.maxX, aabb.maxY, aabb.minZ).endVertex();
+        worldrenderer.pos(aabb.maxX, aabb.minY, aabb.minZ).endVertex();
+        worldrenderer.pos(aabb.minX, aabb.minY, aabb.minZ).endVertex();
+        tessellator.draw();
+        worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+        worldrenderer.pos(aabb.minX, aabb.minY, aabb.maxZ).endVertex();
+        worldrenderer.pos(aabb.maxX, aabb.minY, aabb.maxZ).endVertex();
+        worldrenderer.pos(aabb.maxX, aabb.maxY, aabb.maxZ).endVertex();
+        worldrenderer.pos(aabb.minX, aabb.maxY, aabb.maxZ).endVertex();
+        tessellator.draw();
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
+        //?} else {
+        /*VertexConsumer buffer = context.consumers().getBuffer(RenderType.debugFilledBox());
+
+        buffer.addVertex(context.matrices().last().pose(), (float) box.min().getX(), (float) box.min().getY(), (float) box.min().getZ())
+                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+
+        buffer.addVertex(context.matrices().last().pose(), (float) box.max().getX(), (float) box.min().getY(), (float) box.min().getZ())
+                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+
+        buffer.addVertex(context.matrices().last().pose(), (float) box.max().getX(), (float) box.min().getY(), (float) box.max().getZ())
+                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+
+        buffer.addVertex(context.matrices().last().pose(), (float) box.min().getX(), (float) box.min().getY(), (float) box.max().getZ())
+                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+
+
+        buffer.addVertex(context.matrices().last().pose(), (float) box.min().getX(), (float) box.max().getY(), (float) box.max().getZ())
+                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+
+        buffer.addVertex(context.matrices().last().pose(), (float) box.max().getX(), (float) box.max().getY(), (float) box.max().getZ())
+                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+
+        buffer.addVertex(context.matrices().last().pose(), (float) box.max().getX(), (float) box.max().getY(), (float) box.min().getZ())
+                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+
+        buffer.addVertex(context.matrices().last().pose(), (float) box.min().getX(), (float) box.max().getY(), (float) box.min().getZ())
+                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+
+
+        buffer.addVertex(context.matrices().last().pose(), (float) box.min().getX(), (float) box.min().getY(), (float) box.min().getZ())
+                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+
+        buffer.addVertex(context.matrices().last().pose(), (float) box.max().getX(), (float) box.min().getY(), (float) box.min().getZ())
+                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+
+        buffer.addVertex(context.matrices().last().pose(), (float) box.max().getX(), (float) box.max().getY(), (float) box.min().getZ())
+                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+
+        buffer.addVertex(context.matrices().last().pose(), (float) box.min().getX(), (float) box.max().getY(), (float) box.min().getZ())
+                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+
+
+        buffer.addVertex(context.matrices().last().pose(), (float) box.min().getX(), (float) box.min().getY(), (float) box.max().getZ())
+                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+
+        buffer.addVertex(context.matrices().last().pose(), (float) box.max().getX(), (float) box.min().getY(), (float) box.max().getZ())
+                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+
+        buffer.addVertex(context.matrices().last().pose(), (float) box.max().getX(), (float) box.max().getY(), (float) box.max().getZ())
+                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+
+        buffer.addVertex(context.matrices().last().pose(), (float) box.min().getX(), (float) box.max().getY(), (float) box.max().getZ())
+                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+
+
+        buffer.addVertex(context.matrices().last().pose(), (float) box.min().getX(), (float) box.min().getY(), (float) box.min().getZ())
+                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+
+        buffer.addVertex(context.matrices().last().pose(), (float) box.min().getX(), (float) box.min().getY(), (float) box.max().getZ())
+                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+
+        buffer.addVertex(context.matrices().last().pose(), (float) box.min().getX(), (float) box.max().getY(), (float) box.max().getZ())
+                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+
+        buffer.addVertex(context.matrices().last().pose(), (float) box.min().getX(), (float) box.max().getY(), (float) box.min().getZ())
+                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+
+
+        buffer.addVertex(context.matrices().last().pose(), (float) box.max().getX(), (float) box.min().getY(), (float) box.min().getZ())
+                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+
+        buffer.addVertex(context.matrices().last().pose(), (float) box.max().getX(), (float) box.min().getY(), (float) box.max().getZ())
+                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+
+        buffer.addVertex(context.matrices().last().pose(), (float) box.max().getX(), (float) box.max().getY(), (float) box.max().getZ())
+                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+
+        buffer.addVertex(context.matrices().last().pose(), (float) box.max().getX(), (float) box.max().getY(), (float) box.min().getZ())
+                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+        *///?}
+    }
+
+    private static void renderBeaconBeam(
+            //? if >= 1.21.9 {
+            /*WorldRenderContext context,
+            *///?}
+            double x,
+            double y,
+            double z,
+            int rgb,
+            float alphaMultiplier
+            //? if = 1.8.9 {
+            , float partialTicks
+            //?}
+    ) {
+        //? if = 1.8.9 {
         int height = 300;
         int bottomOffset = 0;
         int topOffset = bottomOffset + height;
@@ -76,7 +359,7 @@ public class WaypointRenderer {
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldrenderer = tessellator.getWorldRenderer();
 
-        Minecraft.getMinecraft().getTextureManager().bindTexture(beaconBeam);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(BEAM_TEXTURE);
         GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, 10497.0F);
         GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, 10497.0F);
         GlStateManager.disableLighting();
@@ -144,68 +427,38 @@ public class WaypointRenderer {
         worldrenderer.pos(x + 0.2D, y + bottomOffset, z + 0.2D).tex(0.0D, d12).color(r, g, b, 0.25F).endVertex();
         worldrenderer.pos(x + 0.2D, y + topOffset, z + 0.2D).tex(0.0D, d13).color(r, g, b, 0.25F * alphaMultiplier).endVertex();
         tessellator.draw();
+        //?} else {
+        /*context.matrices().pushPose();
+        context.matrices().translate(x, y, z);
+        BeaconRenderer.submitBeaconBeam(
+                context.matrices(),
+                Minecraft.getInstance().gameRenderer.getFeatureRenderDispatcher().getSubmitNodeStorage(),
+                BEAM_TEXTURE,
+                1.0f,
+                Minecraft.getInstance().level.getGameTime(),
+                0,
+                300,
+                rgb,
+                0.2f,
+                0.25f * alphaMultiplier
+        );
+        context.matrices().popPose();
+        *///?}
     }
 
-    private static void drawFilledBoundingBox(AxisAlignedBB aabb, Color c, float alphaMultiplier) {
-        GlStateManager.enableBlend();
-        GlStateManager.disableLighting();
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-        GlStateManager.disableTexture2D();
-
-        Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-
-        GlStateManager.color(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, c.getAlpha() / 255f * alphaMultiplier);
-
-        worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
-        worldrenderer.pos(aabb.minX, aabb.minY, aabb.minZ).endVertex();
-        worldrenderer.pos(aabb.maxX, aabb.minY, aabb.minZ).endVertex();
-        worldrenderer.pos(aabb.maxX, aabb.minY, aabb.maxZ).endVertex();
-        worldrenderer.pos(aabb.minX, aabb.minY, aabb.maxZ).endVertex();
-        tessellator.draw();
-        worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
-        worldrenderer.pos(aabb.minX, aabb.maxY, aabb.maxZ).endVertex();
-        worldrenderer.pos(aabb.maxX, aabb.maxY, aabb.maxZ).endVertex();
-        worldrenderer.pos(aabb.maxX, aabb.maxY, aabb.minZ).endVertex();
-        worldrenderer.pos(aabb.minX, aabb.maxY, aabb.minZ).endVertex();
-        tessellator.draw();
-
-
-        GlStateManager.color(c.getRed() / 255f * 0.8f, c.getGreen() / 255f * 0.8f, c.getBlue() / 255f * 0.8f, c.getAlpha() / 255f * alphaMultiplier);
-
-        worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
-        worldrenderer.pos(aabb.minX, aabb.minY, aabb.maxZ).endVertex();
-        worldrenderer.pos(aabb.minX, aabb.maxY, aabb.maxZ).endVertex();
-        worldrenderer.pos(aabb.minX, aabb.maxY, aabb.minZ).endVertex();
-        worldrenderer.pos(aabb.minX, aabb.minY, aabb.minZ).endVertex();
-        tessellator.draw();
-        worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
-        worldrenderer.pos(aabb.maxX, aabb.minY, aabb.minZ).endVertex();
-        worldrenderer.pos(aabb.maxX, aabb.maxY, aabb.minZ).endVertex();
-        worldrenderer.pos(aabb.maxX, aabb.maxY, aabb.maxZ).endVertex();
-        worldrenderer.pos(aabb.maxX, aabb.minY, aabb.maxZ).endVertex();
-        tessellator.draw();
-
-
-        GlStateManager.color(c.getRed() / 255f * 0.9f, c.getGreen() / 255f * 0.9f, c.getBlue() / 255f * 0.9f, c.getAlpha() / 255f * alphaMultiplier);
-
-        worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
-        worldrenderer.pos(aabb.minX, aabb.maxY, aabb.minZ).endVertex();
-        worldrenderer.pos(aabb.maxX, aabb.maxY, aabb.minZ).endVertex();
-        worldrenderer.pos(aabb.maxX, aabb.minY, aabb.minZ).endVertex();
-        worldrenderer.pos(aabb.minX, aabb.minY, aabb.minZ).endVertex();
-        tessellator.draw();
-        worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
-        worldrenderer.pos(aabb.minX, aabb.minY, aabb.maxZ).endVertex();
-        worldrenderer.pos(aabb.maxX, aabb.minY, aabb.maxZ).endVertex();
-        worldrenderer.pos(aabb.maxX, aabb.maxY, aabb.maxZ).endVertex();
-        worldrenderer.pos(aabb.minX, aabb.maxY, aabb.maxZ).endVertex();
-        tessellator.draw();
-        GlStateManager.enableTexture2D();
-        GlStateManager.disableBlend();
-    }
-
-    private static void renderWaypointText(String str, BlockPos loc, boolean renderText, boolean renderDistance, float partialTicks) {
+    private static void renderWaypointText(
+            //? if >= 1.21.9 {
+            /*WorldRenderContext context,
+            *///?}
+            String str,
+            BlockPos loc,
+            boolean renderText,
+            boolean renderDistance
+            //? if = 1.8.9 {
+            , float partialTicks
+            //?}
+    ) {
+        //? if = 1.8.9 {
         GlStateManager.alphaFunc(516, 0.1F);
 
         GlStateManager.pushMatrix();
@@ -242,8 +495,71 @@ public class WaypointRenderer {
         GlStateManager.popMatrix();
 
         GlStateManager.disableLighting();
+        //?} else {
+        /*if (!renderText && !renderDistance) return;
+
+        Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
+
+        double viewerX = camera.getPosition().x;
+        double viewerY = camera.getPosition().y;
+        double viewerZ = camera.getPosition().z;
+
+        double renderX = loc.getX() + 0.5 - viewerX;
+        double renderY = loc.getY() + 2.0 - viewerY;
+        double renderZ = loc.getZ() + 0.5 - viewerZ;
+
+        double dist = Math.sqrt(camera.getPosition().distanceToSqr(loc.getX(), loc.getY(), loc.getZ()));
+
+        context.matrices().pushPose();
+        context.matrices().translate(renderX, renderY, renderZ);
+        context.matrices().mulPose(camera.rotation());
+
+        float scale = 0.025f;
+        context.matrices().scale(-scale, -scale, scale);
+
+        Matrix4f matrix = context.matrices().last().pose();
+        int background = (int) (Minecraft.getInstance().options.textBackgroundOpacity().get() * 255.0) << 24;
+        int line = 0;
+
+        if (renderText) {
+            float width = -Minecraft.getInstance().font.width(str) / 2f;
+            Minecraft.getInstance().font.drawInBatch(
+                    Component.literal(str),
+                    width,
+                    line,
+                    0xFFFFFFFF,
+                    false,
+                    matrix,
+                    context.consumers(),
+                    Font.DisplayMode.SEE_THROUGH,
+                    background,
+                    LightTexture.FULL_BRIGHT
+            );
+            line -= 10;
+        }
+
+        if (renderDistance) {
+            String distText = ((int) dist + "m");
+            float width = -Minecraft.getInstance().font.width(distText) / 2f;
+            Minecraft.getInstance().font.drawInBatch(
+                    Component.literal(distText),
+                    width,
+                    line,
+                    0xFFFFFFFF,
+                    false,
+                    matrix,
+                    context.consumers(),
+                    Font.DisplayMode.SEE_THROUGH,
+                    background,
+                    LightTexture.FULL_BRIGHT
+            );
+        }
+
+        context.matrices().popPose();
+        *///?}
     }
 
+    //? if = 1.8.9 {
     private static void drawNametag(String str, boolean render) {
         if (!render) return;
 
@@ -283,4 +599,5 @@ public class WaypointRenderer {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.popMatrix();
     }
+    //?}
 }
