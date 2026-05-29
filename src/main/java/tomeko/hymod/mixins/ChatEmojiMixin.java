@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Mixin(GuiScreen.class)
-public class GuiScreenMixin {
+public class ChatEmojiMixin {
     private static final Map<String, String> emojis = new HashMap<>();
 
     static {
@@ -48,7 +48,7 @@ public class GuiScreenMixin {
     }
 
     @ModifyVariable(method = "sendChatMessage(Ljava/lang/String;Z)V", at = @At("HEAD"), ordinal = 0, argsOnly = true)
-    private String onChatMessage(String message) {
+    private String replaceWithEmoji(String message) {
         if (!HyModConfig.mvpEmojisEnabled) return message;
 
         for (Map.Entry<String, String> entry : emojis.entrySet()) {

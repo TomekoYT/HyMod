@@ -15,7 +15,7 @@ import tomeko.hymod.utils.HypixelPackets;
 import java.util.List;
 
 @Mixin(GuiContainer.class)
-public abstract class GuiContainerMixin {
+public abstract class MiddleClickGUIItemsMixin {
     private static final Minecraft mc = Minecraft.getMinecraft();
 
     @Shadow
@@ -28,7 +28,7 @@ public abstract class GuiContainerMixin {
                     target = "Lnet/minecraft/client/gui/inventory/GuiContainer;handleMouseClick(Lnet/minecraft/inventory/Slot;III)V"
             )
     )
-    private void mouseClicked(GuiContainer instance, Slot slotIn, int slotId, int clickedButton, int clickType) {
+    private void useMiddleClick(GuiContainer instance, Slot slotIn, int slotId, int clickedButton, int clickType) {
         if (shouldCallOriginal(instance, slotIn, clickedButton, clickType)) {
             handleMouseClick(slotIn, slotId, clickedButton, clickType);
             return;
