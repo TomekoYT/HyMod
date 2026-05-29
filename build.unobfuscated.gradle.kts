@@ -3,6 +3,7 @@ val mod_id: String by project
 val mod_version: String by project
 val mod_description: String by project
 val mod_archives_name: String by project
+val base_group: String by project
 
 val java_version: String by project
 val minecraft_version: String by project
@@ -58,6 +59,7 @@ tasks.processResources {
         "mod_name" to mod_name,
         "mod_version" to mod_version,
         "mod_description" to mod_description,
+        "base_group" to base_group,
 
         "java_version" to java_version,
         "minecraft_version" to minecraft_version,
