@@ -113,6 +113,11 @@ public class BedwarsResourceDisplay extends BasicHud {
         return actualHeight * scale;
     }
 
+    @Override
+    public boolean shouldShow() {
+        return super.shouldShow() && HypixelPackets.inBedwars;
+    }
+
     private String getText(Item item) {
         int inventoryAmount = ItemTracker.inventory.get(item);
         int enderChestAmount = ItemTracker.enderChest.get(item);
