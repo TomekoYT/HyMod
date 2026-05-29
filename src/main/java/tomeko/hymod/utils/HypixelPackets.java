@@ -43,7 +43,7 @@ public class HypixelPackets {
 
         inSkyblock = packetName.equalsIgnoreCase("skyblock");
         inBedwars = packetName.equalsIgnoreCase("bed wars");
-        inArcade = packetName.equalsIgnoreCase("skyblock");
+        inArcade = packetName.equalsIgnoreCase("arcade");
     }
 
     private static void disableModes() {

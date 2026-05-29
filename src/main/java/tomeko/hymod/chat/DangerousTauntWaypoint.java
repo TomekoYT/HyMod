@@ -8,6 +8,7 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import tomeko.hymod.config.HyModConfig;
+import tomeko.hymod.utils.HypixelPackets;
 import tomeko.hymod.utils.StringFormatting;
 import tomeko.hymod.utils.Waypoint;
 import tomeko.hymod.utils.WaypointRenderer;
@@ -23,7 +24,8 @@ public class DangerousTauntWaypoint {
 
     @SubscribeEvent
     public void onChat(ClientChatReceivedEvent event) {
-        if (event.type == 2 || event.message == null || !HyModConfig.dangerousTauntWaypointEnabled) return;
+        if (event.type == 2 || event.message == null || !HyModConfig.dangerousTauntWaypointEnabled || !HypixelPackets.inArcade)
+            return;
 
         String message = StringFormatting.removeFormatting(event.message.getUnformattedText());
         String[] words = message.split(" ");
