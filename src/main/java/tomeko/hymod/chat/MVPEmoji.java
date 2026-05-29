@@ -8,7 +8,7 @@ import tomeko.hymod.config.HyModConfig;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ChatEmoji {
+public class MVPEmoji {
     private static final Map<String, String> emojis = new HashMap<>();
 
     static {
@@ -46,8 +46,8 @@ public class ChatEmoji {
 
     //? if >= 1.21.9 {
     /*public static void register() {
-        ClientSendMessageEvents.MODIFY_CHAT.register(ChatEmoji::replaceWithEmoji);
-        ClientSendMessageEvents.MODIFY_COMMAND.register(ChatEmoji::replaceWithEmoji);
+        ClientSendMessageEvents.MODIFY_CHAT.register(MVPEmoji::replaceWithEmoji);
+        ClientSendMessageEvents.MODIFY_COMMAND.register(MVPEmoji::replaceWithEmoji);
     }
     *///?}
 
