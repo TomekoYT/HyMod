@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Mixin(GuiScreen.class)
-public class ChatEmojiMixin {
+public abstract class ChatEmojiMixin {
     private static final Map<String, String> emojis = new HashMap<>();
 
     static {
