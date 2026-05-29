@@ -1,10 +1,12 @@
 package tomeko.hymod.chat;
 
 //? if = 1.8.9 {
+
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 //?} else {
+
 /*import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.minecraft.network.chat.Component;
 *///?}
@@ -19,24 +21,21 @@ public class HideGuildMOTD {
         MinecraftForge.EVENT_BUS.register(new HideGuildMOTD());
         //?} else {
         /*ClientReceiveMessageEvents.ALLOW_GAME.register(HideGuildMOTD::onChatReceive);
-        *///?}
+         *///?}
     }
 
     //? if = 1.8.9 {
     @SubscribeEvent
-    //?}
-    public
-            //? if = 1.8.9 {
-    void
-            //?} else {
-    /*static boolean
-    *///?}
+    public void
+    //?} else {
+    /*public static boolean
+     *///?}
     onChatReceive(
             //? if = 1.8.9 {
             ClientChatReceivedEvent event
             //?} else {
             /*Component message, boolean fromActionBar
-            *///?}
+             *///?}
     ) {
         //? if = 1.8.9 {
         if (event.type == 2 || event.message == null) return;
