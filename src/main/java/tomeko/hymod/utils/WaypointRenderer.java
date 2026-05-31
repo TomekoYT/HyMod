@@ -19,12 +19,17 @@ import org.lwjgl.opengl.GL11;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+//? if >= 26.1 {
+/^import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
+ ^///?} else {
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
+//?}
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Camera;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.core.BlockBox;
 import net.minecraft.core.BlockPos;
@@ -39,10 +44,16 @@ import java.util.Iterator;
 import java.util.List;
 
 public class WaypointRenderer {
-    private static final String BEACON_PNG = "textures/entity/beacon_beam.png";
+    private static final String BEACON_PNG =
+            //? if >= 26.1 {
+            /*"textures/entity/beacon/beacon_beam.png";
+            *///?} else {
+            "textures/entity/beacon_beam.png";
+    //?}
+
     //? if = 1.8.9 {
     private static final ResourceLocation BEAM_TEXTURE = new ResourceLocation(BEACON_PNG);
-    //?} else {
+     //?} else {
     /*private static final Identifier BEAM_TEXTURE = Identifier.parse(BEACON_PNG);
     *///?}
 
@@ -52,7 +63,11 @@ public class WaypointRenderer {
         //? if = 1.8.9 {
         MinecraftForge.EVENT_BUS.register(new WaypointRenderer());
          //?} else {
-        /*WorldRenderEvents.AFTER_ENTITIES.register(WaypointRenderer::onWorldRender);
+        /*//? if >= 26.1 {
+        /^LevelRenderEvents.AFTER_TRANSLUCENT_FEATURES.register(WaypointRenderer::onWorldRender);
+         ^///?} else {
+        WorldRenderEvents.AFTER_ENTITIES.register(WaypointRenderer::onWorldRender);
+        //?}
         ClientTickEvents.END_CLIENT_TICK.register(WaypointRenderer::onTick);
         *///?}
     }
@@ -66,7 +81,11 @@ public class WaypointRenderer {
             //? if = 1.8.9 {
             RenderWorldLastEvent event
              //?} else {
-            /*WorldRenderContext context
+            /*//? if >= 26.1 {
+            /^LevelRenderContext context
+             ^///?} else {
+            WorldRenderContext context
+            //?}
             *///?}
     ) {
         for (Waypoint waypoint : waypoints) {
@@ -113,7 +132,11 @@ public class WaypointRenderer {
             //? if = 1.8.9 {
             RenderWorldLastEvent event
              //?} else {
-            /*WorldRenderContext context
+            /*//? if >= 26.1 {
+            /^LevelRenderContext context
+             ^///?} else {
+            WorldRenderContext context
+            //?}
             *///?}
     ) {
         if (waypoint == null) return;
@@ -152,8 +175,14 @@ public class WaypointRenderer {
         drawFilledBoundingBox(
                 //? if = 1.8.9 {
                 new AxisAlignedBB(renderX, renderY, renderZ, renderX + 1, renderY + 1, renderZ + 1),
-                //?} else {
-                /*context,
+                 //?} else {
+                /*//? if >= 26.1 {
+                /^context.poseStack(),
+                context.bufferSource(),
+                ^///?} else {
+                context.matrices(),
+                context.consumers(),
+                //?}
                 new BlockBox(
                         waypoint.pos,
                         waypoint.pos.offset(1, 1, 1)
@@ -163,8 +192,12 @@ public class WaypointRenderer {
                 waypoint.boxOpacity
         );
         renderBeaconBeam(
-                //? if >= 1.21.9 {
-                /*context,
+                //? if >= 26.1 {
+                /*context.poseStack(),
+                context.bufferSource(),
+                *///?} else if >= 1.21.9 {
+                /*context.matrices(),
+                context.consumers(),
                 *///?}
                 renderX,
                 renderY + 1,
@@ -176,8 +209,12 @@ public class WaypointRenderer {
                  //?}
         );
         renderWaypointText(
-                //? if >= 1.21.9 {
-                /*context,
+                //? if >= 26.1 {
+                /*context.poseStack(),
+                context.bufferSource(),
+                *///?} else if >= 1.21.9 {
+                /*context.matrices(),
+                context.consumers(),
                 *///?}
                 waypoint.text,
                 //? if = 1.8.9 {
@@ -197,7 +234,8 @@ public class WaypointRenderer {
             //? if = 1.8.9 {
             AxisAlignedBB aabb,
              //?} else {
-            /*WorldRenderContext context,
+            /*PoseStack matrices,
+            MultiBufferSource consumers,
             BlockBox box,
             *///?}
             Color c,
@@ -267,11 +305,11 @@ public class WaypointRenderer {
         double camY = camera.position().y;
         double camZ = camera.position().z;
 
-        context.matrices().pushPose();
-        context.matrices().translate(-camX, -camY, -camZ);
+        matrices.pushPose();
+        matrices.translate(-camX, -camY, -camZ);
 
-        VertexConsumer buffer = context.consumers().getBuffer(RenderTypes.debugFilledBox());
-        Matrix4f pose = context.matrices().last().pose();
+        VertexConsumer buffer = consumers.getBuffer(RenderTypes.debugFilledBox());
+        Matrix4f pose = matrices.last().pose();
 
         float r = c.getRed() / 255f;
         float g = c.getGreen() / 255f;
@@ -339,7 +377,7 @@ public class WaypointRenderer {
                 r, g, b, alphaMultiplier
         );
 
-        context.matrices().popPose();
+        matrices.popPose();
         *///?}
     }
 
@@ -367,7 +405,8 @@ public class WaypointRenderer {
 
     private static void renderBeaconBeam(
             //? if >= 1.21.9 {
-            /*WorldRenderContext context,
+            /*PoseStack matrices,
+            MultiBufferSource consumers,
             *///?}
             double x,
             double y,
@@ -455,11 +494,11 @@ public class WaypointRenderer {
         worldrenderer.pos(x + 0.2D, y + topOffset, z + 0.2D).tex(0.0D, d13).color(r, g, b, 0.25F * alphaMultiplier).endVertex();
         tessellator.draw();
         //?} else {
-        /*context.matrices().pushPose();
-        context.matrices().translate(x, y, z);
+        /*matrices.pushPose();
+        matrices.translate(x, y, z);
 
-        PoseStack.Pose pose = context.matrices().last();
-        VertexConsumer buffer = context.consumers().getBuffer(RenderTypes.beaconBeam(BEAM_TEXTURE, true));
+        PoseStack.Pose pose = matrices.last();
+        VertexConsumer buffer = consumers.getBuffer(RenderTypes.beaconBeam(BEAM_TEXTURE, true));
 
         long gameTime = Minecraft.getInstance().level.getGameTime();
         float tickDelta = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaTicks();
@@ -502,7 +541,7 @@ public class WaypointRenderer {
         renderBeamSide(pose, buffer, r, g, b, innerAlpha, bottomOffset, topOffset, 0.8f, 0.2f, 0.8f, 0.8f, 1.0f, 0.0f, d12, d13);
         renderBeamSide(pose, buffer, r, g, b, innerAlpha, bottomOffset, topOffset, 0.2f, 0.8f, 0.2f, 0.2f, 1.0f, 0.0f, d12, d13);
 
-        context.matrices().popPose();
+        matrices.popPose();
         *///?}
     }
 
@@ -526,7 +565,8 @@ public class WaypointRenderer {
 
     private static void renderWaypointText(
             //? if >= 1.21.9 {
-            /*WorldRenderContext context,
+            /*PoseStack matrices,
+            MultiBufferSource consumers,
             *///?}
             String str,
             BlockPos loc,
@@ -588,15 +628,15 @@ public class WaypointRenderer {
 
         double dist = Math.sqrt(Minecraft.getInstance().player.distanceToSqr(loc.getX(), loc.getY(), loc.getZ()));
 
-        context.matrices().pushPose();
-        context.matrices().translate(renderX, renderY, renderZ);
-        context.matrices().mulPose(Axis.YP.rotationDegrees(-camera.yRot()));
-        context.matrices().mulPose(Axis.XP.rotationDegrees(camera.xRot()));
+        matrices.pushPose();
+        matrices.translate(renderX, renderY, renderZ);
+        matrices.mulPose(Axis.YP.rotationDegrees(-camera.yRot()));
+        matrices.mulPose(Axis.XP.rotationDegrees(camera.xRot()));
 
         float scale = 0.025f;
-        context.matrices().scale(-scale, -scale, scale);
+        matrices.scale(-scale, -scale, scale);
 
-        Matrix4f matrix = context.matrices().last().pose();
+        Matrix4f matrix = matrices.last().pose();
         int background = (int) (Minecraft.getInstance().options.textBackgroundOpacity().get() * 255.0) << 24;
         int line = 0;
 
@@ -609,10 +649,10 @@ public class WaypointRenderer {
                     0xFFFFFFFF,
                     false,
                     matrix,
-                    context.consumers(),
+                    consumers,
                     Font.DisplayMode.SEE_THROUGH,
                     background,
-                    LightTexture.FULL_BRIGHT
+                    15728880
             );
             line += 10;
         }
@@ -626,13 +666,13 @@ public class WaypointRenderer {
                     0xFFFFFFFF,
                     false,
                     matrix,
-                    context.consumers(),
+                    consumers,
                     Font.DisplayMode.SEE_THROUGH,
                     background,
-                    LightTexture.FULL_BRIGHT
+                    15728880
             );
         }
-        context.matrices().popPose();
+        matrices.popPose();
         *///?}
     }
 

@@ -19,7 +19,11 @@ import net.minecraft.item.ItemStack;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.client.DeltaTracker;
+//? if >= 26.1 {
+/^import net.minecraft.client.gui.GuiGraphicsExtractor;
+^///?} else {
 import net.minecraft.client.gui.GuiGraphics;
+//?}
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -246,7 +250,14 @@ public class BedwarsResourceDisplay
         return super.shouldShow() && HypixelPackets.inBedwars;
     }
     //?} else {
-    /*public void render(GuiGraphics context, DeltaTracker tickDelta) {
+    /*public void render(
+            //? if >= 26.1 {
+            /^GuiGraphicsExtractor context,
+            ^///?} else {
+            GuiGraphics context,
+            //?}
+            DeltaTracker tickDelta
+    ) {
         if (!HypixelPackets.inBedwars) return;
 
         int x = widthPercentage * mc.getWindow().getGuiScaledWidth() / 100;
@@ -268,14 +279,33 @@ public class BedwarsResourceDisplay
             int iconX = 0;
             int textX = (int) (iconSize + iconPadding);
 
-            context.renderItem(stack, iconX, itemY);
+            //? if >= 26.1 {
+            /^context.item(
+            ^///?} else {
+            context.renderItem(
+            //?}
+                    stack,
+                    iconX,
+                    itemY
+            );
 
             int textY = itemY + (16 - mc.font.lineHeight) / 2;
 
             String text = getText(item);
             int color = 0xFFFFFFFF;
 
-            context.drawString(mc.font, text, textX, textY, color, textType);
+            //? if >= 26.1 {
+            /^context.text(
+            ^///?} else {
+            context.drawString(
+            //?}
+                    mc.font,
+                    text,
+                    textX,
+                    textY,
+                    color,
+                    textType
+            );
 
             index++;
         }

@@ -11,8 +11,13 @@ import net.minecraftforge.client.ClientCommandHandler;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.minecraft.client.player.LocalPlayer;
 
+//? if >= 26.1 {
+/^import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.argument;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal;
+^///?} else {
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument;
 import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal;
+//?}
 *///?}
 import tomeko.hymod.config.HyModConfig;
 import tomeko.hymod.utils.HypixelPackets;
@@ -80,26 +85,26 @@ public class SendCoordsCommand
         EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
         //?} else {
         /*LocalPlayer player = Minecraft.getInstance().player;
-        *///?}
+         *///?}
 
         int x = (int)
                 //? if = 1.8.9 {
                 player.posX;
         //?} else {
-            /*player.getX();
-        *///?}
+        /*player.getX();
+         *///?}
         int y = (int)
                 //? if = 1.8.9 {
                 player.posY;
-                //?} else {
-                /*player.getY();
-        *///?}
+        //?} else {
+        /*player.getY();
+         *///?}
         int z = (int)
                 //? if = 1.8.9 {
                 player.posZ;
-                //?} else {
-                /*player.getZ();
-        *///?}
+        //?} else {
+        /*player.getZ();
+         *///?}
         String message = "x: " + x + ", y: " + y + ", z: " + z;
 
         if (!mode.equals("all") && !mode.equals("party")) mode = defaultMode;
@@ -113,6 +118,6 @@ public class SendCoordsCommand
         player.sendChatMessage(message);
         //?} else {
         /*player.connection.sendChat(message);
-        *///?}
+         *///?}
     }
 }
