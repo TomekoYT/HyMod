@@ -24,7 +24,7 @@
     ]
   },
   "mixins": [
-    "${mod_id}.mixins.json"
+    "mixins.${mod_id}.json"
   ],
   "depends": {
     "java": ">=${java_version}",

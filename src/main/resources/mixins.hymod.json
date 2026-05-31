@@ -5,5 +5,8 @@
   "mixins": [
     "MiddleClickGUIItemsMixin",
     "MVPEmojiMixin"
-  ]
+  ],
+  "overwrites": {
+    "requireAnnotations": false
+  }
 }
