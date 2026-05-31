@@ -1,11 +1,8 @@
 {
+  "plugin": "${base_group}.utils.MixinPlugin",
   "package": "${base_group}.mixins",
   "refmap": "mixins.${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_${java_version}",
-  "mixins": [
-    "MiddleClickGUIItemsMixin",
-    "MVPEmojiMixin"
-  ],
   "overwrites": {
     "requireAnnotations": false
   }
