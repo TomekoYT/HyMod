@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 //?} else {
 /*import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-*///?}
+ *///?}
 
 public class HypixelPackets {
     public static boolean onHypixel = false;
@@ -21,24 +21,24 @@ public class HypixelPackets {
     public static void register() {
         //? if = 1.8.9 {
         MinecraftForge.EVENT_BUS.register(new HypixelPackets());
-         //?} else {
+        //?} else {
         /*ClientTickEvents.END_CLIENT_TICK.register(HypixelPackets::onTick);
-        *///?}
+         *///?}
         HypixelModAPI.getInstance().createHandler(ClientboundLocationPacket.class, HypixelPackets::onLocationPacket);
         HypixelModAPI.getInstance().subscribeToEventPacket(ClientboundLocationPacket.class);
     }
 
     //? if = 1.8.9 {
     @SubscribeEvent
-    //?} else {
+            //?} else {
     /*static
-    *///?}
+     *///?}
     public void onTick(
             //? if = 1.8.9 {
             TickEvent.ClientTickEvent event
             //?} else {
             /*Minecraft mc
-            *///?}
+             *///?}
     ) {
         //? if = 1.8.9 {
         if (event.phase != TickEvent.Phase.END) return;
@@ -51,23 +51,25 @@ public class HypixelPackets {
         ServerData server =
                 //? if = 1.8.9 {
                 Minecraft.getMinecraft().getCurrentServerData();
-                //?} else {
-                /*Minecraft.getInstance().getCurrentServer();
-        *///?}
+        //?} else {
+        /*Minecraft.getInstance().getCurrentServer();
+         *///?}
 
-        if (server == null) {
+        if (
+                server == null
+                        //? if = 1.8.9 {
+                        || !server.serverIP
+                        //?} else {
+                        /*|| !server.ip
+                        *///?}
+                        .contains("hypixel")
+        ) {
             onHypixel = false;
             disableModes();
             return;
         }
 
-        String serverIP =
-                //? if = 1.8.9 {
-                server.serverIP;
-                //?} else {
-                /*server.ip;
-        *///?}
-        onHypixel = serverIP.contains("hypixel");
+        onHypixel = true;
     }
 
     private static void onLocationPacket(ClientboundLocationPacket packet) {
