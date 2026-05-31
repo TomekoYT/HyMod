@@ -520,7 +520,7 @@ public class HyModConfig
                                         .name(Component.literal(coordsWaypointsTimeName))
                                         .binding(defaults.coordsWaypointsTime, () -> config.coordsWaypointsTime, newVal -> config.coordsWaypointsTime = newVal)
                                         .controller(opt -> IntegerSliderControllerBuilder.create(opt)
-                                                .formatValue(value -> Component.literal(value + "%"))
+                                                .formatValue(value -> Component.literal(value + "s"))
                                                 .range(coordsWaypointsTimeMin, coordsWaypointsTimeMax)
                                                 .step(coordsWaypointsTimeStep))
                                         .build())
