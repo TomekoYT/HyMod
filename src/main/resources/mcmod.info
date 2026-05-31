@@ -10,9 +10,7 @@
     "authorList": [
       "Tomeko"
     ],
-    "credits": "",
     "logoFile": "assets/${mod_id}/icon.png",
-    "dependencies": ["hypixel_mod_api"],
-    "screenshots": []
+    "dependencies": ["hypixel_mod_api"]
   }
 ]
