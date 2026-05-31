@@ -57,7 +57,8 @@ public class HyModConfig
             category = CATEGORY_BEDWARS
     )
             //?} else {
-    /*static
+    /*@SerialEntry
+    static
      *///?}
     public BedwarsResourceDisplay bedwarsResourceDisplay = new BedwarsResourceDisplay();
 
