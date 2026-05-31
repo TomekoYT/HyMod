@@ -15,19 +15,21 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.opengl.GL11;
 //?} else {
-/*import net.minecraft.client.Camera;
+/*import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Camera;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BeaconRenderer;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.core.BlockBox;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.joml.Matrix4f;
 *///?}
 
@@ -38,11 +40,10 @@ import java.util.List;
 
 public class WaypointRenderer {
     private static final String BEACON_PNG = "textures/entity/beacon_beam.png";
-    private static final ResourceLocation BEAM_TEXTURE =
-            //? if = 1.8.9 {
-            new ResourceLocation(BEACON_PNG);
-             //?} else {
-            /*ResourceLocation.parse(BEACON_PNG);
+    //? if = 1.8.9 {
+    private static final ResourceLocation BEAM_TEXTURE = new ResourceLocation(BEACON_PNG);
+    //?} else {
+    /*private static final Identifier BEAM_TEXTURE = Identifier.parse(BEACON_PNG);
     *///?}
 
     public static final List<Waypoint> waypoints = new ArrayList<>();
@@ -58,13 +59,13 @@ public class WaypointRenderer {
 
     //? if = 1.8.9 {
     @SubscribeEvent
-    //?} else {
+     //?} else {
     /*static
             *///?}
     public void onWorldRender(
             //? if = 1.8.9 {
             RenderWorldLastEvent event
-            //?} else {
+             //?} else {
             /*WorldRenderContext context
             *///?}
     ) {
@@ -73,7 +74,7 @@ public class WaypointRenderer {
                     waypoint,
                     //? if = 1.8.9 {
                     event
-                    //?} else {
+                     //?} else {
                     /*context
                     *///?}
             );
@@ -82,19 +83,19 @@ public class WaypointRenderer {
 
     //? if = 1.8.9 {
     @SubscribeEvent
-    //?} else {
+     //?} else {
     /*static
             *///?}
     public void onTick(
             //? if = 1.8.9 {
             TickEvent.ClientTickEvent event
-            //?} else {
+             //?} else {
             /*Minecraft mc
             *///?}
     ) {
         //? if = 1.8.9 {
         if (event.phase != TickEvent.Phase.END) return;
-        //?}
+         //?}
 
         Iterator<Waypoint> iterator = waypoints.iterator();
         while (iterator.hasNext()) {
@@ -111,7 +112,7 @@ public class WaypointRenderer {
             Waypoint waypoint,
             //? if = 1.8.9 {
             RenderWorldLastEvent event
-            //?} else {
+             //?} else {
             /*WorldRenderContext context
             *///?}
     ) {
@@ -123,25 +124,25 @@ public class WaypointRenderer {
 
         //? if = 1.8.9 {
         Entity viewer = Minecraft.getMinecraft().getRenderViewEntity();
-        //?}
+         //?}
 
         double viewerX =
                 //? if = 1.8.9 {
                 viewer.lastTickPosX + (viewer.posX - viewer.lastTickPosX) * event.partialTicks;
-                //?} else {
-                /*Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().x;
+                 //?} else {
+                /*Minecraft.getInstance().gameRenderer.getMainCamera().position().x;
         *///?}
         double viewerY =
                 //? if = 1.8.9 {
                 viewer.lastTickPosY + (viewer.posY - viewer.lastTickPosY) * event.partialTicks;
-                //?} else {
-                /*Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().y;
+                 //?} else {
+                /*Minecraft.getInstance().gameRenderer.getMainCamera().position().y;
         *///?}
         double viewerZ =
                 //? if = 1.8.9 {
                 viewer.lastTickPosZ + (viewer.posZ - viewer.lastTickPosZ) * event.partialTicks;
-                //?} else {
-                /*Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().z;
+                 //?} else {
+                /*Minecraft.getInstance().gameRenderer.getMainCamera().position().z;
         *///?}
 
         double renderX = waypoint.pos.getX() - viewerX;
@@ -153,7 +154,10 @@ public class WaypointRenderer {
                 new AxisAlignedBB(renderX, renderY, renderZ, renderX + 1, renderY + 1, renderZ + 1),
                 //?} else {
                 /*context,
-                new BlockBox(new BlockPos((int) renderX, (int) renderY, (int) renderZ), new BlockPos((int) (renderX + 1), (int) (renderY + 1), (int) (renderZ + 1))),
+                new BlockBox(
+                        waypoint.pos,
+                        waypoint.pos.offset(1, 1, 1)
+                ),
                 *///?}
                 waypoint.color,
                 waypoint.boxOpacity
@@ -169,7 +173,7 @@ public class WaypointRenderer {
                 waypoint.beamOpacity
                 //? if = 1.8.9 {
                 , event.partialTicks
-                //?}
+                 //?}
         );
         renderWaypointText(
                 //? if >= 1.21.9 {
@@ -178,21 +182,21 @@ public class WaypointRenderer {
                 waypoint.text,
                 //? if = 1.8.9 {
                 waypoint.pos.up(2),
-                //?} else {
-                /*waypoint.pos.above(2),
+                 //?} else {
+                /*waypoint.pos,
                 *///?}
                 waypoint.renderText,
                 waypoint.renderDistance
                 //? if = 1.8.9 {
                 , event.partialTicks
-                //?}
+                 //?}
         );
     }
 
     private static void drawFilledBoundingBox(
             //? if = 1.8.9 {
             AxisAlignedBB aabb,
-            //?} else {
+             //?} else {
             /*WorldRenderContext context,
             BlockBox box,
             *///?}
@@ -257,86 +261,109 @@ public class WaypointRenderer {
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
         //?} else {
-        /*VertexConsumer buffer = context.consumers().getBuffer(RenderType.debugFilledBox());
+        /*Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
 
-        buffer.addVertex(context.matrices().last().pose(), (float) box.min().getX(), (float) box.min().getY(), (float) box.min().getZ())
-                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+        double camX = camera.position().x;
+        double camY = camera.position().y;
+        double camZ = camera.position().z;
 
-        buffer.addVertex(context.matrices().last().pose(), (float) box.max().getX(), (float) box.min().getY(), (float) box.min().getZ())
-                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+        context.matrices().pushPose();
+        context.matrices().translate(-camX, -camY, -camZ);
 
-        buffer.addVertex(context.matrices().last().pose(), (float) box.max().getX(), (float) box.min().getY(), (float) box.max().getZ())
-                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+        VertexConsumer buffer = context.consumers().getBuffer(RenderTypes.debugFilledBox());
+        Matrix4f pose = context.matrices().last().pose();
 
-        buffer.addVertex(context.matrices().last().pose(), (float) box.min().getX(), (float) box.min().getY(), (float) box.max().getZ())
-                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+        float r = c.getRed() / 255f;
+        float g = c.getGreen() / 255f;
+        float b = c.getBlue() / 255f;
 
+        float minX = box.min().getX();
+        float minY = box.min().getY();
+        float minZ = box.min().getZ();
 
-        buffer.addVertex(context.matrices().last().pose(), (float) box.min().getX(), (float) box.max().getY(), (float) box.max().getZ())
-                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+        float maxX = box.max().getX();
+        float maxY = box.max().getY();
+        float maxZ = box.max().getZ();
 
-        buffer.addVertex(context.matrices().last().pose(), (float) box.max().getX(), (float) box.max().getY(), (float) box.max().getZ())
-                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+        addDoubleSidedQuad(
+                buffer, pose,
+                minX, minY, minZ,
+                maxX, minY, minZ,
+                maxX, minY, maxZ,
+                minX, minY, maxZ,
+                r, g, b, alphaMultiplier
+        );
 
-        buffer.addVertex(context.matrices().last().pose(), (float) box.max().getX(), (float) box.max().getY(), (float) box.min().getZ())
-                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+        addDoubleSidedQuad(
+                buffer, pose,
+                minX, maxY, maxZ,
+                maxX, maxY, maxZ,
+                maxX, maxY, minZ,
+                minX, maxY, minZ,
+                r, g, b, alphaMultiplier
+        );
 
-        buffer.addVertex(context.matrices().last().pose(), (float) box.min().getX(), (float) box.max().getY(), (float) box.min().getZ())
-                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+        addDoubleSidedQuad(
+                buffer, pose,
+                minX, minY, minZ,
+                maxX, minY, minZ,
+                maxX, maxY, minZ,
+                minX, maxY, minZ,
+                r, g, b, alphaMultiplier
+        );
 
+        addDoubleSidedQuad(
+                buffer, pose,
+                minX, minY, maxZ,
+                maxX, minY, maxZ,
+                maxX, maxY, maxZ,
+                minX, maxY, maxZ,
+                r, g, b, alphaMultiplier
+        );
 
-        buffer.addVertex(context.matrices().last().pose(), (float) box.min().getX(), (float) box.min().getY(), (float) box.min().getZ())
-                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+        addDoubleSidedQuad(
+                buffer, pose,
+                minX, minY, minZ,
+                minX, minY, maxZ,
+                minX, maxY, maxZ,
+                minX, maxY, minZ,
+                r, g, b, alphaMultiplier
+        );
 
-        buffer.addVertex(context.matrices().last().pose(), (float) box.max().getX(), (float) box.min().getY(), (float) box.min().getZ())
-                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+        addDoubleSidedQuad(
+                buffer, pose,
+                maxX, minY, minZ,
+                maxX, minY, maxZ,
+                maxX, maxY, maxZ,
+                maxX, maxY, minZ,
+                r, g, b, alphaMultiplier
+        );
 
-        buffer.addVertex(context.matrices().last().pose(), (float) box.max().getX(), (float) box.max().getY(), (float) box.min().getZ())
-                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
-
-        buffer.addVertex(context.matrices().last().pose(), (float) box.min().getX(), (float) box.max().getY(), (float) box.min().getZ())
-                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
-
-
-        buffer.addVertex(context.matrices().last().pose(), (float) box.min().getX(), (float) box.min().getY(), (float) box.max().getZ())
-                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
-
-        buffer.addVertex(context.matrices().last().pose(), (float) box.max().getX(), (float) box.min().getY(), (float) box.max().getZ())
-                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
-
-        buffer.addVertex(context.matrices().last().pose(), (float) box.max().getX(), (float) box.max().getY(), (float) box.max().getZ())
-                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
-
-        buffer.addVertex(context.matrices().last().pose(), (float) box.min().getX(), (float) box.max().getY(), (float) box.max().getZ())
-                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
-
-
-        buffer.addVertex(context.matrices().last().pose(), (float) box.min().getX(), (float) box.min().getY(), (float) box.min().getZ())
-                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
-
-        buffer.addVertex(context.matrices().last().pose(), (float) box.min().getX(), (float) box.min().getY(), (float) box.max().getZ())
-                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
-
-        buffer.addVertex(context.matrices().last().pose(), (float) box.min().getX(), (float) box.max().getY(), (float) box.max().getZ())
-                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
-
-        buffer.addVertex(context.matrices().last().pose(), (float) box.min().getX(), (float) box.max().getY(), (float) box.min().getZ())
-                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
-
-
-        buffer.addVertex(context.matrices().last().pose(), (float) box.max().getX(), (float) box.min().getY(), (float) box.min().getZ())
-                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
-
-        buffer.addVertex(context.matrices().last().pose(), (float) box.max().getX(), (float) box.min().getY(), (float) box.max().getZ())
-                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
-
-        buffer.addVertex(context.matrices().last().pose(), (float) box.max().getX(), (float) box.max().getY(), (float) box.max().getZ())
-                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
-
-        buffer.addVertex(context.matrices().last().pose(), (float) box.max().getX(), (float) box.max().getY(), (float) box.min().getZ())
-                .setColor(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, alphaMultiplier);
+        context.matrices().popPose();
         *///?}
     }
+
+    //? if >= 1.21.9 {
+    /*private static void addDoubleSidedQuad(
+            VertexConsumer buffer,
+            Matrix4f pose,
+            float x1, float y1, float z1,
+            float x2, float y2, float z2,
+            float x3, float y3, float z3,
+            float x4, float y4, float z4,
+            float r, float g, float b, float a
+    ) {
+        buffer.addVertex(pose, x1, y1, z1).setColor(r, g, b, a);
+        buffer.addVertex(pose, x2, y2, z2).setColor(r, g, b, a);
+        buffer.addVertex(pose, x3, y3, z3).setColor(r, g, b, a);
+        buffer.addVertex(pose, x4, y4, z4).setColor(r, g, b, a);
+
+        buffer.addVertex(pose, x4, y4, z4).setColor(r, g, b, a);
+        buffer.addVertex(pose, x3, y3, z3).setColor(r, g, b, a);
+        buffer.addVertex(pose, x2, y2, z2).setColor(r, g, b, a);
+        buffer.addVertex(pose, x1, y1, z1).setColor(r, g, b, a);
+    }
+    *///?}
 
     private static void renderBeaconBeam(
             //? if >= 1.21.9 {
@@ -349,7 +376,7 @@ public class WaypointRenderer {
             float alphaMultiplier
             //? if = 1.8.9 {
             , float partialTicks
-            //?}
+             //?}
     ) {
         //? if = 1.8.9 {
         int height = 300;
@@ -430,21 +457,72 @@ public class WaypointRenderer {
         //?} else {
         /*context.matrices().pushPose();
         context.matrices().translate(x, y, z);
-        BeaconRenderer.submitBeaconBeam(
-                context.matrices(),
-                Minecraft.getInstance().gameRenderer.getFeatureRenderDispatcher().getSubmitNodeStorage(),
-                BEAM_TEXTURE,
-                1.0f,
-                Minecraft.getInstance().level.getGameTime(),
-                0,
-                300,
-                rgb,
-                0.2f,
-                0.25f * alphaMultiplier
-        );
+
+        PoseStack.Pose pose = context.matrices().last();
+        VertexConsumer buffer = context.consumers().getBuffer(RenderTypes.beaconBeam(BEAM_TEXTURE, true));
+
+        long gameTime = Minecraft.getInstance().level.getGameTime();
+        float tickDelta = Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaTicks();
+        double time = gameTime + (double) tickDelta;
+
+        double t1 = -time * 0.2D;
+        double d1 = t1 - Math.floor(t1);
+
+        float r = ((rgb >> 16) & 0xFF) / 255f;
+        float g = ((rgb >> 8) & 0xFF) / 255f;
+        float b = (rgb & 0xFF) / 255f;
+
+        double d2 = time * 0.025D * -1.5D;
+        float d4 = (float) (0.5D + Math.cos(d2 + 2.356194490192345D) * 0.2D);
+        float d5 = (float) (0.5D + Math.sin(d2 + 2.356194490192345D) * 0.2D);
+        float d6 = (float) (0.5D + Math.cos(d2 + (Math.PI / 4D)) * 0.2D);
+        float d7 = (float) (0.5D + Math.sin(d2 + (Math.PI / 4D)) * 0.2D);
+        float d8 = (float) (0.5D + Math.cos(d2 + 3.9269908169872414D) * 0.2D);
+        float d9 = (float) (0.5D + Math.sin(d2 + 3.9269908169872414D) * 0.2D);
+        float d10 = (float) (0.5D + Math.cos(d2 + 5.497787143782138D) * 0.2D);
+        float d11 = (float) (0.5D + Math.sin(d2 + 5.497787143782138D) * 0.2D);
+
+        float d14 = (float) (-1.0D + d1);
+        float d15 = (float) (300.0D * 2.5D + d14);
+
+        float topOffset = 300.0f;
+        float bottomOffset = 0.0f;
+
+        renderBeamSide(pose, buffer, r, g, b, alphaMultiplier, bottomOffset, topOffset, d4, d5, d6, d7, 1.0f, 0.0f, d14, d15);
+        renderBeamSide(pose, buffer, r, g, b, alphaMultiplier, bottomOffset, topOffset, d10, d11, d8, d9, 1.0f, 0.0f, d14, d15);
+        renderBeamSide(pose, buffer, r, g, b, alphaMultiplier, bottomOffset, topOffset, d6, d7, d10, d11, 1.0f, 0.0f, d14, d15);
+        renderBeamSide(pose, buffer, r, g, b, alphaMultiplier, bottomOffset, topOffset, d8, d9, d4, d5, 1.0f, 0.0f, d14, d15);
+
+        float d12 = (float) (-1.0D + d1);
+        float d13 = 300.0f + d12;
+        float innerAlpha = 0.25f * alphaMultiplier;
+
+        renderBeamSide(pose, buffer, r, g, b, innerAlpha, bottomOffset, topOffset, 0.2f, 0.2f, 0.8f, 0.2f, 1.0f, 0.0f, d12, d13);
+        renderBeamSide(pose, buffer, r, g, b, innerAlpha, bottomOffset, topOffset, 0.8f, 0.8f, 0.2f, 0.8f, 1.0f, 0.0f, d12, d13);
+        renderBeamSide(pose, buffer, r, g, b, innerAlpha, bottomOffset, topOffset, 0.8f, 0.2f, 0.8f, 0.8f, 1.0f, 0.0f, d12, d13);
+        renderBeamSide(pose, buffer, r, g, b, innerAlpha, bottomOffset, topOffset, 0.2f, 0.8f, 0.2f, 0.2f, 1.0f, 0.0f, d12, d13);
+
         context.matrices().popPose();
         *///?}
     }
+
+    //? if >= 1.21.9 {
+    /*private static void renderBeamSide(
+            PoseStack.Pose pose,
+            VertexConsumer buffer,
+            float r, float g, float b, float a,
+            float yMin, float yMax,
+            float x1, float z1,
+            float x2, float z2,
+            float u1, float u2,
+            float v1, float v2
+    ) {
+        buffer.addVertex(pose.pose(), x1, yMax, z1).setColor(r, g, b, a).setUv(u1, v2).setUv2(15, 15).setNormal(pose, 0.0f, 1.0f, 0.0f);
+        buffer.addVertex(pose.pose(), x1, yMin, z1).setColor(r, g, b, a).setUv(u1, v1).setUv2(15, 15).setNormal(pose, 0.0f, 1.0f, 0.0f);
+        buffer.addVertex(pose.pose(), x2, yMin, z2).setColor(r, g, b, a).setUv(u2, v1).setUv2(15, 15).setNormal(pose, 0.0f, 1.0f, 0.0f);
+        buffer.addVertex(pose.pose(), x2, yMax, z2).setColor(r, g, b, a).setUv(u2, v2).setUv2(15, 15).setNormal(pose, 0.0f, 1.0f, 0.0f);
+    }
+    *///?}
 
     private static void renderWaypointText(
             //? if >= 1.21.9 {
@@ -456,7 +534,7 @@ public class WaypointRenderer {
             boolean renderDistance
             //? if = 1.8.9 {
             , float partialTicks
-            //?}
+             //?}
     ) {
         //? if = 1.8.9 {
         GlStateManager.alphaFunc(516, 0.1F);
@@ -500,19 +578,20 @@ public class WaypointRenderer {
 
         Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
 
-        double viewerX = camera.getPosition().x;
-        double viewerY = camera.getPosition().y;
-        double viewerZ = camera.getPosition().z;
+        double viewerX = camera.position().x;
+        double viewerY = camera.position().y;
+        double viewerZ = camera.position().z;
 
         double renderX = loc.getX() + 0.5 - viewerX;
         double renderY = loc.getY() + 2.0 - viewerY;
         double renderZ = loc.getZ() + 0.5 - viewerZ;
 
-        double dist = Math.sqrt(camera.getPosition().distanceToSqr(loc.getX(), loc.getY(), loc.getZ()));
+        double dist = Math.sqrt(Minecraft.getInstance().player.distanceToSqr(loc.getX(), loc.getY(), loc.getZ()));
 
         context.matrices().pushPose();
         context.matrices().translate(renderX, renderY, renderZ);
-        context.matrices().mulPose(camera.rotation());
+        context.matrices().mulPose(Axis.YP.rotationDegrees(-camera.yRot()));
+        context.matrices().mulPose(Axis.XP.rotationDegrees(camera.xRot()));
 
         float scale = 0.025f;
         context.matrices().scale(-scale, -scale, scale);
@@ -535,14 +614,13 @@ public class WaypointRenderer {
                     background,
                     LightTexture.FULL_BRIGHT
             );
-            line -= 10;
+            line += 10;
         }
-
         if (renderDistance) {
             String distText = ((int) dist + "m");
             float width = -Minecraft.getInstance().font.width(distText) / 2f;
             Minecraft.getInstance().font.drawInBatch(
-                    Component.literal(distText),
+                    Component.literal(distText).withStyle(style -> style.withColor(ChatFormatting.YELLOW)),
                     width,
                     line,
                     0xFFFFFFFF,
@@ -554,7 +632,6 @@ public class WaypointRenderer {
                     LightTexture.FULL_BRIGHT
             );
         }
-
         context.matrices().popPose();
         *///?}
     }
