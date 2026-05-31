@@ -52,7 +52,9 @@ public class HyMod
         *///?}
 
         HypixelPackets.register();
+        //? if = 1.8.9 {
         ItemTracker.register();
+        //?}
         WaypointRenderer.register();
     }
 }

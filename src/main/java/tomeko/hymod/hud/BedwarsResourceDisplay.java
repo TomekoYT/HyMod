@@ -1,5 +1,6 @@
 package tomeko.hymod.hud;
 
+//? if = 1.8.9 {
 import cc.polyfrost.oneconfig.config.annotations.Dropdown;
 import cc.polyfrost.oneconfig.config.annotations.Exclude;
 import cc.polyfrost.oneconfig.config.annotations.Slider;
@@ -124,3 +125,4 @@ public class BedwarsResourceDisplay extends BasicHud {
         return inventoryAmount + " + " + enderChestAmount + " (" + (inventoryAmount + enderChestAmount) + ")";
     }
 }
+//?}
