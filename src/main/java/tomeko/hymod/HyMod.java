@@ -1,15 +1,17 @@
 package tomeko.hymod;
 
 //? if = 1.8.9 {
+
 import cc.polyfrost.oneconfig.events.EventManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 //?} else {
 /*import net.fabricmc.api.ClientModInitializer;
-*///?}
+ *///?}
 import tomeko.hymod.chat.*;
 import tomeko.hymod.commands.*;
 import tomeko.hymod.config.*;
+import tomeko.hymod.hud.BedwarsResourceDisplay;
 import tomeko.hymod.utils.*;
 
 //? if = 1.8.9 {
@@ -18,13 +20,13 @@ import tomeko.hymod.utils.*;
 public class HyMod
         //? if >= 1.21.9 {
         /*implements ClientModInitializer
-        *///?}
+         *///?}
 {
     //? if = 1.8.9 {
     @Mod.EventHandler
-    //?} else {
+            //?} else {
     /*@Override
-            *///?}
+     *///?}
     public void onInitializeClient(
             //? if = 1.8.9 {
             FMLInitializationEvent event
@@ -49,12 +51,11 @@ public class HyMod
         new HyModConfig();
         //?} else {
         /*HyModConfig.register();
+        BedwarsResourceDisplay.register();
         *///?}
 
         HypixelPackets.register();
-        //? if = 1.8.9 {
         ItemTracker.register();
-        //?}
         WaypointRenderer.register();
     }
 }

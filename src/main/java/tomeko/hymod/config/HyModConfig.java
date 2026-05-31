@@ -19,12 +19,13 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import java.awt.Color;
 *///?}
+import tomeko.hymod.hud.BedwarsResourceDisplay;
 import tomeko.hymod.utils.Constants;
 
 public class HyModConfig
         //? if = 1.8.9 {
         extends Config
-         //?}
+        //?}
 {
     //? if = 1.8.9 {
     public HyModConfig() {
@@ -47,7 +48,7 @@ public class HyModConfig
 
     //? if = 1.8.9 {
     @Exclude
-    //?}
+            //?}
     private static final String bedwarsResourceDisplayName = "Bedwars Resource Display";
 
     //? if = 1.8.9 {
@@ -55,8 +56,10 @@ public class HyModConfig
             name = bedwarsResourceDisplayName,
             category = CATEGORY_BEDWARS
     )
+            //?} else {
+    /*static
+     *///?}
     public BedwarsResourceDisplay bedwarsResourceDisplay = new BedwarsResourceDisplay();
-    //?}
 
 
     //? if = 1.8.9 {
@@ -72,7 +75,7 @@ public class HyModConfig
 
     //? if = 1.8.9 {
     @Exclude
-    //?}
+            //?}
     private static final String dangerousTauntWaypointName = "Dangerous Taunt Waypoint";
 
     //? if = 1.8.9 {
@@ -83,7 +86,7 @@ public class HyModConfig
     )
             //?} else {
     /*@SerialEntry
-            *///?}
+     *///?}
     public static boolean dangerousTauntWaypointEnabled = true;
 
 
@@ -112,7 +115,7 @@ public class HyModConfig
     )
             //?} else {
     /*@SerialEntry
-            *///?}
+     *///?}
     public static boolean whitePrivateMessagesEnabled = true;
 
     //? if = 1.8.9 {
@@ -128,7 +131,7 @@ public class HyModConfig
     )
             //?} else {
     /*@SerialEntry
-            *///?}
+     *///?}
     public static boolean whiteNoRankMessagesEnabled = true;
 
 
@@ -151,7 +154,7 @@ public class HyModConfig
     )
             //?} else {
     /*@SerialEntry
-            *///?}
+     *///?}
     public static boolean hideGuildMOTDEnabled = false;
 
 
@@ -174,7 +177,7 @@ public class HyModConfig
     )
             //?} else {
     /*@SerialEntry
-            *///?}
+     *///?}
     public static boolean mvpEmojisEnabled = true;
 
 
@@ -194,7 +197,7 @@ public class HyModConfig
     )
             //?} else {
     /*@SerialEntry
-            *///?}
+     *///?}
     public static boolean sendcoordsToParty = true;
 
 
@@ -218,7 +221,7 @@ public class HyModConfig
 
             //?} else {
     /*@SerialEntry
-            *///?}
+     *///?}
     public static boolean coordsWaypointsEnabled = true;
 
     //? if = 1.8.9 {
@@ -245,15 +248,15 @@ public class HyModConfig
     private static final String coordsWaypointsBoxOpacityName = "Box Opacity";
     //? if = 1.8.9 {
     @Exclude
-    //?}
+            //?}
     private static final int coordsWaypointsBoxOpacityMin = 0;
     //? if = 1.8.9 {
     @Exclude
-    //?}
+            //?}
     private static final int coordsWaypointsBoxOpacityMax = 100;
     //? if = 1.8.9 {
     @Exclude
-    //?}
+            //?}
     private static final int coordsWaypointsBoxOpacityStep = 1;
 
     //? if = 1.8.9 {
@@ -267,24 +270,24 @@ public class HyModConfig
     )
             //?} else {
     /*@SerialEntry
-            *///?}
+     *///?}
     public static int coordsWaypointsBoxOpacity = 50;
 
     //? if = 1.8.9 {
     @Exclude
             //?}
-    private static final String coordsWaypointsBeamOpacityName =  "Beam Opacity";
+    private static final String coordsWaypointsBeamOpacityName = "Beam Opacity";
     //? if = 1.8.9 {
     @Exclude
-    //?}
+            //?}
     private static final int coordsWaypointsBeamOpacityMin = 0;
     //? if = 1.8.9 {
     @Exclude
-    //?}
+            //?}
     private static final int coordsWaypointsBeamOpacityMax = 100;
     //? if = 1.8.9 {
     @Exclude
-    //?}
+            //?}
     private static final int coordsWaypointsBeamOpacityStep = 1;
 
     //? if = 1.8.9 {
@@ -298,13 +301,13 @@ public class HyModConfig
     )
             //?} else {
     /*@SerialEntry
-            *///?}
+     *///?}
     public static int coordsWaypointsBeamOpacity = 50;
 
     //? if = 1.8.9 {
     @Exclude
             //?}
-    private static final String coordsWaypointsRenderTextName =  "Render Text";
+    private static final String coordsWaypointsRenderTextName = "Render Text";
 
     //? if = 1.8.9 {
     @Switch(
@@ -314,13 +317,13 @@ public class HyModConfig
     )
             //?} else {
     /*@SerialEntry
-            *///?}
+     *///?}
     public static boolean coordsWaypointsRenderText = true;
 
     //? if = 1.8.9 {
     @Exclude
             //?}
-    private static final String coordsWaypointsRenderDistanceName =  "Render Distance";
+    private static final String coordsWaypointsRenderDistanceName = "Render Distance";
 
     //? if = 1.8.9 {
     @Switch(
@@ -330,24 +333,24 @@ public class HyModConfig
     )
             //?} else {
     /*@SerialEntry
-            *///?}
+     *///?}
     public static boolean coordsWaypointsRenderDistance = true;
 
     //? if = 1.8.9 {
     @Exclude
-    //?}
+            //?}
     private static final String coordsWaypointsTimeName = "Time";
     //? if = 1.8.9 {
     @Exclude
-     //?}
+            //?}
     private static final int coordsWaypointsTimeMin = 0;
     //? if = 1.8.9 {
     @Exclude
-     //?}
+            //?}
     private static final int coordsWaypointsTimeMax = 120;
     //? if = 1.8.9 {
     @Exclude
-     //?}
+            //?}
     private static final int coordsWaypointsTimeStep = 1;
 
     //? if = 1.8.9 {
@@ -361,7 +364,7 @@ public class HyModConfig
     )
             //?} else {
     /*@SerialEntry
-            *///?}
+     *///?}
     public static int coordsWaypointsTime = 30;
 
 
@@ -379,7 +382,7 @@ public class HyModConfig
 
     //? if = 1.8.9 {
     @Exclude
-    //?}
+            //?}
     private static final String middleClickGUIItemsEnabledName = "Enabled";
 
     //? if = 1.8.9 {
@@ -390,7 +393,7 @@ public class HyModConfig
     )
             //?} else {
     /*@SerialEntry
-            *///?}
+     *///?}
     public static boolean middleClickGUIItemsEnabled = true;
 
     //? if >= 1.21.9 {
@@ -400,6 +403,63 @@ public class HyModConfig
 
                 .category(ConfigCategory.createBuilder()
                         .name(Component.literal(CATEGORY_BEDWARS))
+
+                        .group(OptionGroup.createBuilder()
+                                .name(Component.literal(bedwarsResourceDisplayName))
+
+                                .option(Option.<Integer>createBuilder()
+                                        .name(Component.literal("Position X"))
+                                        .binding(defaults.bedwarsResourceDisplay.widthPercentage, () -> config.bedwarsResourceDisplay.widthPercentage, newVal -> config.bedwarsResourceDisplay.widthPercentage = newVal)
+                                        .controller(opt -> IntegerSliderControllerBuilder.create(opt)
+                                                .formatValue(value -> Component.literal(value + "%"))
+                                                .range(0, 100)
+                                                .step(1))
+                                        .build())
+
+                                .option(Option.<Integer>createBuilder()
+                                        .name(Component.literal("Position Y"))
+                                        .binding(defaults.bedwarsResourceDisplay.heightPercentage, () -> config.bedwarsResourceDisplay.heightPercentage, newVal -> config.bedwarsResourceDisplay.heightPercentage = newVal)
+                                        .controller(opt -> IntegerSliderControllerBuilder.create(opt)
+                                                .formatValue(value -> Component.literal(value + "%"))
+                                                .range(0, 100)
+                                                .step(1))
+                                        .build())
+
+                                .option(Option.<Integer>createBuilder()
+                                        .name(Component.literal("Scale"))
+                                        .binding(defaults.bedwarsResourceDisplay.hudScale, () -> config.bedwarsResourceDisplay.hudScale, newVal -> config.bedwarsResourceDisplay.hudScale = newVal)
+                                        .controller(opt -> IntegerSliderControllerBuilder.create(opt)
+                                                .formatValue(value -> Component.literal(value + "%"))
+                                                .range(0, 200)
+                                                .step(1))
+                                        .build())
+
+                                .option(Option.<Float>createBuilder()
+                                        .name(Component.literal(bedwarsResourceDisplay.itemPaddingName))
+                                        .binding(defaults.bedwarsResourceDisplay.itemPadding, () -> config.bedwarsResourceDisplay.itemPadding, newVal -> config.bedwarsResourceDisplay.itemPadding = newVal)
+                                        .controller(opt -> FloatSliderControllerBuilder.create(opt)
+                                                .formatValue(value -> Component.literal(String.valueOf(value)))
+                                                .range(bedwarsResourceDisplay.itemPaddingMin, bedwarsResourceDisplay.itemPaddingMax)
+                                                .step(0.1f))
+                                        .build())
+
+                                .option(Option.<Float>createBuilder()
+                                        .name(Component.literal(bedwarsResourceDisplay.iconPaddingName))
+                                        .binding(defaults.bedwarsResourceDisplay.iconPadding, () -> config.bedwarsResourceDisplay.iconPadding, newVal -> config.bedwarsResourceDisplay.iconPadding = newVal)
+                                        .controller(opt -> FloatSliderControllerBuilder.create(opt)
+                                                .formatValue(value -> Component.literal(String.valueOf(value)))
+                                                .range(bedwarsResourceDisplay.iconPaddingMin, bedwarsResourceDisplay.iconPaddingMax)
+                                                .step(0.1f))
+                                        .build())
+
+                                .option(Option.<Boolean>createBuilder()
+                                        .name(Component.literal("Text Shadow"))
+                                        .binding(defaults.bedwarsResourceDisplay.textType, () -> config.bedwarsResourceDisplay.textType, newVal -> config.bedwarsResourceDisplay.textType = newVal)
+                                        .controller(TickBoxControllerBuilder::create)
+                                        .build())
+
+                                .build())
+
                         .build())
 
                 .category(ConfigCategory.createBuilder()
