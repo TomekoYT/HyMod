@@ -9,15 +9,15 @@
   ],
   "contact": {
     "homepage": "https://modrinth.com/mod/${mod_id}",
-    "sources": "https://github.com/TomekoYT/${mod_name}",
-    "issues": "https://github.com/TomekoYT/${mod_name}/issues"
+    "sources": "https://github.com/TomekoYT/${mod_archives_name}",
+    "issues": "https://github.com/TomekoYT/${mod_archives_name}/issues"
   },
   "license": "GPL-3.0",
   "icon": "assets/${mod_id}/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
-      "${base_group}.${mod_name}"
+      "${base_group}.${mod_archives_name}"
     ],
     "modmenu": [
       "${base_group}.config.ModMenuIntegration"

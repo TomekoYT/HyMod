@@ -60,6 +60,7 @@ tasks.processResources {
         "mod_name" to mod_name,
         "mod_version" to mod_version,
         "mod_description" to mod_description,
+        "mod_archives_name" to mod_archives_name,
         "base_group" to base_group,
 
         "java_version" to java_version,
