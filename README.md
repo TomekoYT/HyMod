@@ -39,7 +39,7 @@ Multiversion mod for Hypixel adding features for bedwars (resource display), arc
 - Hides guild message of the day
 
 #### MVP++ Emojis
-- Replace emojis like "<3" with "❤"
+- Replaces emojis like "<3" with "❤"
 
 #### /sendcoords Command
 - Usage: /sendcoords <all/party>
