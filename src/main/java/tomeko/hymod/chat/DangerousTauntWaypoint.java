@@ -63,7 +63,7 @@ public class DangerousTauntWaypoint {
             *///?}
             return;
 
-        if (!HyModConfig.dangerousTauntWaypointEnabled || !HypixelPackets.inArcade) return;
+        if (!HyModConfig.dangerousTauntWaypointEnabled || !HypixelPackets.inFarmHunt) return;
 
         String message = StringFormatting.removeFormatting(
                 //? if = 1.8.9 {
