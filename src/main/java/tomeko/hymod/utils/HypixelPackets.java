@@ -16,7 +16,7 @@ public class HypixelPackets {
     public static boolean onHypixel = false;
     public static boolean inSkyblock = false;
     public static boolean inBedwars = false;
-    public static boolean inArcade = false;
+    public static boolean inFarmHunt = false;
 
     public static void register() {
         //? if = 1.8.9 {
@@ -61,11 +61,11 @@ public class HypixelPackets {
                         || !server.serverIP
                         //?} else {
                         /*|| !server.ip
-                        *///?}
+                         *///?}
                         .contains("hypixel")
         ) {
             onHypixel = false;
-            disableModes();
+            disableAll();
             return;
         }
 
@@ -74,20 +74,36 @@ public class HypixelPackets {
 
     private static void onLocationPacket(ClientboundLocationPacket packet) {
         if (!packet.getServerType().isPresent()) {
+            disableAll();
+            return;
+        }
+
+        String serverTypeName = packet.getServerType().get().getName();
+
+        inSkyblock = serverTypeName.equals("SkyBlock");
+        inBedwars = serverTypeName.equals("Bed Wars");
+
+        if (!packet.getMode().isPresent()) {
             disableModes();
             return;
         }
 
-        String packetName = packet.getServerType().get().getName();
+        String modeName = packet.getMode().get();
 
-        inSkyblock = packetName.equalsIgnoreCase("skyblock");
-        inBedwars = packetName.equalsIgnoreCase("bed wars");
-        inArcade = packetName.equalsIgnoreCase("arcade");
+        inFarmHunt = modeName.equals("FARM_HUNT");
+    }
+
+    private static void disableAll() {
+        disableServerTypes();
+        disableModes();
+    }
+
+    private static void disableServerTypes() {
+        inSkyblock = false;
+        inBedwars = false;
     }
 
     private static void disableModes() {
-        inSkyblock = false;
-        inBedwars = false;
-        inArcade = false;
+        inFarmHunt = false;
     }
 }
