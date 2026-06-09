@@ -14,8 +14,11 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class HypixelPackets {
     public static boolean onHypixel = false;
+
     public static boolean inSkyblock = false;
     public static boolean inBedwars = false;
+    public static boolean inArcade = false;
+
     public static boolean inFarmHunt = false;
 
     public static void register() {
@@ -82,6 +85,7 @@ public class HypixelPackets {
 
         inSkyblock = serverTypeName.equals("SkyBlock");
         inBedwars = serverTypeName.equals("Bed Wars");
+        inArcade = serverTypeName.equals("Arcade");
 
         if (!packet.getMode().isPresent()) {
             disableModes();
@@ -90,7 +94,7 @@ public class HypixelPackets {
 
         String modeName = packet.getMode().get();
 
-        inFarmHunt = modeName.equals("FARM_HUNT");
+        inFarmHunt = inArcade && modeName.equals("FARM_HUNT");
     }
 
     private static void disableAll() {
@@ -101,6 +105,7 @@ public class HypixelPackets {
     private static void disableServerTypes() {
         inSkyblock = false;
         inBedwars = false;
+        inArcade = false;
     }
 
     private static void disableModes() {
