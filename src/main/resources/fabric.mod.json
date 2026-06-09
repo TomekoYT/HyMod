@@ -31,10 +31,11 @@
     "minecraft": ">=${minecraft_version}",
     "fabricloader": ">=${fabric_loader_version}",
     "fabric-api": ">=${fabric_api_version}",
-
-    "yet_another_config_lib_v3": ">=${yacl_version}",
-    "modmenu": ">=${mod_menu_version}",
+    "oneconfigbootstrap": ">=${oneconfig_version}",
     "hypixel-mod-api": ">=${hypixel_mod_api_version}"
+  },
+  "suggests": {
+    "modmenu": ">=${mod_menu_version}"
   },
   "custom": {
     "youtube": "https://www.youtube.com/@TomekoYT",

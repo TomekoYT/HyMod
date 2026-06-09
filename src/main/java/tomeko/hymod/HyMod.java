@@ -48,11 +48,7 @@ public class HyMod
 
         //? if = 1.8.9 {
         CloseInactiveConfigScreen.register();
-        new HyModConfig();
-        //?} else {
-        /*HyModConfig.register();
-        BedwarsResourceDisplay.register();
-        *///?}
+        //?}
 
         HypixelPackets.register();
         ItemTracker.register();

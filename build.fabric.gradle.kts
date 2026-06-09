@@ -10,7 +10,7 @@ val minecraft_version: String by project
 val fabric_loader_version: String by project
 val fabric_api_version: String by project
 
-val yacl_version: String by project
+val oneconfig_version: String by project
 val mod_menu_version: String by project
 val hypixel_mod_api_version: String by project
 
@@ -24,7 +24,10 @@ base {
 }
 
 repositories {
-    maven("https://maven.isxander.dev/releases")
+    google()
+
+    maven("https://repo.polyfrost.org/releases")
+    maven("https://repo.polyfrost.org/snapshots")
     maven("https://maven.terraformersmc.com/")
     maven("https://repo.hypixel.net/repository/Hypixel/")
 }
@@ -43,7 +46,12 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:$fabric_loader_version")
     modImplementation("net.fabricmc.fabric-api:fabric-api:$fabric_api_version")
 
-    modImplementation("dev.isxander:yet-another-config-lib:$yacl_version")
+    val oneconfigModules = arrayOf("commands", "config-impl", "events", "hud", "internal", "ui", "utils")
+    for (module in oneconfigModules) {
+        implementation("org.polyfrost.oneconfig:${module}:${oneconfig_version}")
+    }
+    modImplementation("org.polyfrost.oneconfig:$minecraft_version-fabric:$oneconfig_version")
+
     modImplementation("com.terraformersmc:modmenu:$mod_menu_version")
     modImplementation("net.hypixel:mod-api:$hypixel_mod_api_version")
 }
@@ -68,7 +76,7 @@ tasks.processResources {
         "fabric_loader_version" to fabric_loader_version,
         "fabric_api_version" to fabric_api_version,
 
-        "yacl_version" to yacl_version,
+        "oneconfig_version" to oneconfig_version,
         "mod_menu_version" to mod_menu_version,
         "hypixel_mod_api_version" to hypixel_mod_api_version
     )

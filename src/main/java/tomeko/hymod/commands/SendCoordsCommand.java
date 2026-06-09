@@ -28,7 +28,7 @@ public class SendCoordsCommand
         //?}
 {
     private static final String COMMAND_NAME = "sendcoords";
-    private static String defaultMode = HyModConfig.sendcoordsToParty ? "party" : "all";
+    private static String defaultMode = HyModConfig.sendcoordsToParty == 1 ? "party" : "all";
 
     public static void register() {
         //? if = 1.8.9 {

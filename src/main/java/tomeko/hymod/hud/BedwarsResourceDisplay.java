@@ -15,21 +15,12 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 //?} else {
-/*import dev.isxander.yacl3.config.v2.api.SerialEntry;
-import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
-import net.minecraft.client.DeltaTracker;
-//? if >= 26.1 {
-/^import net.minecraft.client.gui.GuiGraphicsExtractor;
-^///?} else {
-import net.minecraft.client.gui.GuiGraphics;
-//?}
-import net.minecraft.resources.Identifier;
+/*import androidx.compose.runtime.Composer;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import tomeko.hymod.config.HyModConfig;
-import tomeko.hymod.utils.Constants;
+import org.jspecify.annotations.Nullable;
+import org.polyfrost.oneconfig.api.config.v1.annotations.*;
+import org.polyfrost.oneconfig.api.hud.v1.Hud;
 *///?}
 import tomeko.hymod.utils.ItemTracker;
 import tomeko.hymod.utils.HypixelPackets;
@@ -40,80 +31,46 @@ import java.util.List;
 public class BedwarsResourceDisplay
         //? if = 1.8.9 {
         extends BasicHud
-        //?}
+         //?} else {
+        /*extends Hud
+        *///?}
 {
-    //? if = 1.8.9 {
     public BedwarsResourceDisplay() {
-        super(true);
+        super(
+                //? if = 1.8.9 {
+                true
+                 //?} else {
+                /*"bedwarsresourcedisplay",
+                "Bedwars Resource Display",
+                Category.Companion.getCOMBAT()
+                *///?}
+        );
     }
-    //?} else {
-    /*public static void register() {
-        HudElementRegistry.attachElementBefore(VanillaHudElements.CHAT, Identifier.fromNamespaceAndPath(Constants.MOD_ID, "bedwars_resource_display"), HyModConfig.bedwarsResourceDisplay::render);
-    }
-    *///?}
 
-    //? if >= 1.21.9 {
-    /*@SerialEntry
-    public int widthPercentage = 0;
 
-    @SerialEntry
-    public int heightPercentage = 0;
-
-    @SerialEntry
-    public int hudScale = 100;
-    *///?}
-
-    //? if = 1.8.9 {
-    @Exclude
-            //?}
-    public final String itemPaddingName = "Item Padding";
-
-    //? if = 1.8.9 {
-    @Exclude
-            //?}
-    public final float itemPaddingMin = 0f;
-
-    //? if = 1.8.9 {
-    @Exclude
-            //?}
-    public final float itemPaddingMax = 10f;
-
-    //? if = 1.8.9{
-    @Slider(name = itemPaddingName, min = itemPaddingMin, max = itemPaddingMax)
+    @Slider(//? if = 1.8.9 {
+            name
             //?} else {
-    /*@SerialEntry
-     *///?}
+            /*title
+                    *///?}
+                    = "Item Padding", min = 0f, max = 10f)
     public float itemPadding = 5;
 
-    //? if = 1.8.9 {
-    @Exclude
-            //?}
-    public final String iconPaddingName = "Icon Padding";
-
-    //? if = 1.8.9 {
-    @Exclude
-            //?}
-    public final float iconPaddingMin = 0f;
-
-    //? if = 1.8.9 {
-    @Exclude
-            //?}
-    public final float iconPaddingMax = 10f;
-
-    //? if = 1.8.9 {
-    @Slider(name = iconPaddingName, min = iconPaddingMin, max = iconPaddingMax)
+    @Slider(//? if = 1.8.9 {
+            name
             //?} else {
-    /*@SerialEntry
-     *///?}
+            /*title
+                    *///?}
+                    = "Icon Padding", min = 0f, max = 10f)
     public float iconPadding = 5;
 
-    //? if = 1.8.9 {
-    @Dropdown(name = "Text Type", options = {"No Shadow", "Shadow", "Full Shadow"})
+    @Dropdown(//? if = 1.8.9 {
+            name
+            //?} else {
+            /*title
+                    *///?}
+                    = "Text Type", options = {"No Shadow", "Shadow"})
     public int textType = 0;
-    //?} else {
-    /*@SerialEntry
-    public boolean textType = false;
-    *///?}
 
 
     //? if = 1.8.9 {
@@ -121,58 +78,60 @@ public class BedwarsResourceDisplay
     private static final Minecraft mc = Minecraft.getMinecraft();
     //?} else {
     /*private static final Minecraft mc = Minecraft.getInstance();
-     *///?}
+    *///?}
 
     //? if = 1.8.9 {
     @Exclude
+     //?}
     private static float actualWidth = 0.0f;
+    //? if = 1.8.9 {
     @Exclude
+     //?}
     private static float actualHeight = 0.0f;
-    //?}
 
     //? if = 1.8.9 {
     @Exclude
-            //?}
+     //?}
     private static final Item IRON =
             //? if = 1.8.9 {
             Items.iron_ingot;
-    //?} else {
-    /*Items.IRON_INGOT;
-     *///?}
+             //?} else {
+            /*Items.IRON_INGOT;
+    *///?}
 
     //? if = 1.8.9 {
     @Exclude
-            //?}
+     //?}
     private static final Item GOLD =
             //? if = 1.8.9 {
             Items.gold_ingot;
-    //?} else {
-    /*Items.GOLD_INGOT;
-     *///?}
+             //?} else {
+            /*Items.GOLD_INGOT;
+    *///?}
 
     //? if = 1.8.9 {
     @Exclude
-            //?}
+     //?}
     private static final Item DIAMOND =
             //? if = 1.8.9 {
             Items.diamond;
-    //?} else {
-    /*Items.DIAMOND;
-     *///?}
+             //?} else {
+            /*Items.DIAMOND;
+    *///?}
 
     //? if = 1.8.9 {
     @Exclude
-            //?}
+     //?}
     private static final Item EMERALD =
             //? if = 1.8.9 {
             Items.emerald;
-    //?} else {
-    /*Items.EMERALD;
-     *///?}
+             //?} else {
+            /*Items.EMERALD;
+    *///?}
 
     //? if = 1.8.9 {
     @Exclude
-            //?}
+     //?}
     public static List<Item> items = new ArrayList<>();
 
     static {
@@ -250,68 +209,16 @@ public class BedwarsResourceDisplay
         return super.shouldShow() && HypixelPackets.inBedwars;
     }
     //?} else {
-    /*public void render(
-            //? if >= 26.1 {
-            /^GuiGraphicsExtractor context,
-            ^///?} else {
-            GuiGraphics context,
-            //?}
-            DeltaTracker tickDelta
-    ) {
-        if (!HypixelPackets.inBedwars) return;
-
-        int x = widthPercentage * mc.getWindow().getGuiScaledWidth() / 100;
-        int y = heightPercentage * mc.getWindow().getGuiScaledHeight() / 100;
-        float scale = (float) hudScale / 100;
-
-        float iconSize = 16f;
-        float offset = iconSize + itemPadding;
-
-        context.pose().pushMatrix();
-        context.pose().translate(x, y);
-        context.pose().scale(scale, scale);
-
-        int index = 0;
-        for (Item item : items) {
-            ItemStack stack = new ItemStack(item);
-
-            int itemY = (int) (index * offset);
-            int iconX = 0;
-            int textX = (int) (iconSize + iconPadding);
-
-            //? if >= 26.1 {
-            /^context.item(
-            ^///?} else {
-            context.renderItem(
-            //?}
-                    stack,
-                    iconX,
-                    itemY
-            );
-
-            int textY = itemY + (16 - mc.font.lineHeight) / 2;
-
-            String text = getText(item);
-            int color = 0xFFFFFFFF;
-
-            //? if >= 26.1 {
-            /^context.text(
-            ^///?} else {
-            context.drawString(
-            //?}
-                    mc.font,
-                    text,
-                    textX,
-                    textY,
-                    color,
-                    textType
-            );
-
-            index++;
-        }
-        context.pose().popMatrix();
+    /*@Override
+    public boolean update() {
+        return false;
     }
     *///?}
+
+    @Override
+    public void Content(@Nullable Composer composer, int i) {
+
+    }
 
     private String getText(Item item) {
         int inventoryAmount = ItemTracker.inventory.get(item);
