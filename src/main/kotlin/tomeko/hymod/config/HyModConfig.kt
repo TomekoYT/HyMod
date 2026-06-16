@@ -366,6 +366,9 @@ object HyModConfig : Config(
     var middleClickGUIItemsEnabled = true
 
 
+    //? if = 1.8.9 {
+    @Exclude
+    //?}
     const val CATEGORY_DEBUG = "Debug"
 
     @Switch(

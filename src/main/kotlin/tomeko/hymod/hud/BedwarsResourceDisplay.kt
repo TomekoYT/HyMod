@@ -40,7 +40,7 @@ class
 *///?}
 BedwarsResourceDisplay
 //? if = 1.8.9 {
-: BasicHud(true)
+    : BasicHud(true)
 //?}
 {
     //? if >= 1.21.11 {
@@ -54,55 +54,59 @@ BedwarsResourceDisplay
     *///?}
 
     //? if = 1.8.9 {
-    companion object {
-    //?}
-    //? if = 1.8.9 {
     @Exclude
-    //?}
-    private val IRON: Item =
-    //? if = 1.8.9 {
+    companion object {
+        //?}
+        //? if = 1.8.9 {
+        @Exclude
+        //?}
+        private val IRON: Item =
+            //? if = 1.8.9 {
             Items.iron_ingot
         //?} else {
         /*Items.IRON_INGOT
     *///?}
 
-    //? if = 1.8.9 {
-    @Exclude
-    //?}
-    private val GOLD: Item =
-    //? if = 1.8.9 {
+        //? if = 1.8.9 {
+        @Exclude
+        //?}
+        private val GOLD: Item =
+            //? if = 1.8.9 {
             Items.gold_ingot
         //?} else {
         /*Items.GOLD_INGOT
     *///?}
 
-    //? if = 1.8.9 {
-    @Exclude
-    //?}
-    private val DIAMOND: Item =
-    //? if = 1.8.9 {
+        //? if = 1.8.9 {
+        @Exclude
+        //?}
+        private val DIAMOND: Item =
+            //? if = 1.8.9 {
             Items.diamond
         //?} else {
         /*Items.DIAMOND
     *///?}
 
-    //? if = 1.8.9 {
-    @Exclude
-    //?}
-    private val EMERALD: Item =
-    //? if = 1.8.9 {
+        //? if = 1.8.9 {
+        @Exclude
+        //?}
+        private val EMERALD: Item =
+            //? if = 1.8.9 {
             Items.emerald
         //?} else {
         /*Items.EMERALD
     *///?}
 
-    val items = mutableListOf(
-        IRON,
-        GOLD,
-        DIAMOND,
-        EMERALD
-    )
-    //? if = 1.8.9 {
+        //? if = 1.8.9 {
+        @Exclude
+        //?}
+        val items = mutableListOf(
+            IRON,
+            GOLD,
+            DIAMOND,
+            EMERALD
+        )
+        //? if = 1.8.9 {
     }
     //?}
 
@@ -114,11 +118,11 @@ BedwarsResourceDisplay
     )
     //?}
     var itemPadding =
-    //? if = 1.8.9 {
-    5f
-        //?} else {
-        /*HyModConfig.bedwarsResourceDisplayItemPadding
-    *///?}
+        //? if = 1.8.9 {
+        5f
+    //?} else {
+    /*HyModConfig.bedwarsResourceDisplayItemPadding
+*///?}
 
     //? if = 1.8.9 {
     @Slider(
@@ -128,11 +132,11 @@ BedwarsResourceDisplay
     )
     //?}
     var iconPadding =
-    //? if = 1.8.9 {
-    5f
-        //?} else {
-        /*HyModConfig.bedwarsResourceDisplayIconPadding
-    *///?}
+        //? if = 1.8.9 {
+        5f
+    //?} else {
+    /*HyModConfig.bedwarsResourceDisplayIconPadding
+*///?}
 
     //? if = 1.8.9 {
     @Switch(
@@ -140,11 +144,11 @@ BedwarsResourceDisplay
     )
     //?}
     var textType =
-    //? if = 1.8.9 {
-    false
-        //?} else {
-        /*HyModConfig.bedwarsResourceDisplayTextType
-    *///?}
+        //? if = 1.8.9 {
+        false
+    //?} else {
+    /*HyModConfig.bedwarsResourceDisplayTextType
+*///?}
 
     //? if = 1.8.9 {
     @Exclude
@@ -204,7 +208,7 @@ BedwarsResourceDisplay
 
             RenderHelper.disableStandardItemLighting()
 
-            val type = if(textType) 1 else 0
+            val type = if (textType) 1 else 0
 
             TextRenderer.drawScaledString(
                 getText(item),
@@ -231,7 +235,7 @@ BedwarsResourceDisplay
         actualHeight * scale
 
     override fun shouldShow(): Boolean =
-        super.shouldShow() && HypixelPackets.inBedwars
+        super.shouldShow() && (HypixelPackets.inBedwars || HypixelPackets.onRBW)
     //?} else {
     /*fun render(
         //? if >= 26.1 {
