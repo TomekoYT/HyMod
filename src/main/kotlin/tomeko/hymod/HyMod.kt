@@ -51,6 +51,7 @@ class HyMod
          *///?}
         WhiteChatMessages.register()
 
+        HyModCommand.register()
         SendCoordsCommand.register()
 
         HyModConfig.register()
