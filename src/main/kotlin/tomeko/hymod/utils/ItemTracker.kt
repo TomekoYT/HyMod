@@ -35,6 +35,8 @@ object ItemTracker {
     /*Minecraft.getInstance()
      *///?}
 
+    private var lastServerName: String? = null
+
     var inventory = HashMap<Item, Int>()
     var enderChest = HashMap<Item, Int>()
 
@@ -242,6 +244,12 @@ object ItemTracker {
         //? if = 1.8.9 {
         if (event.phase != TickEvent.Phase.END) return
         //?}
+
+        if (HypixelPackets.inBedwars && lastServerName != HypixelPackets.currentServerName) {
+            resetTracker()
+        }
+
+        lastServerName = HypixelPackets.currentServerName
 
         if (HypixelPackets.inBedwars || HypixelPackets.onRBW) return
 

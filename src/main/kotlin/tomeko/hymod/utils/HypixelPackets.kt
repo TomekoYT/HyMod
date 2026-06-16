@@ -8,6 +8,7 @@ import net.minecraft.client.multiplayer.ServerData
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
+
 //?} else {
 /*import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
  *///?}
@@ -16,6 +17,8 @@ object HypixelPackets {
     @JvmField
     var onHypixel = false
     var onRBW = false
+
+    var currentServerName: String? = null
 
     @JvmField
     var inSkyblock = false
@@ -89,6 +92,8 @@ object HypixelPackets {
             return
         }
 
+        currentServerName = packet.serverName
+
         val serverTypeName = packet.serverType.get().name
 
         inSkyblock = serverTypeName == "SkyBlock"
@@ -106,6 +111,7 @@ object HypixelPackets {
     }
 
     private fun disableAll() {
+        currentServerName = null
         disableServerTypes()
         disableModes()
     }
