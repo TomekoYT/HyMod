@@ -15,7 +15,7 @@
 </a>
 
 # HyMod
-Multiversion mod for Hypixel adding features for bedwars (resource display), arcade, chat waypoints and more!
+Multiversion mod for Hypixel and Ranked Bedwars adding features for bedwars (resource display), arcade, chat waypoints and more!
 
 ## Features
 
