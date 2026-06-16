@@ -54,7 +54,7 @@ object HyModConfig : Config(
         category = CATEGORY_BEDWARS
     )
     //?}
-    var bedwarsResourceDisplay = BedwarsResourceDisplay
+    var bedwarsResourceDisplay = BedwarsResourceDisplay()
 
     //? if = 1.8.9 {
     @Exclude

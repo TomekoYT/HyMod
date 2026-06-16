@@ -20,12 +20,15 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
 import org.polyfrost.oneconfig.api.config.v1.annotations.*
 import org.polyfrost.oneconfig.api.hud.v1.Hud
+import kotlin.div
+import kotlin.text.toInt
+import kotlin.times
 *///?}
 
 import tomeko.hymod.utils.ItemTracker
 import tomeko.hymod.utils.HypixelPackets
 
-object BedwarsResourceDisplay
+class BedwarsResourceDisplay
 //? if = 1.8.9 {
     : BasicHud(true)
 //?} else {
@@ -36,6 +39,55 @@ object BedwarsResourceDisplay
 )
 *///?}
 {
+    companion object {
+        //? if = 1.8.9 {
+        @Exclude
+        //?}
+        private val IRON: Item =
+            //? if = 1.8.9 {
+            Items.iron_ingot
+        //?} else {
+        /*Items.IRON_INGOT
+         *///?}
+
+        //? if = 1.8.9 {
+        @Exclude
+        //?}
+        private val GOLD: Item =
+            //? if = 1.8.9 {
+            Items.gold_ingot
+        //?} else {
+        /*Items.GOLD_INGOT
+         *///?}
+
+        //? if = 1.8.9 {
+        @Exclude
+        //?}
+        private val DIAMOND: Item =
+            //? if = 1.8.9 {
+            Items.diamond
+        //?} else {
+        /*Items.DIAMOND
+         *///?}
+
+        //? if = 1.8.9 {
+        @Exclude
+        //?}
+        private val EMERALD: Item =
+            //? if = 1.8.9 {
+            Items.emerald
+        //?} else {
+        /*Items.EMERALD
+         *///?}
+
+        val items = mutableListOf(
+            IRON,
+            GOLD,
+            DIAMOND,
+            EMERALD
+        )
+    }
+
     @Slider(
         //? if = 1.8.9 {
         name
@@ -90,56 +142,6 @@ object BedwarsResourceDisplay
     @Exclude
     //?}
     private var actualHeight = 0f
-
-    //? if = 1.8.9 {
-    @Exclude
-    //?}
-    private val IRON: Item =
-        //? if = 1.8.9 {
-        Items.iron_ingot
-    //?} else {
-    /*Items.IRON_INGOT
-     *///?}
-
-    //? if = 1.8.9 {
-    @Exclude
-    //?}
-    private val GOLD: Item =
-        //? if = 1.8.9 {
-        Items.gold_ingot
-    //?} else {
-    /*Items.GOLD_INGOT
-     *///?}
-
-    //? if = 1.8.9 {
-    @Exclude
-    //?}
-    private val DIAMOND: Item =
-        //? if = 1.8.9 {
-        Items.diamond
-    //?} else {
-    /*Items.DIAMOND
-     *///?}
-
-    //? if = 1.8.9 {
-    @Exclude
-    //?}
-    private val EMERALD: Item =
-        //? if = 1.8.9 {
-        Items.emerald
-    //?} else {
-    /*Items.EMERALD
-     *///?}
-
-    //? if = 1.8.9 {
-    @Exclude
-    //?}
-    val items = mutableListOf(
-        IRON,
-        GOLD,
-        DIAMOND,
-        EMERALD
-    )
 
     //? if = 1.8.9 {
     override fun draw(
