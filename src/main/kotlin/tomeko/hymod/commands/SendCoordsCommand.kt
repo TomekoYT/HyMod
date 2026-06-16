@@ -31,7 +31,7 @@ object SendCoordsCommand
     private const val COMMAND_NAME = "sendcoords"
 
     private val defaultMode: String
-        get() = if (HyModConfig.sendcoordsToParty == 1) "party" else "all"
+        get() = if (HyModConfig.sendcoordsToParty) "party" else "all"
 
     fun register() {
         //? if = 1.8.9 {

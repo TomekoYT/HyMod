@@ -8,7 +8,6 @@ import cc.polyfrost.oneconfig.config.core.OneColor
 import cc.polyfrost.oneconfig.config.data.Mod
 import cc.polyfrost.oneconfig.config.data.ModType
 //?} else {
-
 /*import org.polyfrost.compose.render.PolyColor
 import org.polyfrost.oneconfig.api.config.v1.Config
 import org.polyfrost.oneconfig.api.config.v1.annotations.Color
@@ -208,18 +207,17 @@ object HyModConfig : Config(
     //?}
     const val SUBCATEGORY_SENDCOORDS_COMMAND = "/sendcoords Command"
 
-    @Dropdown(
+    @Switch(
         //? if = 1.8.9 {
         name
             //?} else {
             /*title
              *///?}
-        = "Default /sendcoords mode",
-        options = ["All", "Party"],
+        = "Use party as default",
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_SENDCOORDS_COMMAND
     )
-    var sendcoordsToParty = 1
+    var sendcoordsToParty = true
 
     //? if = 1.8.9 {
     @Exclude
