@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 val mod_name: String by project
 val mod_id: String by project
 val mod_version: String by project
@@ -9,12 +11,14 @@ val java_version: String by project
 val minecraft_version: String by project
 val fabric_loader_version: String by project
 val fabric_api_version: String by project
+val fabric_language_kotlin_version: String by project
 
 val oneconfig_version: String by project
 val mod_menu_version: String by project
 val hypixel_mod_api_version: String by project
 
 plugins {
+    id("org.jetbrains.kotlin.jvm") version "2.4.0"
     id("net.fabricmc.fabric-loom") version "1.16-SNAPSHOT"
     id("dev.deftu.gradle.bloom") version "0.2.0"
 }
@@ -44,6 +48,7 @@ dependencies {
     minecraft("com.mojang:minecraft:$minecraft_version")
     implementation("net.fabricmc:fabric-loader:$fabric_loader_version")
     implementation("net.fabricmc.fabric-api:fabric-api:$fabric_api_version")
+    implementation("net.fabricmc:fabric-language-kotlin:$fabric_language_kotlin_version")
 
     val oneconfigModules = arrayOf("commands", "config-impl", "events", "hud", "internal", "ui", "utils")
     for (module in oneconfigModules) {
@@ -74,6 +79,7 @@ tasks.processResources {
         "minecraft_version" to minecraft_version,
         "fabric_loader_version" to fabric_loader_version,
         "fabric_api_version" to fabric_api_version,
+        "fabric_language_kotlin_version" to fabric_language_kotlin_version,
 
         "oneconfig_version" to oneconfig_version,
         "mod_menu_version" to mod_menu_version,
@@ -98,6 +104,12 @@ java {
 
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(java_version))
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.fromTarget(java_version)
     }
 }
 
