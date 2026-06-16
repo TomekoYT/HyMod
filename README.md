@@ -25,6 +25,7 @@ Multiversion mod for Hypixel adding features for bedwars (resource display), arc
 - Displays your iron, gold, diamonds and emeralds while in bedwars game
 - Shows both inventory and ender chest
 - Works with new ender chest punching feature
+- Works on Ranked Bedwars Server: rbw.gg
 
 
 ### Arcade
