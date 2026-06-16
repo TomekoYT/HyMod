@@ -243,7 +243,7 @@ object ItemTracker {
         if (event.phase != TickEvent.Phase.END) return
         //?}
 
-        if (HypixelPackets.inBedwars) return
+        if (HypixelPackets.inBedwars || HypixelPackets.onRBW) return
 
         resetTracker()
     }

@@ -164,7 +164,7 @@ BedwarsResourceDisplay
         scale: Float,
         example: Boolean
     ) {
-        if (!example && !HypixelPackets.inBedwars) return
+        if (!example && !HypixelPackets.inBedwars && !HypixelPackets.onRBW) return
 
         val mc = Minecraft.getMinecraft()
 
@@ -241,7 +241,7 @@ BedwarsResourceDisplay
         //?}
         tickDelta: DeltaTracker
     ) {
-        if (!HypixelPackets.inBedwars) return
+        if (!HypixelPackets.inBedwars && !HypixelPackets.onRBW) return
 
         val mc = Minecraft.getInstance()
 

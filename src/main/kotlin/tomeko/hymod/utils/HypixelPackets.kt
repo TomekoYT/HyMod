@@ -8,7 +8,6 @@ import net.minecraft.client.multiplayer.ServerData
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
-
 //?} else {
 /*import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
  *///?}
@@ -16,6 +15,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent
 object HypixelPackets {
     @JvmField
     var onHypixel = false
+    var onRBW = false
 
     @JvmField
     var inSkyblock = false
@@ -66,21 +66,21 @@ object HypixelPackets {
         /*Minecraft.getInstance().currentServer
          *///?}
 
-        if (
-            server == null
+        val ip =
             //? if = 1.8.9 {
-            || !server.serverIP
-                //?} else {
-                /*|| !server.ip
-                 *///?}
-                .contains("hypixel")
-        ) {
-            onHypixel = false
-            disableAll()
-            return
-        }
+            server?.serverIP ?: return
+        //?} else {
+        /*server?.ip ?: return
+        *///?}
 
-        onHypixel = true
+        Debug.println(ip)
+
+        onHypixel = ip.endsWith("hypixel.net")
+        onRBW = ip.endsWith("rbw.gg")
+
+        if (!onHypixel) {
+            disableAll()
+        }
     }
 
     private fun onLocationPacket(packet: ClientboundLocationPacket) {
