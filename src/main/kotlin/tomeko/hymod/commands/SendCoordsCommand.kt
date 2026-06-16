@@ -37,7 +37,7 @@ object SendCoordsCommand
         //? if = 1.8.9 {
         ClientCommandHandler.instance.registerCommand(this)
         //?} else {
-        /*ClientCommandRegistrationCallback.EVENT.register { dispatcher, registryAccess ->
+        /*ClientCommandRegistrationCallback.EVENT.register { dispatcher, _ ->
             dispatcher.register(
                 literal(COMMAND_NAME)
                     .executes { _ ->

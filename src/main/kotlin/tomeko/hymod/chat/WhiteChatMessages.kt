@@ -47,7 +47,7 @@ object WhiteChatMessages {
 
         event.message = modifyMessage(event.message)
         //?} else {
-        /*if (fromActionBar || message == null) return message
+        /*if (fromActionBar) return message
 
         return modifyMessage(message)
          *///?}

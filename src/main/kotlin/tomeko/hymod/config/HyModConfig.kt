@@ -213,8 +213,8 @@ object HyModConfig : Config(
             //? if = 1.8.9{
             1
         //?} else {
-        //1f
-        //?}
+        /*1f
+        *///?}
         ,
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS
@@ -234,8 +234,8 @@ object HyModConfig : Config(
             //? if = 1.8.9{
             1
         //?} else {
-        //1f
-        //?}
+        /*1f
+        *///?}
         ,
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS
@@ -279,8 +279,8 @@ object HyModConfig : Config(
             //? if = 1.8.9{
             1
         //?} else {
-        //1f
-        //?}
+        /*1f
+        *///?}
         ,
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS

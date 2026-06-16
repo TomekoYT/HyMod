@@ -59,7 +59,7 @@ object DangerousTauntWaypoint {
         //? if = 1.8.9 {
         if (event.type.toInt() == 2 || event.message == null)
         //?} else {
-        /*if (fromActionBar || component == null)
+        /*if (fromActionBar)
          *///?}
             return
 
@@ -107,9 +107,9 @@ object DangerousTauntWaypoint {
                 animal,
                 0.5f,
                 1f,
-                true,
-                true,
-                20 * SECONDS
+                renderText = true,
+                renderDistance = true,
+                tickTime = 20 * SECONDS
             )
         )
     }

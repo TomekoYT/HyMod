@@ -32,7 +32,7 @@ object HypixelPackets {
          *///?}
 
         HypixelModAPI.getInstance()
-            .createHandler<ClientboundLocationPacket>(
+            .createHandler(
                 ClientboundLocationPacket::class.java,
                 HypixelPackets::onLocationPacket
             )

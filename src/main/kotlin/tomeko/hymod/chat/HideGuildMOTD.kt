@@ -46,7 +46,7 @@ object HideGuildMOTD {
             event.isCanceled = true
         }
         //?} else {
-        /*if (fromActionBar || message == null) return true
+        /*if (fromActionBar) return true
 
         return !shouldCancel(message.string)
          *///?}

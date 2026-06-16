@@ -1,4 +1,4 @@
-package tomeko.hymod.utils;
+package tomeko.hymod.utils
 
 object StringFormatting {
     fun removeFormatting(string: String): String {

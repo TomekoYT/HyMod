@@ -22,7 +22,6 @@ import net.minecraft.resources.Identifier
 import net.minecraft.world.Container
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.item.Item
-import net.minecraft.world.item.ItemStack
 *///?}
 
 import tomeko.hymod.hud.BedwarsResourceDisplay
@@ -50,7 +49,7 @@ object ItemTracker {
         //? if = 1.8.9 {
         MinecraftForge.EVENT_BUS.register(this)
         //?} else {
-        /*ClientTickEvents.END_CLIENT_TICK.register { client ->
+        /*ClientTickEvents.END_CLIENT_TICK.register { _ ->
             scanInventory()
             scanEnderChest()
             stopTracking()
@@ -157,14 +156,12 @@ object ItemTracker {
         ) {
             val stack =
                 //? if = 1.8.9 {
-                containerInventory.getStackInSlot(i)
+                containerInventory.getStackInSlot(i) ?: continue
             //?} else {
             /*containerInventory.getItem(i)
              *///?}
 
-            //? if = 1.8.9 {
-            if (stack == null) continue
-            //?} else {
+            //? if >= 1.21.11 {
             /*if (stack.isEmpty) continue
              *///?}
 
@@ -199,7 +196,7 @@ object ItemTracker {
         //? if = 1.8.9 {
         if (event.type.toInt() == 2 || event.message == null) return
         //?} else {
-        /*if (fromActionBar || component == null) return
+        /*if (fromActionBar) return
          *///?}
 
         val message = StringFormatting.removeFormatting(

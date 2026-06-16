@@ -2,12 +2,9 @@ package tomeko.hymod.utils
 
 import net.minecraft.client.Minecraft
 //? if = 1.8.9 {
-import net.minecraft.client.gui.FontRenderer
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.Tessellator
-import net.minecraft.client.renderer.WorldRenderer
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
-import net.minecraft.entity.Entity
 import net.minecraft.util.*
 import net.minecraftforge.client.event.RenderWorldLastEvent
 import net.minecraftforge.common.MinecraftForge
@@ -27,7 +24,6 @@ import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents
 //?}
 import net.minecraft.ChatFormatting
-import net.minecraft.client.Camera
 import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.client.renderer.rendertype.RenderTypes
@@ -40,12 +36,11 @@ import org.joml.Matrix4f
 
 import java.awt.Color
 import java.util.ArrayList
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
+import kotlin.math.*
+import kotlin.math.roundToInt
 
 object WaypointRenderer {
-    private val BEACON_PNG =
+    private const val BEACON_PNG =
     //? if >= 26.1 {
             /*"textures/entity/beacon/beacon_beam.png"
             *///?} else {
@@ -454,11 +449,11 @@ object WaypointRenderer {
         val d4 = 0.5 + cos(d2 + 2.356194490192345) * 0.2
         val d5 = 0.5 + sin(d2 + 2.356194490192345) * 0.2
         val d6 = 0.5 + cos(d2 + (Math.PI / 4)) * 0.2
-        val d7 = 0.5 + Math.sin(d2 + (Math.PI / 4)) * 0.2
+        val d7 = 0.5 + sin(d2 + (Math.PI / 4)) * 0.2
         val d8 = 0.5 + cos(d2 + 3.9269908169872414) * 0.2
-        val d9 = 0.5 + Math.sin(d2 + 3.9269908169872414) * 0.2
-        val d10 = 0.5 + Math.cos(d2 + 5.497787143782138) * 0.2
-        val d11 = 0.5 + Math.sin(d2 + 5.497787143782138) * 0.2
+        val d9 = 0.5 + sin(d2 + 3.9269908169872414) * 0.2
+        val d10 = 0.5 + cos(d2 + 5.497787143782138) * 0.2
+        val d11 = 0.5 + sin(d2 + 5.497787143782138) * 0.2
         val d14 = -1.0 + d1
         val d15 = height.toDouble() * 2.5 + d14
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR)
@@ -522,21 +517,21 @@ object WaypointRenderer {
         val time = gameTime + tickDelta.toDouble()
 
         val t1 = -time * 0.2
-        val d1 = t1 - Math.floor(t1)
+        val d1 = t1 - floor(t1)
 
         val r = ((rgb shr 16) and 0xFF) / 255f
         val g = ((rgb shr 8) and 0xFF) / 255f
         val b = (rgb and 0xFF) / 255f
 
         val d2 = time * 0.025 * -1.5
-        val d4 = (0.5 + Math.cos(d2 + 2.356194490192345) * 0.2).toFloat()
-        val d5 = (0.5 + Math.sin(d2 + 2.356194490192345) * 0.2).toFloat()
-        val d6 = (0.5 + Math.cos(d2 + (Math.PI / 4)) * 0.2).toFloat()
-        val d7 = (0.5 + Math.sin(d2 + (Math.PI / 4)) * 0.2).toFloat()
-        val d8 = (0.5 + Math.cos(d2 + 3.9269908169872414) * 0.2).toFloat()
-        val d9 = (0.5 + Math.sin(d2 + 3.9269908169872414) * 0.2).toFloat()
-        val d10 = (0.5 + Math.cos(d2 + 5.497787143782138) * 0.2).toFloat()
-        val d11 = (0.5 + Math.sin(d2 + 5.497787143782138) * 0.2).toFloat()
+        val d4 = (0.5 + cos(d2 + 2.356194490192345) * 0.2).toFloat()
+        val d5 = (0.5 + sin(d2 + 2.356194490192345) * 0.2).toFloat()
+        val d6 = (0.5 + cos(d2 + (Math.PI / 4)) * 0.2).toFloat()
+        val d7 = (0.5 + sin(d2 + (Math.PI / 4)) * 0.2).toFloat()
+        val d8 = (0.5 + cos(d2 + 3.9269908169872414) * 0.2).toFloat()
+        val d9 = (0.5 + sin(d2 + 3.9269908169872414) * 0.2).toFloat()
+        val d10 = (0.5 + cos(d2 + 5.497787143782138) * 0.2).toFloat()
+        val d11 = (0.5 + sin(d2 + 5.497787143782138) * 0.2).toFloat()
 
         val d14 = (-1.0 + d1).toFloat()
         val d15 = (300.0 * 2.5 + d14.toDouble()).toFloat()
@@ -748,7 +743,7 @@ object WaypointRenderer {
         var z = loc.z + 0.5 - viewerZ
 
         val distSq = x * x + y * y + z * z
-        val dist = Math.sqrt(distSq)
+        val dist = sqrt(distSq)
         if (distSq > 144) {
             x *= 12 / dist
             y *= 12 / dist
@@ -765,7 +760,7 @@ object WaypointRenderer {
         GlStateManager.rotate(-Minecraft.getMinecraft().renderManager.playerViewX, 1.0F, 0.0F, 0.0F)
         GlStateManager.rotate(Minecraft.getMinecraft().renderManager.playerViewY, 0.0F, 1.0F, 0.0F)
 
-        drawNametag("${EnumChatFormatting.YELLOW}${Math.round(dist)}m", renderDistance)
+        drawNametag("${EnumChatFormatting.YELLOW}${dist.roundToInt()}m", renderDistance)
 
         GlStateManager.popMatrix()
 
