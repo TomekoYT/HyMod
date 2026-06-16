@@ -366,4 +366,18 @@ object HyModConfig : Config(
         subcategory = SUBCATEGORY_MIDDLE_CLICK_GUI_ITEMS
     )
     var middleClickGUIItemsEnabled = true
+
+
+    const val CATEGORY_DEBUG = "Debug"
+
+    @Switch(
+        //? if = 1.8.9 {
+        name
+            //?} else {
+            /*title
+             *///?}
+        = "Debug Mode Enabled",
+        category = CATEGORY_DEBUG
+    )
+    var debugModeEnabled = false
 }
