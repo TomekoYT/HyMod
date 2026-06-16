@@ -2,9 +2,9 @@ package tomeko.hymod.hud
 
 import net.minecraft.client.Minecraft
 //? if = 1.8.9 {
-import cc.polyfrost.oneconfig.config.annotations.Dropdown
 import cc.polyfrost.oneconfig.config.annotations.Exclude
 import cc.polyfrost.oneconfig.config.annotations.Slider
+import cc.polyfrost.oneconfig.config.annotations.Switch
 import cc.polyfrost.oneconfig.config.core.OneColor
 import cc.polyfrost.oneconfig.hud.BasicHud
 import cc.polyfrost.oneconfig.libs.universal.UGraphics
@@ -15,133 +15,146 @@ import net.minecraft.init.Items
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 //?} else {
-/*import androidx.compose.runtime.Composable
+/*import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry
+import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements
+import net.minecraft.client.DeltaTracker
+//? if >= 26.1 {
+/*import net.minecraft.client.gui.GuiGraphicsExtractor
+*///?} else {
+import net.minecraft.client.gui.GuiGraphics
+//?}
+import net.minecraft.resources.Identifier
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
-import org.polyfrost.oneconfig.api.config.v1.annotations.*
-import org.polyfrost.oneconfig.api.hud.v1.Hud
-import kotlin.div
-import kotlin.text.toInt
-import kotlin.times
+import tomeko.hymod.config.HyModConfig
+import tomeko.hymod.utils.Constants
 *///?}
-
-import tomeko.hymod.utils.ItemTracker
 import tomeko.hymod.utils.HypixelPackets
+import tomeko.hymod.utils.ItemTracker
 
-class BedwarsResourceDisplay
 //? if = 1.8.9 {
-    : BasicHud(true)
+class
 //?} else {
-/*: Hud(
-    "bedwarsresourcedisplay",
-    "Bedwars Resource Display",
-    Category.COMBAT
-)
+/*object
 *///?}
+BedwarsResourceDisplay
+//? if = 1.8.9 {
+: BasicHud(true)
+//?}
 {
-    companion object {
-        //? if = 1.8.9 {
-        @Exclude
-        //?}
-        private val IRON: Item =
-            //? if = 1.8.9 {
-            Items.iron_ingot
-        //?} else {
-        /*Items.IRON_INGOT
-         *///?}
-
-        //? if = 1.8.9 {
-        @Exclude
-        //?}
-        private val GOLD: Item =
-            //? if = 1.8.9 {
-            Items.gold_ingot
-        //?} else {
-        /*Items.GOLD_INGOT
-         *///?}
-
-        //? if = 1.8.9 {
-        @Exclude
-        //?}
-        private val DIAMOND: Item =
-            //? if = 1.8.9 {
-            Items.diamond
-        //?} else {
-        /*Items.DIAMOND
-         *///?}
-
-        //? if = 1.8.9 {
-        @Exclude
-        //?}
-        private val EMERALD: Item =
-            //? if = 1.8.9 {
-            Items.emerald
-        //?} else {
-        /*Items.EMERALD
-         *///?}
-
-        val items = mutableListOf(
-            IRON,
-            GOLD,
-            DIAMOND,
-            EMERALD
+    //? if >= 1.21.11 {
+    /*fun register() {
+        HudElementRegistry.attachElementBefore(
+            VanillaHudElements.CHAT,
+            Identifier.fromNamespaceAndPath(Constants.MOD_ID, "bedwars_resource_display"),
+            BedwarsResourceDisplay::render
         )
     }
+    *///?}
 
-    @Slider(
-        //? if = 1.8.9 {
-        name
-            //?} else {
-            /*title
-             *///?}
-        = "Item Padding",
-        min = 0f,
-        max = 10f
-    )
-    var itemPadding = 5f
-
-    @Slider(
-        //? if = 1.8.9 {
-        name
-            //?} else {
-            /*title
-             *///?}
-        = "Icon Padding",
-        min = 0f,
-        max = 10f
-    )
-    var iconPadding = 5f
-
-    @Dropdown(
-        //? if = 1.8.9 {
-        name
-            //?} else {
-            /*title
-             *///?}
-        = "Text Type",
-        options = ["No Shadow", "Shadow"]
-    )
-    var textType = 0
-
+    //? if = 1.8.9 {
+    companion object {
+    //?}
     //? if = 1.8.9 {
     @Exclude
     //?}
-    private val mc =
-        //? if = 1.8.9 {
-        Minecraft.getMinecraft()
-    //?} else {
-    /*Minecraft.getInstance()
+    private val IRON: Item =
+    //? if = 1.8.9 {
+            Items.iron_ingot
+        //?} else {
+        /*Items.IRON_INGOT
     *///?}
 
     //? if = 1.8.9 {
     @Exclude
     //?}
-    private var actualWidth = 0f
+    private val GOLD: Item =
+    //? if = 1.8.9 {
+            Items.gold_ingot
+        //?} else {
+        /*Items.GOLD_INGOT
+    *///?}
 
     //? if = 1.8.9 {
     @Exclude
     //?}
+    private val DIAMOND: Item =
+    //? if = 1.8.9 {
+            Items.diamond
+        //?} else {
+        /*Items.DIAMOND
+    *///?}
+
+    //? if = 1.8.9 {
+    @Exclude
+    //?}
+    private val EMERALD: Item =
+    //? if = 1.8.9 {
+            Items.emerald
+        //?} else {
+        /*Items.EMERALD
+    *///?}
+
+    val items = mutableListOf(
+        IRON,
+        GOLD,
+        DIAMOND,
+        EMERALD
+    )
+    //? if = 1.8.9 {
+    }
+    //?}
+
+    //? if = 1.8.9 {
+    @Slider(
+        name = "Item Padding",
+        min = 0f,
+        max = 10f
+    )
+    //?}
+    var itemPadding =
+    //? if = 1.8.9 {
+    5f
+        //?} else {
+        /*HyModConfig.bedwarsResourceDisplayItemPadding
+    *///?}
+
+    //? if = 1.8.9 {
+    @Slider(
+        name = "Icon Padding",
+        min = 0f,
+        max = 10f
+    )
+    //?}
+    var iconPadding =
+    //? if = 1.8.9 {
+    5f
+        //?} else {
+        /*HyModConfig.bedwarsResourceDisplayIconPadding
+    *///?}
+
+    //? if = 1.8.9 {
+    @Switch(
+        name = "Text Shadow"
+    )
+    //?}
+    var textType =
+    //? if = 1.8.9 {
+    false
+        //?} else {
+        /*HyModConfig.bedwarsResourceDisplayTextType
+    *///?}
+
+    //? if = 1.8.9 {
+    @Exclude
+    private var actualWidth = 0f
+    //?}
+
+    //? if = 1.8.9 {
+    @Exclude
     private var actualHeight = 0f
+    //?}
 
     //? if = 1.8.9 {
     override fun draw(
@@ -152,6 +165,8 @@ class BedwarsResourceDisplay
         example: Boolean
     ) {
         if (!example && !HypixelPackets.inBedwars) return
+
+        val mc = Minecraft.getMinecraft()
 
         val iconSize = 16f
         val offset = iconSize + itemPadding
@@ -189,12 +204,14 @@ class BedwarsResourceDisplay
 
             RenderHelper.disableStandardItemLighting()
 
+            val type = if(textType) 1 else 0
+
             TextRenderer.drawScaledString(
                 getText(item),
                 textX.toFloat(),
                 itemY + mc.fontRendererObj.FONT_HEIGHT / 2f,
                 OneColor(255, 255, 255).rgb,
-                TextRenderer.TextType.toType(textType),
+                TextRenderer.TextType.toType(type),
                 1f
             )
 
@@ -216,13 +233,66 @@ class BedwarsResourceDisplay
     override fun shouldShow(): Boolean =
         super.shouldShow() && HypixelPackets.inBedwars
     //?} else {
-    /*override fun update(): Boolean {
-        return false
-    }
+    /*fun render(
+        //? if >= 26.1 {
+        /*context: GuiGraphicsExtractor,
+    *///?} else {
+        context: GuiGraphics,
+        //?}
+        tickDelta: DeltaTracker
+    ) {
+        if (!HypixelPackets.inBedwars) return
 
-    @Composable
-    override fun Content() {
+        val mc = Minecraft.getInstance()
 
+        val x = HyModConfig.bedwarsResourceDisplayWidthPercentage * mc.window.guiScaledWidth / 100
+        val y = HyModConfig.bedwarsResourceDisplayHeightPercentage * mc.window.guiScaledHeight / 100
+        val scale = HyModConfig.bedwarsResourceDisplayScalePercentage.toFloat() / 100f
+
+        val iconSize = 16f
+        val offset = iconSize + itemPadding
+
+        context.pose().pushMatrix()
+        context.pose().translate(x.toFloat(), y.toFloat())
+        context.pose().scale(scale, scale)
+
+        items.forEachIndexed { index, item ->
+            val stack = ItemStack(item)
+
+            val itemY = (index * offset).toInt()
+            val iconX = 0
+            val textX = (iconSize + iconPadding).toInt()
+
+            //? if >= 26.1 {
+            /*context.item(
+            *///?} else {
+            context.renderItem(
+                //?}
+                stack,
+                iconX,
+                itemY
+            )
+
+            val textY = itemY + (16 - mc.font.lineHeight) / 2
+
+            val text = getText(item)
+            val color = 0xFFFFFFFF.toInt()
+
+            //? if >= 26.1 {
+            /*context.text(
+            *///?} else {
+            context.drawString(
+                //?}
+                mc.font,
+                text,
+                textX,
+                textY,
+                color,
+                textType
+            )
+        }
+
+        context.pose().popMatrix()
     }
     *///?}
 

@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent
 import tomeko.hymod.chat.*
 import tomeko.hymod.commands.*
 import tomeko.hymod.config.*
+import tomeko.hymod.hud.BedwarsResourceDisplay
 import tomeko.hymod.utils.*
 
 //? if = 1.8.9 {
@@ -53,6 +54,10 @@ class HyMod
         SendCoordsCommand.register()
 
         HyModConfig.register()
+
+        //? if >= 1.21.11 {
+        /*BedwarsResourceDisplay.register()
+        *///?}
 
         HypixelPackets.register()
         ItemTracker.register()

@@ -53,8 +53,65 @@ object HyModConfig : Config(
         name = "Bedwars Resource Display",
         category = CATEGORY_BEDWARS
     )
-    //?}
     var bedwarsResourceDisplay = BedwarsResourceDisplay()
+    //?} else {
+    /*const val SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY = "Bedwars Resource Display"
+
+    @Slider(
+        title = "Width",
+        min = 0f,
+        max = 100f,
+        step = 1f,
+        category = CATEGORY_BEDWARS,
+        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
+    )
+    var bedwarsResourceDisplayWidthPercentage = 0
+
+    @Slider(
+        title = "Height",
+        min = 0f,
+        max = 100f,
+        step = 1f,
+        category = CATEGORY_BEDWARS,
+        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
+    )
+    var bedwarsResourceDisplayHeightPercentage = 0
+
+    @Slider(
+        title = "Scale",
+        min = 0f,
+        max = 200f,
+        step = 1f,
+        category = CATEGORY_BEDWARS,
+        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
+    )
+    var bedwarsResourceDisplayScalePercentage = 100
+
+    @Slider(
+        title = "Item Padding",
+        min = 0f,
+        max = 10f,
+        category = CATEGORY_BEDWARS,
+        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
+    )
+    var bedwarsResourceDisplayItemPadding = 5f
+
+    @Slider(
+        title = "Icon Padding",
+        min = 0f,
+        max = 10f,
+        category = CATEGORY_BEDWARS,
+        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
+    )
+    var bedwarsResourceDisplayIconPadding = 5f
+
+    @Switch(
+        title = "Text Shadow",
+        category = CATEGORY_BEDWARS,
+        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
+    )
+    var bedwarsResourceDisplayTextType = false
+    *///?}
 
     //? if = 1.8.9 {
     @Exclude
