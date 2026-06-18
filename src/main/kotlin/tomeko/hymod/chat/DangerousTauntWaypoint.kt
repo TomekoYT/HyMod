@@ -2,21 +2,21 @@ package tomeko.hymod.chat
 
 import net.minecraft.client.Minecraft
 //? if = 1.8.9 {
-import net.minecraft.block.Block
+/*import net.minecraft.block.Block
 import net.minecraft.client.multiplayer.WorldClient
 import net.minecraft.init.Blocks
 import net.minecraft.util.BlockPos
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
-//?} else {
-/*import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents
+*///?} else {
+import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents
 import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
-*///?}
+//?}
 
 import tomeko.hymod.config.HyModConfig
 import tomeko.hymod.utils.HypixelPackets
@@ -29,48 +29,48 @@ import java.awt.Color
 object DangerousTauntWaypoint {
     private val AIR: Block =
         //? if = 1.8.9 {
-        Blocks.air
-    //?} else {
-    /*Blocks.AIR
-     *///?}
+        /*Blocks.air
+    *///?} else {
+    Blocks.AIR
+     //?}
 
     private const val SECONDS = 15
 
     fun register() {
         //? if = 1.8.9 {
-        MinecraftForge.EVENT_BUS.register(this)
-        //?} else {
-        /*ClientReceiveMessageEvents.GAME.register(DangerousTauntWaypoint::onChat)
-         *///?}
+        /*MinecraftForge.EVENT_BUS.register(this)
+        *///?} else {
+        ClientReceiveMessageEvents.GAME.register(DangerousTauntWaypoint::onChat)
+         //?}
     }
 
     //? if = 1.8.9 {
-    @SubscribeEvent
-//?}
+    /*@SubscribeEvent
+*///?}
 
     fun onChat(
         //? if = 1.8.9 {
-        event: ClientChatReceivedEvent
-        //?} else {
-        /*component: Component,
+        /*event: ClientChatReceivedEvent
+        *///?} else {
+        component: Component,
         fromActionBar: Boolean
-        *///?}
+        //?}
     ) {
         //? if = 1.8.9 {
-        if (event.type.toInt() == 2 || event.message == null)
-        //?} else {
-        /*if (fromActionBar)
-         *///?}
+        /*if (event.type.toInt() == 2 || event.message == null)
+        *///?} else {
+        if (fromActionBar)
+         //?}
             return
 
         if (!HyModConfig.dangerousTauntWaypointEnabled || !HypixelPackets.inFarmHunt) return
 
         val message = StringFormatting.removeFormatting(
             //? if = 1.8.9 {
-            event.message.unformattedText
-            //?} else {
-            /*component.string
-             *///?}
+            /*event.message.unformattedText
+            *///?} else {
+            component.string
+             //?}
         )
 
         val words = message.split(" ")
@@ -116,10 +116,10 @@ object DangerousTauntWaypoint {
 
     private fun getPos(x: Int, z: Int): BlockPos {
         //? if = 1.8.9 {
-        val world: WorldClient = Minecraft.getMinecraft().theWorld
-        //?} else {
-        /*val world: ClientLevel = Minecraft.getInstance().level!!
-         *///?}
+        /*val world: WorldClient = Minecraft.getMinecraft().theWorld
+        *///?} else {
+        val world: ClientLevel = Minecraft.getInstance().level!!
+         //?}
 
         var pos = BlockPos(x, 0, z)
 
@@ -136,8 +136,8 @@ object DangerousTauntWaypoint {
 
     private fun oneHigher(pos: BlockPos): BlockPos =
         //? if = 1.8.9 {
-        pos.up()
-    //?} else {
-    /*pos.above()
-     *///?}
+        /*pos.up()
+    *///?} else {
+    pos.above()
+     //?}
 }

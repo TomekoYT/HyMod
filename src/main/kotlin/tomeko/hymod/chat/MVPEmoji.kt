@@ -1,8 +1,8 @@
 package tomeko.hymod.chat
 
-//? if >= 1.21.9 {
-/*import net.fabricmc.fabric.api.client.message.v1.ClientSendMessageEvents
- *///?}
+//? if >= 26.1 {
+import net.fabricmc.fabric.api.client.message.v1.ClientSendMessageEvents
+ //?}
 
 import tomeko.hymod.config.HyModConfig
 
@@ -40,12 +40,12 @@ object MVPEmoji {
         "o/" to "( ﾟ◡ﾟ)/"
     )
 
-    //? if >= 1.21.9 {
-    /*fun register() {
+    //? if >= 26.1 {
+    fun register() {
         ClientSendMessageEvents.MODIFY_CHAT.register(::replaceWithEmoji)
         ClientSendMessageEvents.MODIFY_COMMAND.register(::replaceWithEmoji)
     }
-    *///?}
+    //?}
 
     @JvmStatic
     fun replaceWithEmoji(message: String): String {

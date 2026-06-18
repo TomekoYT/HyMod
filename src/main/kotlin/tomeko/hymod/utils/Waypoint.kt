@@ -1,10 +1,10 @@
 package tomeko.hymod.utils
 
 //? if = 1.8.9 {
-import net.minecraft.util.BlockPos
-//?} else {
-/*import net.minecraft.core.BlockPos
-*///?}
+/*import net.minecraft.util.BlockPos
+*///?} else {
+import net.minecraft.core.BlockPos
+//?}
 
 import java.awt.Color
 

@@ -2,59 +2,59 @@ package tomeko.hymod.config
 
 //? if = 1.8.9 {
 
-import cc.polyfrost.oneconfig.config.Config
+/*import cc.polyfrost.oneconfig.config.Config
 import cc.polyfrost.oneconfig.config.annotations.*
 import cc.polyfrost.oneconfig.config.core.OneColor
 import cc.polyfrost.oneconfig.config.data.Mod
 import cc.polyfrost.oneconfig.config.data.ModType
-//?} else {
-/*import org.polyfrost.compose.render.PolyColor
+*///?} else {
+import org.polyfrost.compose.render.PolyColor
 import org.polyfrost.oneconfig.api.config.v1.Config
 import org.polyfrost.oneconfig.api.config.v1.annotations.Color
 import org.polyfrost.oneconfig.api.config.v1.annotations.Dropdown
 import org.polyfrost.oneconfig.api.config.v1.annotations.Slider
 import org.polyfrost.oneconfig.api.config.v1.annotations.Switch
-*///?}
+//?}
 
 import tomeko.hymod.hud.BedwarsResourceDisplay
 import tomeko.hymod.utils.Constants
 
 object HyModConfig : Config(
     //? if = 1.8.9 {
-    Mod(
+    /*Mod(
         Constants.MOD_NAME,
         ModType.HYPIXEL,
         "/assets/${Constants.MOD_ID}/icon.png"
     ),
     "${Constants.MOD_ID}.json"
-    //?} else {
-    /*"${Constants.MOD_ID}.json",
+    *///?} else {
+    "${Constants.MOD_ID}.json",
     "/assets/${Constants.MOD_ID}/icon.png",
     Constants.MOD_NAME,
     Category.HYPIXEL
-    *///?}
+    //?}
 ) {
     fun register() {
         //? if = 1.8.9 {
-        initialize()
-        //?} else {
-        /*save()
-        *///?}
+        /*initialize()
+        *///?} else {
+        save()
+        //?}
     }
 
     //? if = 1.8.9 {
-    @Exclude
-    //?}
+    /*@Exclude
+    *///?}
     const val CATEGORY_BEDWARS = "Bedwars"
 
     //? if = 1.8.9 {
-    @HUD(
+    /*@HUD(
         name = "Bedwars Resource Display",
         category = CATEGORY_BEDWARS
     )
     var bedwarsResourceDisplay = BedwarsResourceDisplay()
-    //?} else {
-    /*const val SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY = "Bedwars Resource Display"
+    *///?} else {
+    const val SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY = "Bedwars Resource Display"
 
     @Slider(
         title = "Width",
@@ -110,24 +110,24 @@ object HyModConfig : Config(
         subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
     )
     var bedwarsResourceDisplayTextType = false
-    *///?}
+    //?}
 
     //? if = 1.8.9 {
-    @Exclude
-    //?}
+    /*@Exclude
+    *///?}
     const val CATEGORY_ARCADE = "Arcade"
 
     //? if = 1.8.9 {
-    @Exclude
-    //?}
+    /*@Exclude
+    *///?}
     const val SUBCATEGORY_FARM_HUNT = "Farm Hunt"
 
     @Switch(
         //? if = 1.8.9 {
-        name
-            //?} else {
-            /*title
-             *///?}
+        /*name
+            *///?} else {
+            title
+             //?}
         = "Dangerous Taunt Waypoint",
         category = CATEGORY_ARCADE,
         subcategory = SUBCATEGORY_FARM_HUNT
@@ -135,21 +135,21 @@ object HyModConfig : Config(
     var dangerousTauntWaypointEnabled = true
 
     //? if = 1.8.9 {
-    @Exclude
-    //?}
+    /*@Exclude
+    *///?}
     const val CATEGORY_CHAT = "Chat"
 
     //? if = 1.8.9 {
-    @Exclude
-    //?}
+    /*@Exclude
+    *///?}
     const val SUBCATEGORY_WHITE_CHAT_MESSAGES = "White Chat Messages"
 
     @Switch(
         //? if = 1.8.9 {
-        name
-            //?} else {
-            /*title
-             *///?}
+        /*name
+            *///?} else {
+            title
+             //?}
         = "White Private Messages",
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_WHITE_CHAT_MESSAGES
@@ -158,10 +158,10 @@ object HyModConfig : Config(
 
     @Switch(
         //? if = 1.8.9 {
-        name
-            //?} else {
-            /*title
-             *///?}
+        /*name
+            *///?} else {
+            title
+             //?}
         = "White No Rank Messages",
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_WHITE_CHAT_MESSAGES
@@ -169,16 +169,16 @@ object HyModConfig : Config(
     var whiteNoRankMessagesEnabled = true
 
     //? if = 1.8.9 {
-    @Exclude
-    //?}
+    /*@Exclude
+    *///?}
     const val SUBCATEGORY_HIDE_GUILD_MOTD = "Hide Guild MOTD"
 
     @Switch(
         //? if = 1.8.9 {
-        name
-            //?} else {
-            /*title
-             *///?}
+        /*name
+            *///?} else {
+            title
+             //?}
         = "Enabled",
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_HIDE_GUILD_MOTD
@@ -186,16 +186,16 @@ object HyModConfig : Config(
     var hideGuildMOTDEnabled = false
 
     //? if = 1.8.9 {
-    @Exclude
-    //?}
+    /*@Exclude
+    *///?}
     const val SUBCATEGORY_MVP_EMOJIS = "MVP++ Emojis"
 
     @Switch(
         //? if = 1.8.9 {
-        name
-            //?} else {
-            /*title
-             *///?}
+        /*name
+            *///?} else {
+            title
+             //?}
         = "Enabled",
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_MVP_EMOJIS
@@ -203,16 +203,16 @@ object HyModConfig : Config(
     var mvpEmojisEnabled = true
 
     //? if = 1.8.9 {
-    @Exclude
-    //?}
+    /*@Exclude
+    *///?}
     const val SUBCATEGORY_SENDCOORDS_COMMAND = "/sendcoords Command"
 
     @Switch(
         //? if = 1.8.9 {
-        name
-            //?} else {
-            /*title
-             *///?}
+        /*name
+            *///?} else {
+            title
+             //?}
         = "Use party as default",
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_SENDCOORDS_COMMAND
@@ -220,16 +220,16 @@ object HyModConfig : Config(
     var sendcoordsToParty = true
 
     //? if = 1.8.9 {
-    @Exclude
-    //?}
+    /*@Exclude
+    *///?}
     const val SUBCATEGORY_COORDS_WAYPOINTS = "Coords Waypoints"
 
     @Switch(
         //? if = 1.8.9 {
-        name
-            //?} else {
-            /*title
-             *///?}
+        /*name
+            *///?} else {
+            title
+             //?}
         = "Enabled",
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS
@@ -238,38 +238,38 @@ object HyModConfig : Config(
 
     @Color(
         //? if = 1.8.9 {
-        name
-            //?} else {
-            /*title
-             *///?}
+        /*name
+            *///?} else {
+            title
+             //?}
         = "Color",
         //? if = 1.8.9 {
-        allowAlpha = false,
-        //?}
+        /*allowAlpha = false,
+        *///?}
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS
     )
     //? if = 1.8.9 {
-    var coordsWaypointsColor = OneColor(255, 255, 255)
-    //?} else {
-    /*var coordsWaypointsColor = PolyColor.WHITE
-     *///?}
+    /*var coordsWaypointsColor = OneColor(255, 255, 255)
+    *///?} else {
+    var coordsWaypointsColor = PolyColor.WHITE
+     //?}
 
     @Slider(
         //? if = 1.8.9 {
-        name
-            //?} else {
-            /*title
-             *///?}
+        /*name
+            *///?} else {
+            title
+             //?}
         = "Box Opacity",
         min = 0f,
         max = 100f,
         step =
             //? if = 1.8.9{
-            1
-        //?} else {
-        /*1f
-        *///?}
+            /*1
+        *///?} else {
+        1f
+        //?}
         ,
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS
@@ -278,19 +278,19 @@ object HyModConfig : Config(
 
     @Slider(
         //? if = 1.8.9 {
-        name
-            //?} else {
-            /*title
-             *///?}
+        /*name
+            *///?} else {
+            title
+             //?}
         = "Beam Opacity",
         min = 0f,
         max = 100f,
         step =
             //? if = 1.8.9{
-            1
-        //?} else {
-        /*1f
-        *///?}
+            /*1
+        *///?} else {
+        1f
+        //?}
         ,
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS
@@ -299,10 +299,10 @@ object HyModConfig : Config(
 
     @Switch(
         //? if = 1.8.9 {
-        name
-            //?} else {
-            /*title
-             *///?}
+        /*name
+            *///?} else {
+            title
+             //?}
         = "Render Text",
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS
@@ -311,10 +311,10 @@ object HyModConfig : Config(
 
     @Switch(
         //? if = 1.8.9 {
-        name
-            //?} else {
-            /*title
-             *///?}
+        /*name
+            *///?} else {
+            title
+             //?}
         = "Render Distance",
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS
@@ -323,19 +323,19 @@ object HyModConfig : Config(
 
     @Slider(
         //? if = 1.8.9 {
-        name
-            //?} else {
-            /*title
-             *///?}
+        /*name
+            *///?} else {
+            title
+             //?}
         = "Time",
         min = 0f,
         max = 120f,
         step =
             //? if = 1.8.9{
-            1
-        //?} else {
-        /*1f
-        *///?}
+            /*1
+        *///?} else {
+        1f
+        //?}
         ,
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS
@@ -343,22 +343,22 @@ object HyModConfig : Config(
     var coordsWaypointsTime = 30
 
     //? if = 1.8.9 {
-    @Exclude
-    //?}
+    /*@Exclude
+    *///?}
     const val CATEGORY_GUI = "GUI"
 
     //? if = 1.8.9 {
-    @Exclude
-    //?}
+    /*@Exclude
+    *///?}
     const val SUBCATEGORY_MIDDLE_CLICK_GUI_ITEMS = "Middle Click GUI Items"
 
     @JvmField
     @Switch(
         //? if = 1.8.9 {
-        name
-            //?} else {
-            /*title
-             *///?}
+        /*name
+            *///?} else {
+            title
+             //?}
         = "Enabled",
         category = CATEGORY_GUI,
         subcategory = SUBCATEGORY_MIDDLE_CLICK_GUI_ITEMS
@@ -367,16 +367,16 @@ object HyModConfig : Config(
 
 
     //? if = 1.8.9 {
-    @Exclude
-    //?}
+    /*@Exclude
+    *///?}
     const val CATEGORY_DEBUG = "Debug"
 
     @Switch(
         //? if = 1.8.9 {
-        name
-            //?} else {
-            /*title
-             *///?}
+        /*name
+            *///?} else {
+            title
+             //?}
         = "Debug Mode Enabled",
         category = CATEGORY_DEBUG
     )

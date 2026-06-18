@@ -2,18 +2,18 @@ package tomeko.hymod.chat
 
 //? if = 1.8.9 {
 
-import net.minecraft.util.ChatComponentText
+/*import net.minecraft.util.ChatComponentText
 import net.minecraft.util.EnumChatFormatting
 import net.minecraft.util.IChatComponent
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
-//?} else {
-/*import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents
+*///?} else {
+import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents
 import net.minecraft.ChatFormatting
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
-*///?}
+//?}
 
 import tomeko.hymod.config.HyModConfig
 import tomeko.hymod.utils.HypixelPackets
@@ -22,46 +22,46 @@ import tomeko.hymod.utils.StringFormatting
 object WhiteChatMessages {
     fun register() {
         //? if = 1.8.9 {
-        MinecraftForge.EVENT_BUS.register(this)
-        //?} else {
-        /*ClientReceiveMessageEvents.MODIFY_GAME.register(WhiteChatMessages::onChatReceive)
-         *///?}
+        /*MinecraftForge.EVENT_BUS.register(this)
+        *///?} else {
+        ClientReceiveMessageEvents.MODIFY_GAME.register(WhiteChatMessages::onChatReceive)
+         //?}
     }
 
     //? if = 1.8.9 {
-    @SubscribeEvent
-//?}
+    /*@SubscribeEvent
+*///?}
     fun onChatReceive(
         //? if = 1.8.9 {
-        event: ClientChatReceivedEvent
-        //?} else {
-        /*message: Component, fromActionBar: Boolean
-         *///?}
+        /*event: ClientChatReceivedEvent
+        *///?} else {
+        message: Component, fromActionBar: Boolean
+         //?}
     )
-//? if >= 1.21.9 {
-            /*: Component
-             *///?}
+//? if >= 26.1 {
+            : Component
+             //?}
     {
         //? if = 1.8.9 {
-        if (event.type.toInt() == 2 || event.message == null) return
+        /*if (event.type.toInt() == 2 || event.message == null) return
 
         event.message = modifyMessage(event.message)
-        //?} else {
-        /*if (fromActionBar) return message
+        *///?} else {
+        if (fromActionBar) return message
 
         return modifyMessage(message)
-         *///?}
+         //?}
     }
 
     private fun modifyMessage(
         //? if = 1.8.9 {
-        message: IChatComponent
-        //?} else {
-        /*message: Component
-         *///?}
+        /*message: IChatComponent
+        *///?} else {
+        message: Component
+         //?}
     ) =
 //? if = 1.8.9 {
-        run {
+        /*run {
             // White Private Messages
             val unformattedMessage = StringFormatting.removeFormatting(
                 message.unformattedText
@@ -139,8 +139,8 @@ object WhiteChatMessages {
 
             message
         }
-    //?} else {
-    /*run {
+    *///?} else {
+    run {
         // White Private Messages
         val unformattedMessage = StringFormatting.removeFormatting(
             message.string
@@ -219,5 +219,5 @@ object WhiteChatMessages {
 
         message
     }
-     *///?}
+     //?}
 }

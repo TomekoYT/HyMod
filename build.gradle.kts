@@ -19,17 +19,21 @@ val hypixel_mod_api_version: String by project
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "2.4.0"
-    id("net.fabricmc.fabric-loom-remap") version "1.16-SNAPSHOT"
+    id("org.jetbrains.kotlin.plugin.compose") version "2.4.0"
+    id("net.fabricmc.fabric-loom") version "1.16-SNAPSHOT"
     id("dev.deftu.gradle.bloom") version "0.2.0"
 }
 
 base {
-    archivesName.set("$mod_archives_name-$mod_version-${minecraft_version}_fabric")
+    archivesName.set("$mod_archives_name-$mod_version-$minecraft_version+_fabric")
 }
 
 repositories {
+    mavenCentral()
     google()
 
+    maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://repo.stellardrift.ca/repository/maven-snapshots/")
     maven("https://repo.polyfrost.org/releases")
     maven("https://repo.polyfrost.org/snapshots")
     maven("https://maven.terraformersmc.com/")
@@ -46,19 +50,18 @@ loom {
 
 dependencies {
     minecraft("com.mojang:minecraft:$minecraft_version")
-    mappings(loom.officialMojangMappings())
-    modImplementation("net.fabricmc:fabric-loader:$fabric_loader_version")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:$fabric_api_version")
-    modImplementation("net.fabricmc:fabric-language-kotlin:$fabric_language_kotlin_version")
+    implementation("net.fabricmc:fabric-loader:$fabric_loader_version")
+    implementation("net.fabricmc.fabric-api:fabric-api:$fabric_api_version")
+    implementation("net.fabricmc:fabric-language-kotlin:$fabric_language_kotlin_version")
 
     val oneconfigModules = arrayOf("commands", "config-impl", "events", "hud", "internal", "ui", "utils")
     for (module in oneconfigModules) {
-        modImplementation("org.polyfrost.oneconfig:${module}:${oneconfig_version}")
+        implementation("org.polyfrost.oneconfig:${module}:${oneconfig_version}")
     }
-    modImplementation("org.polyfrost.oneconfig:$minecraft_version-fabric:$oneconfig_version")
+    implementation("org.polyfrost.oneconfig:$minecraft_version-fabric:$oneconfig_version")
 
-    modImplementation("com.terraformersmc:modmenu:$mod_menu_version")
-    modImplementation("net.hypixel:mod-api:$hypixel_mod_api_version")
+    implementation("com.terraformersmc:modmenu:$mod_menu_version")
+    implementation("net.hypixel:mod-api:$hypixel_mod_api_version")
 }
 
 bloom {

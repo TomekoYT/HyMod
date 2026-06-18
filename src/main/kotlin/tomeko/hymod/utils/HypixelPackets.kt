@@ -5,13 +5,13 @@ import net.hypixel.modapi.packet.impl.clientbound.event.ClientboundLocationPacke
 import net.minecraft.client.Minecraft
 import net.minecraft.client.multiplayer.ServerData
 //? if = 1.8.9 {
-import net.minecraftforge.common.MinecraftForge
+/*import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 
-//?} else {
-/*import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
- *///?}
+*///?} else {
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
+ //?}
 
 object HypixelPackets {
     @JvmField
@@ -29,10 +29,10 @@ object HypixelPackets {
 
     fun register() {
         //? if = 1.8.9 {
-        MinecraftForge.EVENT_BUS.register(this)
-        //?} else {
-        /*ClientTickEvents.END_CLIENT_TICK.register(HypixelPackets::onTick)
-         *///?}
+        /*MinecraftForge.EVENT_BUS.register(this)
+        *///?} else {
+        ClientTickEvents.END_CLIENT_TICK.register(HypixelPackets::onTick)
+         //?}
 
         HypixelModAPI.getInstance()
             .createHandler(
@@ -45,18 +45,18 @@ object HypixelPackets {
     }
 
     //? if = 1.8.9 {
-    @SubscribeEvent
-    //?}
+    /*@SubscribeEvent
+    *///?}
     fun onTick(
         //? if = 1.8.9 {
-        event: TickEvent.ClientTickEvent
-        //?} else {
-        /*mc: Minecraft
-         *///?}
+        /*event: TickEvent.ClientTickEvent
+        *///?} else {
+        mc: Minecraft
+         //?}
     ) {
         //? if = 1.8.9 {
-        if (event.phase != TickEvent.Phase.END) return
-        //?}
+        /*if (event.phase != TickEvent.Phase.END) return
+        *///?}
 
         checkHypixel()
     }
@@ -64,17 +64,17 @@ object HypixelPackets {
     private fun checkHypixel() {
         val server: ServerData? =
             //? if = 1.8.9 {
-            Minecraft.getMinecraft().currentServerData
-        //?} else {
-        /*Minecraft.getInstance().currentServer
-         *///?}
+            /*Minecraft.getMinecraft().currentServerData
+        *///?} else {
+        Minecraft.getInstance().currentServer
+         //?}
 
         val ip =
             //? if = 1.8.9 {
-            server?.serverIP ?: return
-        //?} else {
-        /*server?.ip ?: return
-        *///?}
+            /*server?.serverIP ?: return
+        *///?} else {
+        server?.ip ?: return
+        //?}
 
         Debug.println(ip)
 

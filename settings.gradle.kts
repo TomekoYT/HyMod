@@ -34,8 +34,7 @@ plugins {
 stonecutter {
 	create(rootProject) {
 		version("1.8.9").buildscript("build.forge.gradle.kts")
-		version("1.21.11")
-		version("26.1").buildscript("build.unobfuscated.gradle.kts")
+		versions("26.1")
 		vcsVersion = "1.8.9"
 	}
 }

@@ -2,7 +2,7 @@ package tomeko.hymod.utils
 
 import net.minecraft.client.Minecraft
 //? if = 1.8.9 {
-import net.minecraft.client.renderer.GlStateManager
+/*import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import net.minecraft.util.*
@@ -11,18 +11,13 @@ import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import org.lwjgl.opengl.GL11
-//?} else {
-/*import com.mojang.blaze3d.vertex.PoseStack
+*///?} else {
+import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import com.mojang.math.Axis
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
-//? if >= 26.1 {
-/*import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext
+import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents
- *///?} else {
-import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext
-import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents
-//?}
 import net.minecraft.ChatFormatting
 import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.MultiBufferSource
@@ -32,85 +27,76 @@ import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
 import org.joml.Matrix4f
-*///?}
+//?}
 
 import java.awt.Color
 import java.util.ArrayList
 import kotlin.math.*
-import kotlin.math.roundToInt
 
 object WaypointRenderer {
     private const val BEACON_PNG =
-    //? if >= 26.1 {
-            /*"textures/entity/beacon/beacon_beam.png"
-            *///?} else {
-        "textures/entity/beacon_beam.png"
-    //?}
+        //? if = 1.8.9 {
+        /*"textures/entity/beacon_beam.png"
+        *///?} else {
+        "textures/entity/beacon/beacon_beam.png"
+        //?}
 
     //? if = 1.8.9 {
-    private val BEAM_TEXTURE = ResourceLocation(BEACON_PNG)
-    //?} else {
-    /*private val BEAM_TEXTURE = Identifier.parse(BEACON_PNG)
-    *///?}
+    /*private val BEAM_TEXTURE = ResourceLocation(BEACON_PNG)
+    *///?} else {
+    private val BEAM_TEXTURE = Identifier.parse(BEACON_PNG)
+    //?}
 
     val waypoints: MutableList<Waypoint> = ArrayList()
 
     fun register() {
         //? if = 1.8.9 {
-        MinecraftForge.EVENT_BUS.register(WaypointRenderer)
-        //?} else {
-        /*//? if >= 26.1 {
-        /*LevelRenderEvents.AFTER_TRANSLUCENT_FEATURES.register(WaypointRenderer::onWorldRender)
-         *///?} else {
-        WorldRenderEvents.AFTER_ENTITIES.register(WaypointRenderer::onWorldRender)
-        //?}
+        /*MinecraftForge.EVENT_BUS.register(WaypointRenderer)
+        *///?} else {
+        LevelRenderEvents.AFTER_TRANSLUCENT_FEATURES.register(WaypointRenderer::onWorldRender)
         ClientTickEvents.END_CLIENT_TICK.register(WaypointRenderer::onTick)
-        *///?}
+        //?}
     }
 
     //? if = 1.8.9 {
-    @SubscribeEvent
-    //?} else {
-            /*@JvmStatic
-            *///?}
+    /*@SubscribeEvent
+    *///?} else {
+            @JvmStatic
+            //?}
     fun onWorldRender(
         //? if = 1.8.9 {
-        event: RenderWorldLastEvent
-        //?} else {
-        /*//? if >= 26.1 {
-        /*context: LevelRenderContext
-         *///?} else {
-        context: WorldRenderContext
+        /*event: RenderWorldLastEvent
+        *///?} else {
+        context: LevelRenderContext
         //?}
-        *///?}
     ) {
         for (waypoint in waypoints) {
             renderWaypoint(
                 waypoint,
                 //? if = 1.8.9 {
-                event
-                //?} else {
-                /*context
-                *///?}
+                /*event
+                *///?} else {
+                context
+                //?}
             )
         }
     }
 
     //? if = 1.8.9 {
-    @SubscribeEvent
-    //?} else {
-            /*@JvmStatic
-            *///?}
+    /*@SubscribeEvent
+    *///?} else {
+            @JvmStatic
+            //?}
     fun onTick(
         //? if = 1.8.9 {
-        event: TickEvent.ClientTickEvent
-        //?} else {
-        /*mc: Minecraft
-        *///?}
+        /*event: TickEvent.ClientTickEvent
+        *///?} else {
+        mc: Minecraft
+        //?}
     ) {
         //? if = 1.8.9 {
-        if (event.phase != TickEvent.Phase.END) return
-        //?}
+        /*if (event.phase != TickEvent.Phase.END) return
+        *///?}
 
         val iterator = waypoints.iterator()
         while (iterator.hasNext()) {
@@ -126,43 +112,39 @@ object WaypointRenderer {
     private fun renderWaypoint(
         waypoint: Waypoint?,
         //? if = 1.8.9 {
-        event: RenderWorldLastEvent
-        //?} else {
-        /*//? if >= 26.1 {
-        /*context: LevelRenderContext
-         *///?} else {
-        context: WorldRenderContext
+        /*event: RenderWorldLastEvent
+        *///?} else {
+        context: LevelRenderContext
         //?}
-        *///?}
     ) {
         if (waypoint == null) return
 
-        //? if >= 1.21.9 {
-        /*if (Minecraft.getInstance().player == null || Minecraft.getInstance().level == null) return
-        *///?}
+        //? if >= 26.1 {
+        if (Minecraft.getInstance().player == null || Minecraft.getInstance().level == null) return
+        //?}
 
         //? if = 1.8.9 {
-        val viewer = Minecraft.getMinecraft().renderViewEntity
-        //?}
+        /*val viewer = Minecraft.getMinecraft().renderViewEntity
+        *///?}
 
         val viewerX =
             //? if = 1.8.9 {
-            viewer.lastTickPosX + (viewer.posX - viewer.lastTickPosX) * event.partialTicks
-        //?} else {
-        /*Minecraft.getInstance().gameRenderer.mainCamera.position().x
-*///?}
+            /*viewer.lastTickPosX + (viewer.posX - viewer.lastTickPosX) * event.partialTicks
+        *///?} else {
+        Minecraft.getInstance().gameRenderer.mainCamera.position().x
+//?}
         val viewerY =
             //? if = 1.8.9 {
-            viewer.lastTickPosY + (viewer.posY - viewer.lastTickPosY) * event.partialTicks
-        //?} else {
-        /*Minecraft.getInstance().gameRenderer.mainCamera.position().y
-*///?}
+            /*viewer.lastTickPosY + (viewer.posY - viewer.lastTickPosY) * event.partialTicks
+        *///?} else {
+        Minecraft.getInstance().gameRenderer.mainCamera.position().y
+//?}
         val viewerZ =
             //? if = 1.8.9 {
-            viewer.lastTickPosZ + (viewer.posZ - viewer.lastTickPosZ) * event.partialTicks
-        //?} else {
-        /*Minecraft.getInstance().gameRenderer.mainCamera.position().z
-*///?}
+            /*viewer.lastTickPosZ + (viewer.posZ - viewer.lastTickPosZ) * event.partialTicks
+        *///?} else {
+        Minecraft.getInstance().gameRenderer.mainCamera.position().z
+//?}
 
         val renderX = waypoint.pos.x - viewerX
         val renderY = waypoint.pos.y - viewerY
@@ -170,75 +152,64 @@ object WaypointRenderer {
 
         drawFilledBoundingBox(
             //? if = 1.8.9 {
-            AxisAlignedBB(renderX, renderY, renderZ, renderX + 1, renderY + 1, renderZ + 1),
-            //?} else {
-            /*//? if >= 26.1 {
-            /*context.poseStack(),
-            context.bufferSource(),
+            /*AxisAlignedBB(renderX, renderY, renderZ, renderX + 1, renderY + 1, renderZ + 1),
             *///?} else {
-            context.matrices(),
-            context.consumers(),
-            //?}
+            context.poseStack(),
+            context.bufferSource(),
             BlockBox(
                 waypoint.pos,
                 waypoint.pos.offset(1, 1, 1)
             ),
-            *///?}
+            //?}
             waypoint.color,
             waypoint.boxOpacity
         )
         renderBeaconBeam(
             //? if >= 26.1 {
-            /*context.poseStack(),
+            context.poseStack(),
             context.bufferSource(),
-            *///?} else if >= 1.21.9 {
-            /*context.matrices(),
-            context.consumers(),
-            *///?}
+            //?}
             renderX,
             renderY + 1,
             renderZ,
             waypoint.color.rgb,
             waypoint.beamOpacity
             //? if = 1.8.9 {
-            , event.partialTicks
-            //?}
+            /*, event.partialTicks
+            *///?}
         )
         renderWaypointText(
             //? if >= 26.1 {
-            /*context.poseStack(),
+            context.poseStack(),
             context.bufferSource(),
-            *///?} else if >= 1.21.9 {
-            /*context.matrices(),
-            context.consumers(),
-            *///?}
+            //?}
             waypoint.text,
             //? if = 1.8.9 {
-            waypoint.pos.up(2),
-            //?} else {
-            /*waypoint.pos,
-            *///?}
+            /*waypoint.pos.up(2),
+            *///?} else {
+            waypoint.pos,
+            //?}
             waypoint.renderText,
             waypoint.renderDistance
             //? if = 1.8.9 {
-            , event.partialTicks
-            //?}
+            /*, event.partialTicks
+            *///?}
         )
     }
 
     private fun drawFilledBoundingBox(
         //? if = 1.8.9 {
-        aabb: AxisAlignedBB,
-        //?} else {
-        /*matrices: PoseStack,
+        /*aabb: AxisAlignedBB,
+        *///?} else {
+        matrices: PoseStack,
         consumers: MultiBufferSource,
         box: BlockBox,
-        *///?}
+        //?}
         c: Color,
         alphaMultiplier: Float
     ) {
         //? if = 1.8.9 {
-        GlStateManager.enableBlend()
+        /*GlStateManager.enableBlend()
         GlStateManager.disableLighting()
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
         GlStateManager.disableTexture2D()
@@ -302,8 +273,8 @@ object WaypointRenderer {
         tessellator.draw()
         GlStateManager.enableTexture2D()
         GlStateManager.disableBlend()
-        //?} else {
-        /*val camera = Minecraft.getInstance().gameRenderer.mainCamera
+        *///?} else {
+        val camera = Minecraft.getInstance().gameRenderer.mainCamera
 
         val camX = camera.position().x
         val camY = camera.position().y
@@ -382,11 +353,11 @@ object WaypointRenderer {
         )
 
         matrices.popPose()
-        *///?}
+        //?}
     }
 
-    //? if >= 1.21.9 {
-    /*private fun addDoubleSidedQuad(
+    //? if >= 26.1 {
+    private fun addDoubleSidedQuad(
         buffer: VertexConsumer,
         pose: Matrix4f,
         x1: Float, y1: Float, z1: Float,
@@ -405,24 +376,24 @@ object WaypointRenderer {
         buffer.addVertex(pose, x2, y2, z2).setColor(r, g, b, a)
         buffer.addVertex(pose, x1, y1, z1).setColor(r, g, b, a)
     }
-    *///?}
+    //?}
 
     private fun renderBeaconBeam(
-        //? if >= 1.21.9 {
-        /*matrices: PoseStack,
+        //? if >= 26.1 {
+        matrices: PoseStack,
         consumers: MultiBufferSource,
-        *///?}
+        //?}
         x: Double,
         y: Double,
         z: Double,
         rgb: Int,
         alphaMultiplier: Float
         //? if = 1.8.9 {
-        , partialTicks: Float
-        //?}
+        /*, partialTicks: Float
+        *///?}
     ) {
         //? if = 1.8.9 {
-        val height = 300
+        /*val height = 300
         val bottomOffset = 0
         val topOffset = bottomOffset + height
 
@@ -505,8 +476,8 @@ object WaypointRenderer {
         worldrenderer.pos(x + 0.2, y + topOffset, z + 0.2).tex(0.0, d13).color(r, g, b, 0.25F * alphaMultiplier)
             .endVertex()
         tessellator.draw()
-        //?} else {
-        /*matrices.pushPose()
+        *///?} else {
+        matrices.pushPose()
         matrices.translate(x, y, z)
 
         val pose = matrices.last()
@@ -690,11 +661,11 @@ object WaypointRenderer {
         )
 
         matrices.popPose()
-        *///?}
+        //?}
     }
 
-    //? if >= 1.21.9 {
-    /*private fun renderBeamSide(
+    //? if >= 26.1 {
+    private fun renderBeamSide(
         pose: PoseStack.Pose,
         buffer: VertexConsumer,
         r: Float, g: Float, b: Float, a: Float,
@@ -713,23 +684,23 @@ object WaypointRenderer {
         buffer.addVertex(pose.pose(), x2, yMax, z2).setColor(r, g, b, a).setUv(u2, v2).setUv2(15, 15)
             .setNormal(pose, 0.0f, 1.0f, 0.0f)
     }
-    *///?}
+    //?}
 
     private fun renderWaypointText(
-        //? if >= 1.21.9 {
-        /*matrices: PoseStack,
+        //? if >= 26.1 {
+        matrices: PoseStack,
         consumers: MultiBufferSource,
-        *///?}
+        //?}
         str: String,
         loc: BlockPos,
         renderText: Boolean,
         renderDistance: Boolean
         //? if = 1.8.9 {
-        , partialTicks: Float
-        //?}
+        /*, partialTicks: Float
+        *///?}
     ) {
         //? if = 1.8.9 {
-        GlStateManager.alphaFunc(516, 0.1F)
+        /*GlStateManager.alphaFunc(516, 0.1F)
 
         GlStateManager.pushMatrix()
 
@@ -765,8 +736,8 @@ object WaypointRenderer {
         GlStateManager.popMatrix()
 
         GlStateManager.disableLighting()
-        //?} else {
-        /*if (!renderText && !renderDistance) return
+        *///?} else {
+        if (!renderText && !renderDistance) return
 
         val camera = Minecraft.getInstance().gameRenderer.mainCamera
 
@@ -831,11 +802,11 @@ object WaypointRenderer {
             )
         }
         matrices.popPose()
-        *///?}
+        //?}
     }
 
     //? if = 1.8.9 {
-    private fun drawNametag(str: String, render: Boolean) {
+    /*private fun drawNametag(str: String, render: Boolean) {
         if (!render) return
 
         val fontrenderer = Minecraft.getMinecraft().fontRendererObj
@@ -874,5 +845,5 @@ object WaypointRenderer {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F)
         GlStateManager.popMatrix()
     }
-    //?}
+    *///?}
 }
