@@ -153,10 +153,12 @@ class BedwarsResourceDisplay
     override fun render(mcCtx: GuiGraphicsExtractor)
     //?}
     {
-        //? if = 1.8.9 {
-        /*if (!example) return
-        *///?}
-        if (!HypixelPackets.inBedwars && !HypixelPackets.onRBW) return
+        if (
+            //? if = 1.8.9 {
+            /*!example &&
+            *///?}
+            !HypixelPackets.inBedwars && !HypixelPackets.onRBW
+            ) return
 
         val mc =
         //? if = 1.8.9 {
