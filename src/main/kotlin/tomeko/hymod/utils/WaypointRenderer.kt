@@ -20,7 +20,11 @@ import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents
 import net.minecraft.ChatFormatting
 import net.minecraft.client.gui.Font
-import net.minecraft.client.renderer.MultiBufferSource
+//? if = 26.2 {
+import net.minecraft.client.renderer.SubmitNodeCollector
+//?} else {
+//import net.minecraft.client.renderer.MultiBufferSource
+//?}
 import net.minecraft.client.renderer.rendertype.RenderTypes
 import net.minecraft.core.BlockBox
 import net.minecraft.core.BlockPos
@@ -35,11 +39,11 @@ import kotlin.math.*
 
 object WaypointRenderer {
     private const val BEACON_PNG =
-        //? if = 1.8.9 {
-        /*"textures/entity/beacon_beam.png"
-        *///?} else {
+    //? if = 1.8.9 {
+            /*"textures/entity/beacon_beam.png"
+            *///?} else {
         "textures/entity/beacon/beacon_beam.png"
-        //?}
+    //?}
 
     //? if = 1.8.9 {
     /*private val BEAM_TEXTURE = ResourceLocation(BEACON_PNG)
@@ -61,8 +65,8 @@ object WaypointRenderer {
     //? if = 1.8.9 {
     /*@SubscribeEvent
     *///?} else {
-            @JvmStatic
-            //?}
+    @JvmStatic
+    //?}
     fun onWorldRender(
         //? if = 1.8.9 {
         /*event: RenderWorldLastEvent
@@ -85,8 +89,8 @@ object WaypointRenderer {
     //? if = 1.8.9 {
     /*@SubscribeEvent
     *///?} else {
-            @JvmStatic
-            //?}
+    @JvmStatic
+    //?}
     fun onTick(
         //? if = 1.8.9 {
         /*event: TickEvent.ClientTickEvent
@@ -128,24 +132,29 @@ object WaypointRenderer {
         *///?}
 
         val viewerX =
-            //? if = 1.8.9 {
-            /*viewer.lastTickPosX + (viewer.posX - viewer.lastTickPosX) * event.partialTicks
-        *///?} else {
-        Minecraft.getInstance().gameRenderer.mainCamera.position().x
+        //? if = 1.8.9 {
+                /*viewer.lastTickPosX + (viewer.posX - viewer.lastTickPosX) * event.partialTicks
+            *///?} else if >= 26.2 {
+            Minecraft.getInstance().gameRenderer.mainCamera().position().x
+        //?} else {
+        //Minecraft.getInstance().gameRenderer.mainCamera.position().x
 //?}
         val viewerY =
-            //? if = 1.8.9 {
-            /*viewer.lastTickPosY + (viewer.posY - viewer.lastTickPosY) * event.partialTicks
-        *///?} else {
-        Minecraft.getInstance().gameRenderer.mainCamera.position().y
+        //? if = 1.8.9 {
+                /*viewer.lastTickPosY + (viewer.posY - viewer.lastTickPosY) * event.partialTicks
+            *///?} else if >= 26.2 {
+            Minecraft.getInstance().gameRenderer.mainCamera().position().y
+        //?} else {
+        //Minecraft.getInstance().gameRenderer.mainCamera.position().y
 //?}
         val viewerZ =
-            //? if = 1.8.9 {
-            /*viewer.lastTickPosZ + (viewer.posZ - viewer.lastTickPosZ) * event.partialTicks
-        *///?} else {
-        Minecraft.getInstance().gameRenderer.mainCamera.position().z
+        //? if = 1.8.9 {
+                /*viewer.lastTickPosZ + (viewer.posZ - viewer.lastTickPosZ) * event.partialTicks
+            *///?} else if >= 26.2 {
+            Minecraft.getInstance().gameRenderer.mainCamera().position().z
+        //?} else {
+        //Minecraft.getInstance().gameRenderer.mainCamera.position().z
 //?}
-
         val renderX = waypoint.pos.x - viewerX
         val renderY = waypoint.pos.y - viewerY
         val renderZ = waypoint.pos.z - viewerZ
@@ -155,7 +164,11 @@ object WaypointRenderer {
             /*AxisAlignedBB(renderX, renderY, renderZ, renderX + 1, renderY + 1, renderZ + 1),
             *///?} else {
             context.poseStack(),
-            context.bufferSource(),
+            //? if >= 26.2 {
+            context.submitNodeCollector(),
+            //?} else {
+            //context.bufferSource(),
+            //?}
             BlockBox(
                 waypoint.pos,
                 waypoint.pos.offset(1, 1, 1)
@@ -167,7 +180,11 @@ object WaypointRenderer {
         renderBeaconBeam(
             //? if >= 26.1 {
             context.poseStack(),
-            context.bufferSource(),
+            //? if >= 26.2 {
+            context.submitNodeCollector(),
+            //?} else {
+            //context.bufferSource(),
+            //?}
             //?}
             renderX,
             renderY + 1,
@@ -181,7 +198,11 @@ object WaypointRenderer {
         renderWaypointText(
             //? if >= 26.1 {
             context.poseStack(),
-            context.bufferSource(),
+            //? if >= 26.2 {
+            context.submitNodeCollector(),
+            //?} else {
+            //context.bufferSource(),
+            //?}
             //?}
             waypoint.text,
             //? if = 1.8.9 {
@@ -202,7 +223,11 @@ object WaypointRenderer {
         /*aabb: AxisAlignedBB,
         *///?} else {
         matrices: PoseStack,
-        consumers: MultiBufferSource,
+        //? if >= 26.2 {
+        collector: SubmitNodeCollector,
+        //?} else {
+        //consumers: MultiBufferSource,
+        //?}
         box: BlockBox,
         //?}
         c: Color,
@@ -274,7 +299,12 @@ object WaypointRenderer {
         GlStateManager.enableTexture2D()
         GlStateManager.disableBlend()
         *///?} else {
-        val camera = Minecraft.getInstance().gameRenderer.mainCamera
+        val camera =
+            //? if >= 26.2 {
+            Minecraft.getInstance().gameRenderer.mainCamera()
+        //?} else {
+        //Minecraft.getInstance().gameRenderer.mainCamera
+        //?}
 
         val camX = camera.position().x
         val camY = camera.position().y
@@ -283,74 +313,84 @@ object WaypointRenderer {
         matrices.pushPose()
         matrices.translate(-camX, -camY, -camZ)
 
-        val buffer = consumers.getBuffer(RenderTypes.debugFilledBox())
-        val pose = matrices.last().pose()
+        //? if >= 26.2 {
+        collector.submitCustomGeometry(
+            matrices,
+            RenderTypes.debugFilledBox()
+        ) { pose, buffer ->
+            //?} else {
+            //val buffer = consumers.getBuffer(RenderTypes.debugFilledBox())
+            //val pose = matrices.last().pose()
+            //?}
 
-        val r = c.red / 255f
-        val g = c.green / 255f
-        val b = c.blue / 255f
+            val r = c.red / 255f
+            val g = c.green / 255f
+            val b = c.blue / 255f
 
-        val minX = box.min().x.toFloat()
-        val minY = box.min().y.toFloat()
-        val minZ = box.min().z.toFloat()
+            val minX = box.min().x.toFloat()
+            val minY = box.min().y.toFloat()
+            val minZ = box.min().z.toFloat()
 
-        val maxX = box.max().x.toFloat()
-        val maxY = box.max().y.toFloat()
-        val maxZ = box.max().z.toFloat()
+            val maxX = box.max().x.toFloat()
+            val maxY = box.max().y.toFloat()
+            val maxZ = box.max().z.toFloat()
 
-        addDoubleSidedQuad(
-            buffer, pose,
-            minX, minY, minZ,
-            maxX, minY, minZ,
-            maxX, minY, maxZ,
-            minX, minY, maxZ,
-            r, g, b, alphaMultiplier
-        )
+            addDoubleSidedQuad(
+                buffer, pose,
+                minX, minY, minZ,
+                maxX, minY, minZ,
+                maxX, minY, maxZ,
+                minX, minY, maxZ,
+                r, g, b, alphaMultiplier
+            )
 
-        addDoubleSidedQuad(
-            buffer, pose,
-            minX, maxY, maxZ,
-            maxX, maxY, maxZ,
-            maxX, maxY, minZ,
-            minX, maxY, minZ,
-            r, g, b, alphaMultiplier
-        )
+            addDoubleSidedQuad(
+                buffer, pose,
+                minX, maxY, maxZ,
+                maxX, maxY, maxZ,
+                maxX, maxY, minZ,
+                minX, maxY, minZ,
+                r, g, b, alphaMultiplier
+            )
 
-        addDoubleSidedQuad(
-            buffer, pose,
-            minX, minY, minZ,
-            maxX, minY, minZ,
-            maxX, maxY, minZ,
-            minX, maxY, minZ,
-            r, g, b, alphaMultiplier
-        )
+            addDoubleSidedQuad(
+                buffer, pose,
+                minX, minY, minZ,
+                maxX, minY, minZ,
+                maxX, maxY, minZ,
+                minX, maxY, minZ,
+                r, g, b, alphaMultiplier
+            )
 
-        addDoubleSidedQuad(
-            buffer, pose,
-            minX, minY, maxZ,
-            maxX, minY, maxZ,
-            maxX, maxY, maxZ,
-            minX, maxY, maxZ,
-            r, g, b, alphaMultiplier
-        )
+            addDoubleSidedQuad(
+                buffer, pose,
+                minX, minY, maxZ,
+                maxX, minY, maxZ,
+                maxX, maxY, maxZ,
+                minX, maxY, maxZ,
+                r, g, b, alphaMultiplier
+            )
 
-        addDoubleSidedQuad(
-            buffer, pose,
-            minX, minY, minZ,
-            minX, minY, maxZ,
-            minX, maxY, maxZ,
-            minX, maxY, minZ,
-            r, g, b, alphaMultiplier
-        )
+            addDoubleSidedQuad(
+                buffer, pose,
+                minX, minY, minZ,
+                minX, minY, maxZ,
+                minX, maxY, maxZ,
+                minX, maxY, minZ,
+                r, g, b, alphaMultiplier
+            )
 
-        addDoubleSidedQuad(
-            buffer, pose,
-            maxX, minY, minZ,
-            maxX, minY, maxZ,
-            maxX, maxY, maxZ,
-            maxX, maxY, minZ,
-            r, g, b, alphaMultiplier
-        )
+            addDoubleSidedQuad(
+                buffer, pose,
+                maxX, minY, minZ,
+                maxX, minY, maxZ,
+                maxX, maxY, maxZ,
+                maxX, maxY, minZ,
+                r, g, b, alphaMultiplier
+            )
+            //? if >= 26.2 {
+        }
+        //?}
 
         matrices.popPose()
         //?}
@@ -359,7 +399,11 @@ object WaypointRenderer {
     //? if >= 26.1 {
     private fun addDoubleSidedQuad(
         buffer: VertexConsumer,
-        pose: Matrix4f,
+        //? if >= 26.2 {
+        pose: PoseStack.Pose,
+        //?} else {
+        //pose: Matrix4f,
+        //?}
         x1: Float, y1: Float, z1: Float,
         x2: Float, y2: Float, z2: Float,
         x3: Float, y3: Float, z3: Float,
@@ -381,7 +425,11 @@ object WaypointRenderer {
     private fun renderBeaconBeam(
         //? if >= 26.1 {
         matrices: PoseStack,
-        consumers: MultiBufferSource,
+        //? if >= 26.2 {
+        collector: SubmitNodeCollector,
+        //?} else {
+        //consumers: MultiBufferSource,
+        //?}
         //?}
         x: Double,
         y: Double,
@@ -480,185 +528,195 @@ object WaypointRenderer {
         matrices.pushPose()
         matrices.translate(x, y, z)
 
-        val pose = matrices.last()
+        //? if >= 26.2 {
+        collector.submitCustomGeometry(
+            matrices,
+            RenderTypes.beaconBeam(BEAM_TEXTURE, true)
+        ) { pose, buffer ->
+            //?} else {
+            /*val pose = matrices.last()
         val buffer = consumers.getBuffer(RenderTypes.beaconBeam(BEAM_TEXTURE, true))
+        *///?}
 
-        val gameTime = Minecraft.getInstance().level!!.gameTime
-        val tickDelta = Minecraft.getInstance().deltaTracker.gameTimeDeltaTicks
-        val time = gameTime + tickDelta.toDouble()
+            val gameTime = Minecraft.getInstance().level!!.gameTime
+            val tickDelta = Minecraft.getInstance().deltaTracker.gameTimeDeltaTicks
+            val time = gameTime + tickDelta.toDouble()
 
-        val t1 = -time * 0.2
-        val d1 = t1 - floor(t1)
+            val t1 = -time * 0.2
+            val d1 = t1 - floor(t1)
 
-        val r = ((rgb shr 16) and 0xFF) / 255f
-        val g = ((rgb shr 8) and 0xFF) / 255f
-        val b = (rgb and 0xFF) / 255f
+            val r = ((rgb shr 16) and 0xFF) / 255f
+            val g = ((rgb shr 8) and 0xFF) / 255f
+            val b = (rgb and 0xFF) / 255f
 
-        val d2 = time * 0.025 * -1.5
-        val d4 = (0.5 + cos(d2 + 2.356194490192345) * 0.2).toFloat()
-        val d5 = (0.5 + sin(d2 + 2.356194490192345) * 0.2).toFloat()
-        val d6 = (0.5 + cos(d2 + (Math.PI / 4)) * 0.2).toFloat()
-        val d7 = (0.5 + sin(d2 + (Math.PI / 4)) * 0.2).toFloat()
-        val d8 = (0.5 + cos(d2 + 3.9269908169872414) * 0.2).toFloat()
-        val d9 = (0.5 + sin(d2 + 3.9269908169872414) * 0.2).toFloat()
-        val d10 = (0.5 + cos(d2 + 5.497787143782138) * 0.2).toFloat()
-        val d11 = (0.5 + sin(d2 + 5.497787143782138) * 0.2).toFloat()
+            val d2 = time * 0.025 * -1.5
+            val d4 = (0.5 + cos(d2 + 2.356194490192345) * 0.2).toFloat()
+            val d5 = (0.5 + sin(d2 + 2.356194490192345) * 0.2).toFloat()
+            val d6 = (0.5 + cos(d2 + (Math.PI / 4)) * 0.2).toFloat()
+            val d7 = (0.5 + sin(d2 + (Math.PI / 4)) * 0.2).toFloat()
+            val d8 = (0.5 + cos(d2 + 3.9269908169872414) * 0.2).toFloat()
+            val d9 = (0.5 + sin(d2 + 3.9269908169872414) * 0.2).toFloat()
+            val d10 = (0.5 + cos(d2 + 5.497787143782138) * 0.2).toFloat()
+            val d11 = (0.5 + sin(d2 + 5.497787143782138) * 0.2).toFloat()
 
-        val d14 = (-1.0 + d1).toFloat()
-        val d15 = (300.0 * 2.5 + d14.toDouble()).toFloat()
+            val d14 = (-1.0 + d1).toFloat()
+            val d15 = (300.0 * 2.5 + d14.toDouble()).toFloat()
 
-        val topOffset = 300.0f
-        val bottomOffset = 0.0f
+            val topOffset = 300.0f
+            val bottomOffset = 0.0f
 
-        renderBeamSide(
-            pose,
-            buffer,
-            r,
-            g,
-            b,
-            alphaMultiplier,
-            bottomOffset,
-            topOffset,
-            d4,
-            d5,
-            d6,
-            d7,
-            1.0f,
-            0.0f,
-            d14,
-            d15
-        )
-        renderBeamSide(
-            pose,
-            buffer,
-            r,
-            g,
-            b,
-            alphaMultiplier,
-            bottomOffset,
-            topOffset,
-            d10,
-            d11,
-            d8,
-            d9,
-            1.0f,
-            0.0f,
-            d14,
-            d15
-        )
-        renderBeamSide(
-            pose,
-            buffer,
-            r,
-            g,
-            b,
-            alphaMultiplier,
-            bottomOffset,
-            topOffset,
-            d6,
-            d7,
-            d10,
-            d11,
-            1.0f,
-            0.0f,
-            d14,
-            d15
-        )
-        renderBeamSide(
-            pose,
-            buffer,
-            r,
-            g,
-            b,
-            alphaMultiplier,
-            bottomOffset,
-            topOffset,
-            d8,
-            d9,
-            d4,
-            d5,
-            1.0f,
-            0.0f,
-            d14,
-            d15
-        )
+            renderBeamSide(
+                pose,
+                buffer,
+                r,
+                g,
+                b,
+                alphaMultiplier,
+                bottomOffset,
+                topOffset,
+                d4,
+                d5,
+                d6,
+                d7,
+                1.0f,
+                0.0f,
+                d14,
+                d15
+            )
+            renderBeamSide(
+                pose,
+                buffer,
+                r,
+                g,
+                b,
+                alphaMultiplier,
+                bottomOffset,
+                topOffset,
+                d10,
+                d11,
+                d8,
+                d9,
+                1.0f,
+                0.0f,
+                d14,
+                d15
+            )
+            renderBeamSide(
+                pose,
+                buffer,
+                r,
+                g,
+                b,
+                alphaMultiplier,
+                bottomOffset,
+                topOffset,
+                d6,
+                d7,
+                d10,
+                d11,
+                1.0f,
+                0.0f,
+                d14,
+                d15
+            )
+            renderBeamSide(
+                pose,
+                buffer,
+                r,
+                g,
+                b,
+                alphaMultiplier,
+                bottomOffset,
+                topOffset,
+                d8,
+                d9,
+                d4,
+                d5,
+                1.0f,
+                0.0f,
+                d14,
+                d15
+            )
 
-        val d12 = (-1.0 + d1).toFloat()
-        val d13 = 300.0f + d12
-        val innerAlpha = 0.25f * alphaMultiplier
+            val d12 = (-1.0 + d1).toFloat()
+            val d13 = 300.0f + d12
+            val innerAlpha = 0.25f * alphaMultiplier
 
-        renderBeamSide(
-            pose,
-            buffer,
-            r,
-            g,
-            b,
-            innerAlpha,
-            bottomOffset,
-            topOffset,
-            0.2f,
-            0.2f,
-            0.8f,
-            0.2f,
-            1.0f,
-            0.0f,
-            d12,
-            d13
-        )
-        renderBeamSide(
-            pose,
-            buffer,
-            r,
-            g,
-            b,
-            innerAlpha,
-            bottomOffset,
-            topOffset,
-            0.8f,
-            0.8f,
-            0.2f,
-            0.8f,
-            1.0f,
-            0.0f,
-            d12,
-            d13
-        )
-        renderBeamSide(
-            pose,
-            buffer,
-            r,
-            g,
-            b,
-            innerAlpha,
-            bottomOffset,
-            topOffset,
-            0.8f,
-            0.2f,
-            0.8f,
-            0.8f,
-            1.0f,
-            0.0f,
-            d12,
-            d13
-        )
-        renderBeamSide(
-            pose,
-            buffer,
-            r,
-            g,
-            b,
-            innerAlpha,
-            bottomOffset,
-            topOffset,
-            0.2f,
-            0.8f,
-            0.2f,
-            0.2f,
-            1.0f,
-            0.0f,
-            d12,
-            d13
-        )
+            renderBeamSide(
+                pose,
+                buffer,
+                r,
+                g,
+                b,
+                innerAlpha,
+                bottomOffset,
+                topOffset,
+                0.2f,
+                0.2f,
+                0.8f,
+                0.2f,
+                1.0f,
+                0.0f,
+                d12,
+                d13
+            )
+            renderBeamSide(
+                pose,
+                buffer,
+                r,
+                g,
+                b,
+                innerAlpha,
+                bottomOffset,
+                topOffset,
+                0.8f,
+                0.8f,
+                0.2f,
+                0.8f,
+                1.0f,
+                0.0f,
+                d12,
+                d13
+            )
+            renderBeamSide(
+                pose,
+                buffer,
+                r,
+                g,
+                b,
+                innerAlpha,
+                bottomOffset,
+                topOffset,
+                0.8f,
+                0.2f,
+                0.8f,
+                0.8f,
+                1.0f,
+                0.0f,
+                d12,
+                d13
+            )
+            renderBeamSide(
+                pose,
+                buffer,
+                r,
+                g,
+                b,
+                innerAlpha,
+                bottomOffset,
+                topOffset,
+                0.2f,
+                0.8f,
+                0.2f,
+                0.2f,
+                1.0f,
+                0.0f,
+                d12,
+                d13
+            )
+            //? if >= 26.2 {
+        }
+        //?}
 
         matrices.popPose()
         //?}
@@ -689,7 +747,11 @@ object WaypointRenderer {
     private fun renderWaypointText(
         //? if >= 26.1 {
         matrices: PoseStack,
-        consumers: MultiBufferSource,
+        //? if >= 26.2 {
+        collector: SubmitNodeCollector,
+        //?} else {
+        //consumers: MultiBufferSource,
+        //?}
         //?}
         str: String,
         loc: BlockPos,
@@ -739,7 +801,12 @@ object WaypointRenderer {
         *///?} else {
         if (!renderText && !renderDistance) return
 
-        val camera = Minecraft.getInstance().gameRenderer.mainCamera
+        val camera =
+            //? if >= 26.2 {
+            Minecraft.getInstance().gameRenderer.mainCamera()
+        //?} else {
+        //Minecraft.getInstance().gameRenderer.mainCamera
+        //?}
 
         val viewerX = camera.position().x
         val viewerY = camera.position().y
@@ -771,7 +838,21 @@ object WaypointRenderer {
 
         if (renderText) {
             val width = -Minecraft.getInstance().font.width(str) / 2f
-            Minecraft.getInstance().font.drawInBatch(
+            //? if >= 26.2 {
+            collector.submitText(
+                matrices,
+                width,
+                line.toFloat(),
+                Component.literal(str).visualOrderText,
+                false,
+                Font.DisplayMode.SEE_THROUGH,
+                15728880,
+                0xFFFFFFFF.toInt(),
+                background,
+                0
+            )
+            //?} else {
+            /*Minecraft.getInstance().font.drawInBatch(
                 Component.literal(str),
                 width,
                 line.toFloat(),
@@ -783,12 +864,28 @@ object WaypointRenderer {
                 background,
                 15728880
             )
+            *///?}
             line += 10
         }
         if (renderDistance) {
             val distText = "${dist.toInt()}m"
             val width = -Minecraft.getInstance().font.width(distText) / 2f
-            Minecraft.getInstance().font.drawInBatch(
+            //? if >= 26.2 {
+            collector.submitText(
+                matrices,
+                width,
+                line.toFloat(),
+                Component.literal(distText)
+                    .withStyle { style -> style.withColor(ChatFormatting.YELLOW) }.visualOrderText,
+                false,
+                Font.DisplayMode.SEE_THROUGH,
+                15728880,
+                0xFFFFFFFF.toInt(),
+                background,
+                0
+            )
+            //?} else {
+            /*Minecraft.getInstance().font.drawInBatch(
                 Component.literal(distText).withStyle { style -> style.withColor(ChatFormatting.YELLOW) },
                 width,
                 line.toFloat(),
@@ -800,6 +897,7 @@ object WaypointRenderer {
                 background,
                 15728880
             )
+            *///?}
         }
         matrices.popPose()
         //?}

@@ -29,11 +29,11 @@ import java.util.regex.Pattern
 
 object ItemTracker {
     private val mc =
-        //? if = 1.8.9 {
-        /*Minecraft.getMinecraft()
-    *///?} else {
-    Minecraft.getInstance()
-     //?}
+    //? if = 1.8.9 {
+            /*Minecraft.getMinecraft()
+        *///?} else {
+        Minecraft.getInstance()
+    //?}
 
     private var lastServerName: String? = null
 
@@ -75,7 +75,7 @@ object ItemTracker {
         /*if (event.phase != TickEvent.Phase.END || mc.thePlayer == null || mc.thePlayer.inventory == null) return
         *///?} else {
         if (mc.player == null) return
-         //?}
+        //?}
 
         val newInventory = HashMap<Item, Int>()
         for (item in BedwarsResourceDisplay.items) {
@@ -86,23 +86,23 @@ object ItemTracker {
         /*val mainInventory: Array<ItemStack?> = mc.thePlayer.inventory.mainInventory
         *///?} else {
         val mainInventory: Inventory = mc.player!!.inventory
-         //?}
+        //?}
 
         for (stack in mainInventory) {
             //? if = 1.8.9 {
             /*if (stack == null) continue
             *///?} else {
             if (stack.isEmpty) continue
-             //?}
+            //?}
 
             for (item in BedwarsResourceDisplay.items) {
                 if (item == stack.item) {
                     val count =
-                        //? if = 1.8.9 {
-                        /*stack.stackSize
-                    *///?} else {
-                    stack.count
-                     //?}
+                    //? if = 1.8.9 {
+                            /*stack.stackSize
+                        *///?} else {
+                        stack.count
+                    //?}
 
                     newInventory[item] = newInventory[item]!! + count
                 }
@@ -134,14 +134,27 @@ object ItemTracker {
             containerInventory.displayName.unformattedText != "Ender Chest"
         ) return
         *///?} else {
-        if (mc.screen !is ContainerScreen) return
+        if (
+        //? if >= 26.2 {
+            mc.gui.screen()
+                    //?} else {
+                    //mc.screen
+                    //?}
+                    !is ContainerScreen
+        ) return
 
-        val screen = mc.screen as ContainerScreen
+        val screen =
+            //? if >= 26.2 {
+            mc.gui.screen()
+                    //?} else {
+                    //mc.screen
+                    //?}
+                    as ContainerScreen
 
         if (screen.title.string != "Ender Chest") return
 
         val containerInventory: Container = screen.menu.container
-         //?}
+        //?}
 
         val newEnderChest = HashMap<Item, Int>()
         for (item in BedwarsResourceDisplay.items) {
@@ -153,28 +166,28 @@ object ItemTracker {
                 //? if = 1.8.9 {
                 /*containerInventory.sizeInventory
         *///?} else {
-        containerInventory.containerSize
-         //?}
+                containerInventory.containerSize
+        //?}
         ) {
             val stack =
-                //? if = 1.8.9 {
-                /*containerInventory.getStackInSlot(i) ?: continue
-            *///?} else {
-            containerInventory.getItem(i)
-             //?}
+            //? if = 1.8.9 {
+                    /*containerInventory.getStackInSlot(i) ?: continue
+                *///?} else {
+                containerInventory.getItem(i)
+            //?}
 
             //? if >= 26.1 {
             if (stack.isEmpty) continue
-             //?}
+            //?}
 
             for (item in BedwarsResourceDisplay.items) {
                 if (item == stack.item) {
                     val count =
-                        //? if = 1.8.9 {
-                        /*stack.stackSize
-                    *///?} else {
-                    stack.count
-                     //?}
+                    //? if = 1.8.9 {
+                            /*stack.stackSize
+                        *///?} else {
+                        stack.count
+                    //?}
 
                     newEnderChest[item] = newEnderChest[item]!! + count
                 }
@@ -199,14 +212,14 @@ object ItemTracker {
         /*if (event.type.toInt() == 2 || event.message == null) return
         *///?} else {
         if (fromActionBar) return
-         //?}
+        //?}
 
         val message = StringFormatting.removeFormatting(
             //? if = 1.8.9 {
             /*event.message.unformattedText
             *///?} else {
             component.string
-             //?}
+            //?}
         )
 
         val pattern =
@@ -229,7 +242,7 @@ object ItemTracker {
             BuiltInRegistries.ITEM.getValue(
                 Identifier.fromNamespaceAndPath("minecraft", id)
             )
-             //?}
+            //?}
         ] = amount
     }
 
