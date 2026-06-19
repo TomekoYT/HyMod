@@ -19,20 +19,6 @@ Multiversion mod for Hypixel and Ranked Bedwars adding features for bedwars (res
 
 ## Features
 
-### Bedwars
-
-#### Bedwars Resource Display
-- Displays your iron, gold, diamonds and emeralds while in bedwars game
-- Shows both inventory and ender chest
-- Works with new ender chest punching feature
-- Works on Ranked Bedwars Server: rbw.gg
-
-
-### Arcade
-
-#### Farm Hunt
-- Shows waypoint on dangerous taunt message
-
 
 ### Chat
 
@@ -61,3 +47,18 @@ Multiversion mod for Hypixel and Ranked Bedwars adding features for bedwars (res
 #### Middle Click GUI Items
 - Replaces left click with middle click in GUIs
 - Intended for overall Hypixel Network usage, use [Legacy Skyblock](https://modrinth.com/mod/legacyskyblock) for Hypixel Skyblock instead
+
+
+### Bedwars
+
+#### Bedwars Resource Display
+- Displays your iron, gold, diamonds and emeralds while in bedwars game
+- Shows both inventory and ender chest
+- Works with new ender chest punching feature
+- Works on Ranked Bedwars Server: rbw.gg
+
+
+### Arcade
+
+#### Farm Hunt
+- Shows waypoint on dangerous taunt message
