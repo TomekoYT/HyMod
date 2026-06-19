@@ -136,18 +136,18 @@ object ItemTracker {
         *///?} else {
         if (
         //? if >= 26.2 {
-            mc.gui.screen()
-                    //?} else {
-                    //mc.screen
+            /*mc.gui.screen()
+                    *///?} else {
+                    mc.screen
                     //?}
                     !is ContainerScreen
         ) return
 
         val screen =
             //? if >= 26.2 {
-            mc.gui.screen()
-                    //?} else {
-                    //mc.screen
+            /*mc.gui.screen()
+                    *///?} else {
+                    mc.screen
                     //?}
                     as ContainerScreen
 
