@@ -7,16 +7,14 @@ import cc.polyfrost.oneconfig.config.annotations.*
 import cc.polyfrost.oneconfig.config.core.OneColor
 import cc.polyfrost.oneconfig.config.data.Mod
 import cc.polyfrost.oneconfig.config.data.ModType
+import tomeko.hymod.hud.*
 *///?} else {
 import org.polyfrost.compose.render.PolyColor
 import org.polyfrost.oneconfig.api.config.v1.Config
 import org.polyfrost.oneconfig.api.config.v1.annotations.Color
-import org.polyfrost.oneconfig.api.config.v1.annotations.Dropdown
 import org.polyfrost.oneconfig.api.config.v1.annotations.Slider
 import org.polyfrost.oneconfig.api.config.v1.annotations.Switch
 //?}
-
-import tomeko.hymod.hud.BedwarsResourceDisplay
 import tomeko.hymod.utils.Constants
 
 object HyModConfig : Config(
@@ -38,101 +36,9 @@ object HyModConfig : Config(
         //? if = 1.8.9 {
         /*initialize()
         *///?} else {
-        save()
+        preload()
         //?}
     }
-
-    //? if = 1.8.9 {
-    /*@Exclude
-    *///?}
-    const val CATEGORY_BEDWARS = "Bedwars"
-
-    //? if = 1.8.9 {
-    /*@HUD(
-        name = "Bedwars Resource Display",
-        category = CATEGORY_BEDWARS
-    )
-    var bedwarsResourceDisplay = BedwarsResourceDisplay()
-    *///?} else {
-    const val SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY = "Bedwars Resource Display"
-
-    @Slider(
-        title = "Width",
-        min = 0f,
-        max = 100f,
-        step = 1f,
-        category = CATEGORY_BEDWARS,
-        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
-    )
-    var bedwarsResourceDisplayWidthPercentage = 0
-
-    @Slider(
-        title = "Height",
-        min = 0f,
-        max = 100f,
-        step = 1f,
-        category = CATEGORY_BEDWARS,
-        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
-    )
-    var bedwarsResourceDisplayHeightPercentage = 0
-
-    @Slider(
-        title = "Scale",
-        min = 0f,
-        max = 200f,
-        step = 1f,
-        category = CATEGORY_BEDWARS,
-        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
-    )
-    var bedwarsResourceDisplayScalePercentage = 100
-
-    @Slider(
-        title = "Item Padding",
-        min = 0f,
-        max = 10f,
-        category = CATEGORY_BEDWARS,
-        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
-    )
-    var bedwarsResourceDisplayItemPadding = 5f
-
-    @Slider(
-        title = "Icon Padding",
-        min = 0f,
-        max = 10f,
-        category = CATEGORY_BEDWARS,
-        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
-    )
-    var bedwarsResourceDisplayIconPadding = 5f
-
-    @Switch(
-        title = "Text Shadow",
-        category = CATEGORY_BEDWARS,
-        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
-    )
-    var bedwarsResourceDisplayTextType = false
-    //?}
-
-    //? if = 1.8.9 {
-    /*@Exclude
-    *///?}
-    const val CATEGORY_ARCADE = "Arcade"
-
-    //? if = 1.8.9 {
-    /*@Exclude
-    *///?}
-    const val SUBCATEGORY_FARM_HUNT = "Farm Hunt"
-
-    @Switch(
-        //? if = 1.8.9 {
-        /*name
-            *///?} else {
-            title
-             //?}
-        = "Dangerous Taunt Waypoint",
-        category = CATEGORY_ARCADE,
-        subcategory = SUBCATEGORY_FARM_HUNT
-    )
-    var dangerousTauntWaypointEnabled = true
 
     //? if = 1.8.9 {
     /*@Exclude
@@ -364,6 +270,40 @@ object HyModConfig : Config(
         subcategory = SUBCATEGORY_MIDDLE_CLICK_GUI_ITEMS
     )
     var middleClickGUIItemsEnabled = true
+
+
+    //? if = 1.8.9 {
+    /*@Exclude
+    const val CATEGORY_BEDWARS = "Bedwars"
+
+    @HUD(
+        name = "Bedwars Resource Display",
+        category = CATEGORY_BEDWARS
+    )
+    var bedwarsResourceDisplay = BedwarsResourceDisplay()
+    *///?}
+
+    //? if = 1.8.9 {
+    /*@Exclude
+    *///?}
+    const val CATEGORY_ARCADE = "Arcade"
+
+    //? if = 1.8.9 {
+    /*@Exclude
+    *///?}
+    const val SUBCATEGORY_FARM_HUNT = "Farm Hunt"
+
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+            title
+             //?}
+        = "Dangerous Taunt Waypoint",
+        category = CATEGORY_ARCADE,
+        subcategory = SUBCATEGORY_FARM_HUNT
+    )
+    var dangerousTauntWaypointEnabled = true
 
 
     //? if = 1.8.9 {
