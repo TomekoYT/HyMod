@@ -154,11 +154,11 @@ class BedwarsResourceDisplay
     //?}
     {
         if (
-            //? if = 1.8.9 {
-            /*!example &&
-            *///?}
+        //? if = 1.8.9 {
+        /*!example &&
+        *///?}
             !HypixelPackets.inBedwars && !HypixelPackets.onRBW
-            ) return
+        ) return
 
         val mc =
         //? if = 1.8.9 {
@@ -193,13 +193,15 @@ class BedwarsResourceDisplay
         //?}
 
         //? if >= 26.1 {
-        mcCtx.fill(
-            -this.bgRadius.toInt(),
-            -this.bgRadius.toInt(),
-            (longestWidth + iconPadding + iconSize).toInt() + this.bgRadius.toInt(),
-            (items.size * offset - itemPadding).toInt() + this.bgRadius.toInt(),
-            this.bgColor
-        )
+        if (showBackground) {
+            mcCtx.fill(
+                -bgRadius.toInt(),
+                -bgRadius.toInt(),
+                (longestWidth + iconPadding + iconSize).toInt() + bgRadius.toInt(),
+                (items.size * offset - itemPadding).toInt() + bgRadius.toInt(),
+                bgColor
+            )
+        }
         //?}
 
         var size = 0
@@ -248,13 +250,13 @@ class BedwarsResourceDisplay
             *///?} else {
             val textY = itemY + (16 - mc.font.lineHeight) / 2
 
-            if (this.showShadow) {
+            if (showShadow) {
                 mcCtx.text(
                     mc.font,
                     getText(item),
                     textX + 1,
                     textY + 1,
-                    this.shadowColor,
+                    shadowColor,
                     false
                 )
             }
@@ -264,7 +266,7 @@ class BedwarsResourceDisplay
                 getText(item),
                 textX,
                 textY,
-                this.textColor,
+                textColor,
                 false
             )
             //?}
