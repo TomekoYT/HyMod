@@ -22,6 +22,7 @@ import org.polyfrost.oneconfig.api.hud.v1.HudManager
 import org.polyfrost.oneconfig.api.hud.v1.LegacyHud
 import tomeko.hymod.utils.Constants
 //?}
+import tomeko.hymod.config.HyModConfig
 import tomeko.hymod.utils.HypixelPackets
 import tomeko.hymod.utils.ItemTracker
 
@@ -42,9 +43,6 @@ class BedwarsResourceDisplay
         }
         //?}
 
-        //? if = 1.8.9 {
-        /*@Exclude
-        *///?}
         private val IRON: Item =
         //? if = 1.8.9 {
                 /*Items.iron_ingot
@@ -52,9 +50,6 @@ class BedwarsResourceDisplay
             Items.IRON_INGOT
         //?}
 
-        //? if = 1.8.9 {
-        /*@Exclude
-        *///?}
         private val GOLD: Item =
         //? if = 1.8.9 {
                 /*Items.gold_ingot
@@ -62,9 +57,6 @@ class BedwarsResourceDisplay
             Items.GOLD_INGOT
         //?}
 
-        //? if = 1.8.9 {
-        /*@Exclude
-        *///?}
         private val DIAMOND: Item =
         //? if = 1.8.9 {
                 /*Items.diamond
@@ -72,9 +64,6 @@ class BedwarsResourceDisplay
             Items.DIAMOND
         //?}
 
-        //? if = 1.8.9 {
-        /*@Exclude
-        *///?}
         private val EMERALD: Item =
         //? if = 1.8.9 {
                 /*Items.emerald
@@ -82,9 +71,6 @@ class BedwarsResourceDisplay
             Items.EMERALD
         //?}
 
-        //? if = 1.8.9 {
-        /*@Exclude
-        *///?}
         val items = mutableListOf(
             IRON,
             GOLD,
@@ -129,6 +115,9 @@ class BedwarsResourceDisplay
         options = ["No Shadow", "Shadow", "Full Shadow"]
     )
     var textType = 0
+
+    @Color(name = "Text Color")
+    var textColor: OneColor = OneColor(255, 255, 255)
     *///?}
 
     //? if = 1.8.9 {
@@ -153,11 +142,16 @@ class BedwarsResourceDisplay
     override fun render(mcCtx: GuiGraphicsExtractor)
     //?}
     {
+        //? if >= 26.1 {
+        if(!HyModConfig.bedwarsResourceDisplayEnabled) return
+        //?}
+
         if (
         //? if = 1.8.9 {
         /*!example &&
         *///?}
-            !HypixelPackets.inBedwars && !HypixelPackets.onRBW
+            !HypixelPackets.inBedwars
+            && !HypixelPackets.onRBW
         ) return
 
         val mc =
@@ -172,6 +166,8 @@ class BedwarsResourceDisplay
 
         var longestWidth = 0
         for (item in items) {
+            if (!showItem(item)) continue
+
             longestWidth = maxOf(
                 longestWidth,
                 //? if = 1.8.9 {
@@ -182,6 +178,11 @@ class BedwarsResourceDisplay
                     getText(item)
                 )
             )
+        }
+
+        var size = 0
+        for (item in items) {
+            if (showItem(item)) size++
         }
 
         //? if = 1.8.9 {
@@ -198,17 +199,18 @@ class BedwarsResourceDisplay
                 -bgRadius.toInt(),
                 -bgRadius.toInt(),
                 (longestWidth + iconPadding + iconSize).toInt() + bgRadius.toInt(),
-                (items.size * offset - itemPadding).toInt() + bgRadius.toInt(),
+                (size * offset - itemPadding).toInt() + bgRadius.toInt(),
                 bgColor
             )
         }
         //?}
 
-        var size = 0
+        var i = 0
         for (item in items) {
-            val stack = ItemStack(item)
+            if (!showItem(item)) continue
 
-            val itemY = (size * offset).toInt()
+            val stack = ItemStack(item)
+            val itemY = (i * offset).toInt()
             val iconX = 0
             val textX = (iconSize + iconPadding).toInt()
 
@@ -243,7 +245,7 @@ class BedwarsResourceDisplay
                 getText(item),
                 textX.toFloat(),
                 itemY + mc.fontRendererObj.FONT_HEIGHT / 2f,
-                OneColor(255, 255, 255).rgb,
+                textColor.rgb,
                 TextRenderer.TextType.toType(textType),
                 1f
             )
@@ -271,7 +273,7 @@ class BedwarsResourceDisplay
             )
             //?}
 
-            size++
+            i++
         }
 
         //? if = 1.8.9 {
@@ -304,6 +306,27 @@ class BedwarsResourceDisplay
         val inventoryAmount = ItemTracker.inventory[item]!!
         val enderChestAmount = ItemTracker.enderChest[item]!!
 
-        return "$inventoryAmount + $enderChestAmount (${inventoryAmount + enderChestAmount})"
+        var text = ""
+        if (HyModConfig.bedwarsResourceDisplayShowInventory) text += inventoryAmount.toString()
+
+        if (HyModConfig.bedwarsResourceDisplayShowEnderChest) {
+            if (HyModConfig.bedwarsResourceDisplayShowInventory) text += " + "
+            text += enderChestAmount.toString()
+        }
+
+        if (HyModConfig.bedwarsResourceDisplayShowTotal) {
+            if (HyModConfig.bedwarsResourceDisplayShowInventory || HyModConfig.bedwarsResourceDisplayShowEnderChest) text += " "
+            text += "(${inventoryAmount + enderChestAmount})"
+        }
+
+        return text
+    }
+
+    private fun showItem(item: Item): Boolean = when (item) {
+        IRON -> HyModConfig.bedwarsResourceDisplayShowIron
+        GOLD -> HyModConfig.bedwarsResourceDisplayShowGold
+        DIAMOND -> HyModConfig.bedwarsResourceDisplayShowDiamond
+        EMERALD -> HyModConfig.bedwarsResourceDisplayShowEmerald
+        else -> false
     }
 }

@@ -32,13 +32,162 @@ object HyModConfig : Config(
     Category.HYPIXEL
     //?}
 ) {
+    //? if >= 26.1 {
+    val bedwarsResourceDisplayDependencies: Array<String> = arrayOf(
+        "bedwarsResourceDisplayShowIron",
+        "bedwarsResourceDisplayShowGold",
+        "bedwarsResourceDisplayShowDiamond",
+        "bedwarsResourceDisplayShowEmerald",
+        "bedwarsResourceDisplayShowInventory",
+        "bedwarsResourceDisplayShowEnderChest",
+        "bedwarsResourceDisplayShowTotal",
+    )
+    //?}
+
     fun register() {
         //? if = 1.8.9 {
         /*initialize()
         *///?} else {
         preload()
+        for (dependency in bedwarsResourceDisplayDependencies) {
+            addDependency(dependency, "bedwarsResourceDisplayEnabled")
+        }
         //?}
     }
+
+    //? if = 1.8.9 {
+    /*@Exclude
+    *///?}
+    const val CATEGORY_BEDWARS = "Bedwars"
+
+    //? if = 1.8.9 {
+    /*@Exclude
+    *///?}
+    const val SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY = "Bedwars Resource Display"
+
+    //? if >= 26.1 {
+    @Switch(
+        title = "Enabled",
+        category = CATEGORY_BEDWARS,
+        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
+    )
+    var bedwarsResourceDisplayEnabled = true
+    //?}
+
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Show Iron",
+        category = CATEGORY_BEDWARS,
+        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
+    )
+    var bedwarsResourceDisplayShowIron = true
+
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Show Gold",
+        category = CATEGORY_BEDWARS,
+        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
+    )
+    var bedwarsResourceDisplayShowGold = true
+
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Show Diamond",
+        category = CATEGORY_BEDWARS,
+        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
+    )
+    var bedwarsResourceDisplayShowDiamond = true
+
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Show Emerald",
+        category = CATEGORY_BEDWARS,
+        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
+    )
+    var bedwarsResourceDisplayShowEmerald = true
+
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Show Inventory",
+        category = CATEGORY_BEDWARS,
+        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
+    )
+    var bedwarsResourceDisplayShowInventory = true
+
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Show Ender Chest",
+        category = CATEGORY_BEDWARS,
+        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
+    )
+    var bedwarsResourceDisplayShowEnderChest = true
+
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Show Total",
+        category = CATEGORY_BEDWARS,
+        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
+    )
+    var bedwarsResourceDisplayShowTotal = true
+
+    //? if = 1.8.9 {
+    /*@HUD(
+        name = "Bedwars Resource Display HUD",
+        category = CATEGORY_BEDWARS
+    )
+    var bedwarsResourceDisplay = BedwarsResourceDisplay()
+    *///?}
+
+    //? if = 1.8.9 {
+    /*@Exclude
+    *///?}
+    const val CATEGORY_ARCADE = "Arcade"
+
+    //? if = 1.8.9 {
+    /*@Exclude
+    *///?}
+    const val SUBCATEGORY_FARM_HUNT = "Farm Hunt"
+
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Dangerous Taunt Waypoint",
+        category = CATEGORY_ARCADE,
+        subcategory = SUBCATEGORY_FARM_HUNT
+    )
+    var dangerousTauntWaypointEnabled = true
+
 
     //? if = 1.8.9 {
     /*@Exclude
@@ -54,8 +203,8 @@ object HyModConfig : Config(
         //? if = 1.8.9 {
         /*name
             *///?} else {
-            title
-             //?}
+        title
+            //?}
         = "White Private Messages",
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_WHITE_CHAT_MESSAGES
@@ -66,8 +215,8 @@ object HyModConfig : Config(
         //? if = 1.8.9 {
         /*name
             *///?} else {
-            title
-             //?}
+        title
+            //?}
         = "White No Rank Messages",
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_WHITE_CHAT_MESSAGES
@@ -83,8 +232,8 @@ object HyModConfig : Config(
         //? if = 1.8.9 {
         /*name
             *///?} else {
-            title
-             //?}
+        title
+            //?}
         = "Enabled",
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_HIDE_GUILD_MOTD
@@ -100,8 +249,8 @@ object HyModConfig : Config(
         //? if = 1.8.9 {
         /*name
             *///?} else {
-            title
-             //?}
+        title
+            //?}
         = "Enabled",
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_MVP_EMOJIS
@@ -117,8 +266,8 @@ object HyModConfig : Config(
         //? if = 1.8.9 {
         /*name
             *///?} else {
-            title
-             //?}
+        title
+            //?}
         = "Use party as default",
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_SENDCOORDS_COMMAND
@@ -134,8 +283,8 @@ object HyModConfig : Config(
         //? if = 1.8.9 {
         /*name
             *///?} else {
-            title
-             //?}
+        title
+            //?}
         = "Enabled",
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS
@@ -146,8 +295,8 @@ object HyModConfig : Config(
         //? if = 1.8.9 {
         /*name
             *///?} else {
-            title
-             //?}
+        title
+            //?}
         = "Color",
         //? if = 1.8.9 {
         /*allowAlpha = false,
@@ -156,17 +305,17 @@ object HyModConfig : Config(
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS
     )
     //? if = 1.8.9 {
-    /*var coordsWaypointsColor = OneColor(255, 255, 255)
-    *///?} else {
+            /*var coordsWaypointsColor = OneColor(255, 255, 255)
+            *///?} else {
     var coordsWaypointsColor = PolyColor.WHITE
-     //?}
+    //?}
 
     @Slider(
         //? if = 1.8.9 {
         /*name
             *///?} else {
-            title
-             //?}
+        title
+            //?}
         = "Box Opacity",
         min = 0f,
         max = 100f,
@@ -174,7 +323,7 @@ object HyModConfig : Config(
             //? if = 1.8.9{
             /*1
         *///?} else {
-        1f
+            1f
         //?}
         ,
         category = CATEGORY_CHAT,
@@ -186,8 +335,8 @@ object HyModConfig : Config(
         //? if = 1.8.9 {
         /*name
             *///?} else {
-            title
-             //?}
+        title
+            //?}
         = "Beam Opacity",
         min = 0f,
         max = 100f,
@@ -195,7 +344,7 @@ object HyModConfig : Config(
             //? if = 1.8.9{
             /*1
         *///?} else {
-        1f
+            1f
         //?}
         ,
         category = CATEGORY_CHAT,
@@ -207,8 +356,8 @@ object HyModConfig : Config(
         //? if = 1.8.9 {
         /*name
             *///?} else {
-            title
-             //?}
+        title
+            //?}
         = "Render Text",
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS
@@ -219,8 +368,8 @@ object HyModConfig : Config(
         //? if = 1.8.9 {
         /*name
             *///?} else {
-            title
-             //?}
+        title
+            //?}
         = "Render Distance",
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS
@@ -231,8 +380,8 @@ object HyModConfig : Config(
         //? if = 1.8.9 {
         /*name
             *///?} else {
-            title
-             //?}
+        title
+            //?}
         = "Time",
         min = 0f,
         max = 120f,
@@ -240,7 +389,7 @@ object HyModConfig : Config(
             //? if = 1.8.9{
             /*1
         *///?} else {
-        1f
+            1f
         //?}
         ,
         category = CATEGORY_CHAT,
@@ -263,47 +412,13 @@ object HyModConfig : Config(
         //? if = 1.8.9 {
         /*name
             *///?} else {
-            title
-             //?}
+        title
+            //?}
         = "Enabled",
         category = CATEGORY_GUI,
         subcategory = SUBCATEGORY_MIDDLE_CLICK_GUI_ITEMS
     )
     var middleClickGUIItemsEnabled = true
-
-
-    //? if = 1.8.9 {
-    /*@Exclude
-    const val CATEGORY_BEDWARS = "Bedwars"
-
-    @HUD(
-        name = "Bedwars Resource Display",
-        category = CATEGORY_BEDWARS
-    )
-    var bedwarsResourceDisplay = BedwarsResourceDisplay()
-    *///?}
-
-    //? if = 1.8.9 {
-    /*@Exclude
-    *///?}
-    const val CATEGORY_ARCADE = "Arcade"
-
-    //? if = 1.8.9 {
-    /*@Exclude
-    *///?}
-    const val SUBCATEGORY_FARM_HUNT = "Farm Hunt"
-
-    @Switch(
-        //? if = 1.8.9 {
-        /*name
-            *///?} else {
-            title
-             //?}
-        = "Dangerous Taunt Waypoint",
-        category = CATEGORY_ARCADE,
-        subcategory = SUBCATEGORY_FARM_HUNT
-    )
-    var dangerousTauntWaypointEnabled = true
 
 
     //? if = 1.8.9 {
@@ -315,8 +430,8 @@ object HyModConfig : Config(
         //? if = 1.8.9 {
         /*name
             *///?} else {
-            title
-             //?}
+        title
+            //?}
         = "Debug Mode Enabled",
         category = CATEGORY_DEBUG
     )
