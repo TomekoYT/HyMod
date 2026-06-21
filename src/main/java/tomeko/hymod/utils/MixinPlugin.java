@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -45,16 +46,16 @@ public class MixinPlugin implements IMixinConfigPlugin {
         String string = classUrl.toString();
         if (classUrl.getProtocol().equals("jar")) {
             try {
-                return new URL(string.substring(4).split("!")[0]);
+                return URI.create(string.substring(4).split("!")[0]).toURL();
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             }
         }
         if (string.endsWith(".class")) {
             try {
-                return new URL(string.replace("\\", "/")
+                return URI.create(string.replace("\\", "/")
                         .replace(getClass().getCanonicalName()
-                                .replace(".", "/") + ".class", ""));
+                                .replace(".", "/") + ".class", "")).toURL();
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             }
