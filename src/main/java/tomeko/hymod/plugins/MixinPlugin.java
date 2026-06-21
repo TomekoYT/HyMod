@@ -1,8 +1,9 @@
-package tomeko.hymod.utils;
+package tomeko.hymod.plugins;
 
 //? if = 1.8.9 {
 /*import org.spongepowered.asm.lib.tree.ClassNode;
-*///?} else {
+ *///?} else {
+
 import com.llamalad7.mixinextras.MixinExtrasBootstrap;
 import org.objectweb.asm.tree.ClassNode;
 //?}
