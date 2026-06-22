@@ -43,6 +43,9 @@ class BedwarsResourceDisplay
         }
         //?}
 
+        //? if = 1.8.9 {
+        /*@Exclude
+        *///?}
         private val IRON: Item =
         //? if = 1.8.9 {
                 /*Items.iron_ingot
@@ -50,6 +53,9 @@ class BedwarsResourceDisplay
             Items.IRON_INGOT
         //?}
 
+        //? if = 1.8.9 {
+        /*@Exclude
+        *///?}
         private val GOLD: Item =
         //? if = 1.8.9 {
                 /*Items.gold_ingot
@@ -57,6 +63,9 @@ class BedwarsResourceDisplay
             Items.GOLD_INGOT
         //?}
 
+        //? if = 1.8.9 {
+        /*@Exclude
+        *///?}
         private val DIAMOND: Item =
         //? if = 1.8.9 {
                 /*Items.diamond
@@ -64,6 +73,9 @@ class BedwarsResourceDisplay
             Items.DIAMOND
         //?}
 
+        //? if = 1.8.9 {
+        /*@Exclude
+        *///?}
         private val EMERALD: Item =
         //? if = 1.8.9 {
                 /*Items.emerald
@@ -71,6 +83,9 @@ class BedwarsResourceDisplay
             Items.EMERALD
         //?}
 
+        //? if = 1.8.9 {
+        /*@Exclude
+        *///?}
         val items = mutableListOf(
             IRON,
             GOLD,
