@@ -1,20 +1,42 @@
 package tomeko.hymod.utils
 
 //? if = 1.8.9 {
-/*import net.minecraft.util.BlockPos
+/*import cc.polyfrost.oneconfig.config.core.OneColor
+import net.minecraft.util.BlockPos
+
 *///?} else {
 import net.minecraft.core.BlockPos
+import org.polyfrost.compose.render.PolyColor
 //?}
-
-import java.awt.Color
 
 class Waypoint(
     var pos: BlockPos,
-    var color: Color,
+    var boxColor:
+    //? if = 1.8.9 {
+    /*OneColor,
+    *///?} else {
+    PolyColor,
+    //?}
+    var beamColor:
+    //? if = 1.8.9 {
+    /*OneColor,
+    *///?} else {
+    PolyColor,
+    //?}
     var text: String,
-    var boxOpacity: Float,
-    var beamOpacity: Float,
     var renderText: Boolean,
+    var textColor:
+    //? if = 1.8.9 {
+    /*OneColor,
+    *///?} else {
+    PolyColor,
+    //?}
     var renderDistance: Boolean,
+    var distanceTextColor:
+    //? if = 1.8.9 {
+    /*OneColor,
+    *///?} else {
+    PolyColor,
+    //?}
     var tickTime: Int
 )

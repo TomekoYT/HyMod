@@ -297,60 +297,43 @@ object HyModConfig : Config(
             *///?} else {
         title
             //?}
-        = "Color",
+        = "Box Color",
         //? if = 1.8.9 {
-        /*allowAlpha = false,
+        /*allowAlpha = true,
         *///?}
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS
     )
+    var coordsWaypointsBoxColor =
     //? if = 1.8.9 {
-            /*var coordsWaypointsColor = OneColor(255, 255, 255)
+            /*OneColor(
             *///?} else {
-    var coordsWaypointsColor = PolyColor.WHITE
-    //?}
+        PolyColor(
+            //?}
+            0xFFFFFFFF.toInt()
+        )
 
-    @Slider(
+    @Color(
         //? if = 1.8.9 {
         /*name
             *///?} else {
         title
             //?}
-        = "Box Opacity",
-        min = 0f,
-        max = 100f,
-        step =
-            //? if = 1.8.9{
-            /*1
-        *///?} else {
-            1f
-        //?}
-        ,
-        category = CATEGORY_CHAT,
-        subcategory = SUBCATEGORY_COORDS_WAYPOINTS
-    )
-    var coordsWaypointsBoxOpacity = 50
-
-    @Slider(
+        = "Beam Color",
         //? if = 1.8.9 {
-        /*name
-            *///?} else {
-        title
-            //?}
-        = "Beam Opacity",
-        min = 0f,
-        max = 100f,
-        step =
-            //? if = 1.8.9{
-            /*1
-        *///?} else {
-            1f
-        //?}
-        ,
+        /*allowAlpha = true,
+        *///?}
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS
     )
-    var coordsWaypointsBeamOpacity = 50
+    var coordsWaypointsBeamColor =
+    //? if = 1.8.9 {
+            /*OneColor(
+            *///?} else {
+        PolyColor(
+            //?}
+            0xFFFFFFFF.toInt()
+        )
 
     @Switch(
         //? if = 1.8.9 {
@@ -364,6 +347,30 @@ object HyModConfig : Config(
     )
     var coordsWaypointsRenderText = true
 
+    @Color(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Text Color",
+        //? if = 1.8.9 {
+        /*allowAlpha = false,
+        *///?} else {
+        alpha = false,
+        //?}
+        category = CATEGORY_CHAT,
+        subcategory = SUBCATEGORY_COORDS_WAYPOINTS
+    )
+    var coordsWaypointsTextColor =
+    //? if = 1.8.9 {
+            /*OneColor(
+            *///?} else {
+        PolyColor(
+            //?}
+            0xFFFFFFFF.toInt()
+        )
+
     @Switch(
         //? if = 1.8.9 {
         /*name
@@ -375,6 +382,30 @@ object HyModConfig : Config(
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS
     )
     var coordsWaypointsRenderDistance = true
+
+    @Color(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Distance Text Color",
+        //? if = 1.8.9 {
+        /*allowAlpha = false,
+        *///?} else {
+        alpha = false,
+        //?}
+        category = CATEGORY_CHAT,
+        subcategory = SUBCATEGORY_COORDS_WAYPOINTS
+    )
+    var coordsWaypointsDistanceTextColor =
+    //? if = 1.8.9 {
+            /*OneColor(
+            *///?} else {
+        PolyColor(
+            //?}
+            0xFFFFFF00.toInt()
+        )
 
     @Slider(
         //? if = 1.8.9 {

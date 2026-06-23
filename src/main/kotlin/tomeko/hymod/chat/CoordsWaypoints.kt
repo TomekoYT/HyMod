@@ -25,26 +25,26 @@ object CoordsWaypoints {
         /*MinecraftForge.EVENT_BUS.register(this)
         *///?} else {
         ClientReceiveMessageEvents.GAME.register(CoordsWaypoints::onChatReceive)
-         //?}
+        //?}
     }
 
     //? if = 1.8.9 {
     /*@SubscribeEvent
     *///?} else {
-            @JvmStatic
-             //?}
+    @JvmStatic
+    //?}
     fun onChatReceive(
         //? if = 1.8.9 {
         /*event: ClientChatReceivedEvent
         *///?} else {
         component: Component, fromActionBar: Boolean
-         //?}
+        //?}
     ) {
         //? if = 1.8.9 {
         /*if (event.type.toInt() == 2 || event.message == null) return
         *///?} else {
         if (fromActionBar) return
-         //?}
+        //?}
 
         if (!HyModConfig.coordsWaypointsEnabled) return
 
@@ -53,7 +53,7 @@ object CoordsWaypoints {
             /*event.message.unformattedText
             *///?} else {
             component.string
-             //?}
+            //?}
         )
 
         val pattern = Pattern.compile(
@@ -69,18 +69,15 @@ object CoordsWaypoints {
 
         WaypointRenderer.waypoints.add(
             Waypoint(
-                BlockPos(x, y, z),
-                Color(
-                    HyModConfig.coordsWaypointsColor.red,
-                    HyModConfig.coordsWaypointsColor.green,
-                    HyModConfig.coordsWaypointsColor.blue
-                ),
-                nickname,
-                HyModConfig.coordsWaypointsBoxOpacity.toFloat() / 100f,
-                HyModConfig.coordsWaypointsBeamOpacity.toFloat() / 100f,
-                HyModConfig.coordsWaypointsRenderText,
-                HyModConfig.coordsWaypointsRenderDistance,
-                20 * HyModConfig.coordsWaypointsTime
+                pos = BlockPos(x, y, z),
+                boxColor = HyModConfig.coordsWaypointsBoxColor,
+                beamColor = HyModConfig.coordsWaypointsBeamColor,
+                text = nickname,
+                renderText = HyModConfig.coordsWaypointsRenderText,
+                textColor = HyModConfig.coordsWaypointsTextColor,
+                renderDistance = HyModConfig.coordsWaypointsRenderDistance,
+                distanceTextColor = HyModConfig.coordsWaypointsDistanceTextColor,
+                tickTime = 20 * HyModConfig.coordsWaypointsTime
             )
         )
     }
