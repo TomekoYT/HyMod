@@ -33,14 +33,31 @@ object HyModConfig : Config(
     //?}
 ) {
     //? if >= 26.1 {
-    val bedwarsResourceDisplayDependencies: Array<String> = arrayOf(
-        "bedwarsResourceDisplayShowIron",
-        "bedwarsResourceDisplayShowGold",
-        "bedwarsResourceDisplayShowDiamond",
-        "bedwarsResourceDisplayShowEmerald",
-        "bedwarsResourceDisplayShowInventory",
-        "bedwarsResourceDisplayShowEnderChest",
-        "bedwarsResourceDisplayShowTotal",
+    val DEPENDENCIES: List<Pair<String, List<String>>> = listOf(
+        Pair(
+            "bedwarsResourceDisplayEnabled",
+            listOf(
+                "bedwarsResourceDisplayShowIron",
+                "bedwarsResourceDisplayShowGold",
+                "bedwarsResourceDisplayShowDiamond",
+                "bedwarsResourceDisplayShowEmerald",
+                "bedwarsResourceDisplayShowInventory",
+                "bedwarsResourceDisplayShowEnderChest",
+                "bedwarsResourceDisplayShowTotal"
+            )
+        ),
+        Pair(
+            "coordsWaypointsEnabled",
+            listOf(
+                "coordsWaypointsBoxColor",
+                "coordsWaypointsBeamColor",
+                "coordsWaypointsRenderText",
+                "coordsWaypointsTextColor",
+                "coordsWaypointsRenderDistance",
+                "coordsWaypointsDistanceTextColor",
+                "coordsWaypointsTime"
+            )
+        )
     )
     //?}
 
@@ -49,8 +66,10 @@ object HyModConfig : Config(
         /*initialize()
         *///?} else {
         preload()
-        for (dependency in bedwarsResourceDisplayDependencies) {
-            addDependency(dependency, "bedwarsResourceDisplayEnabled")
+        for ((condition, dependencies) in DEPENDENCIES) {
+            for (dependency in dependencies) {
+                addDependency(dependency, condition)
+            }
         }
         //?}
     }
