@@ -257,7 +257,7 @@ object DangerousTauntWaypoint {
         WaypointRenderer.waypoints.add(
             Waypoint(
                 pos = getPos(x, z),
-                boxColor = beamColor,
+                boxColor = boxColor,
                 beamColor = beamColor,
                 text = animal,
                 renderText = true,
