@@ -1,21 +1,21 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
-val mod_name: String by project
-val mod_id: String by project
-val mod_version: String by project
-val mod_description: String by project
-val mod_archives_name: String by project
-val base_group: String by project
+val modName = project.property("mod_name") as String
+val modId = project.property("mod_id") as String
+val modVersion = project.property("mod_version") as String
+val modDescription = project.property("mod_description") as String
+val modArchivesName = project.property("mod_archives_name") as String
+val baseGroup = project.property("base_group") as String
 
-val java_version: String by project
-val minecraft_version: String by project
-val fabric_loader_version: String by project
-val fabric_api_version: String by project
-val fabric_language_kotlin_version: String by project
+val javaVersion = project.property("java_version") as String
+val minecraftVersion = project.property("minecraft_version") as String
+val fabricLoaderVersion = project.property("fabric_loader_version") as String
+val fabricApiVersion = project.property("fabric_api_version") as String
+val fabricLanguageKotlinVersion = project.property("fabric_language_kotlin_version") as String
 
-val oneconfig_version: String by project
-val mod_menu_version: String by project
-val hypixel_mod_api_version: String by project
+val oneconfigVersion = project.property("oneconfig_version") as String
+val modMenuVersion = project.property("mod_menu_version") as String
+val hypixelModApiVersion = project.property("hypixel_mod_api_version") as String
 
 plugins {
     id("org.jetbrains.kotlin.jvm") version "2.4.0"
@@ -25,7 +25,7 @@ plugins {
 }
 
 base {
-    archivesName.set("$mod_archives_name-$mod_version-$minecraft_version+_fabric")
+    archivesName.set("$modArchivesName-$modVersion-$minecraftVersion+_fabric")
 }
 
 repositories {
@@ -41,79 +41,75 @@ repositories {
 }
 
 loom {
-    runConfigs.all {
-        ideConfigGenerated(stonecutter.current.isActive)
-        runDir = "../../run"
-    }
     runConfigs.remove(runConfigs["server"])
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:$minecraft_version")
-    implementation("net.fabricmc:fabric-loader:$fabric_loader_version")
-    implementation("net.fabricmc.fabric-api:fabric-api:$fabric_api_version")
-    implementation("net.fabricmc:fabric-language-kotlin:$fabric_language_kotlin_version")
+    minecraft("com.mojang:minecraft:$minecraftVersion")
+    implementation("net.fabricmc:fabric-loader:$fabricLoaderVersion")
+    implementation("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
+    implementation("net.fabricmc:fabric-language-kotlin:$fabricLanguageKotlinVersion")
 
     val oneconfigModules = arrayOf("commands", "config-impl", "events", "hud", "internal", "ui", "utils")
     for (module in oneconfigModules) {
-        implementation("org.polyfrost.oneconfig:${module}:${oneconfig_version}")
+        implementation("org.polyfrost.oneconfig:${module}:${oneconfigVersion}")
     }
-    implementation("org.polyfrost.oneconfig:$minecraft_version-fabric:$oneconfig_version")
+    implementation("org.polyfrost.oneconfig:$minecraftVersion-fabric:$oneconfigVersion")
 
-    implementation("com.terraformersmc:modmenu:$mod_menu_version")
-    implementation("net.hypixel:mod-api:$hypixel_mod_api_version")
+    implementation("com.terraformersmc:modmenu:$modMenuVersion")
+    implementation("net.hypixel:mod-api:$hypixelModApiVersion")
 }
 
 bloom {
-    replacement("@MOD_NAME@", mod_name)
-    replacement("@MOD_ID@", mod_id)
-    replacement("@MOD_VERSION@", mod_version)
+    replacement("@MOD_NAME@", modName)
+    replacement("@MOD_ID@", modId)
+    replacement("@MOD_VERSION@", modVersion)
 }
 
 tasks.processResources {
     val props = mapOf(
-        "mod_id" to mod_id,
-        "mod_name" to mod_name,
-        "mod_version" to mod_version,
-        "mod_description" to mod_description,
-        "mod_archives_name" to mod_archives_name,
-        "base_group" to base_group,
+        "mod_id" to modId,
+        "mod_name" to modName,
+        "mod_version" to modVersion,
+        "mod_description" to modDescription,
+        "mod_archives_name" to modArchivesName,
+        "base_group" to baseGroup,
 
-        "java_version" to java_version,
-        "minecraft_version" to minecraft_version,
-        "fabric_loader_version" to fabric_loader_version,
-        "fabric_api_version" to fabric_api_version,
-        "fabric_language_kotlin_version" to fabric_language_kotlin_version,
+        "java_version" to javaVersion,
+        "minecraft_version" to minecraftVersion,
+        "fabric_loader_version" to fabricLoaderVersion,
+        "fabric_api_version" to fabricApiVersion,
+        "fabric_language_kotlin_version" to fabricLanguageKotlinVersion,
 
-        "oneconfig_version" to oneconfig_version,
-        "mod_menu_version" to mod_menu_version,
-        "hypixel_mod_api_version" to hypixel_mod_api_version
+        "oneconfig_version" to oneconfigVersion,
+        "mod_menu_version" to modMenuVersion,
+        "hypixel_mod_api_version" to hypixelModApiVersion
     )
 
     inputs.properties(props)
 
-    filesMatching(listOf("fabric.mod.json", "mixins.$mod_id.json")) {
+    filesMatching(listOf("fabric.mod.json", "mixins.$modId.json")) {
         expand(props)
     }
 }
 
 tasks.withType<JavaCompile>().configureEach {
-    options.release = java_version.toInt()
+    options.release = javaVersion.toInt()
 }
 
 java {
     withSourcesJar()
-    sourceCompatibility = JavaVersion.toVersion(java_version)
-    targetCompatibility = JavaVersion.toVersion(java_version)
+    sourceCompatibility = JavaVersion.toVersion(javaVersion)
+    targetCompatibility = JavaVersion.toVersion(javaVersion)
 
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(java_version))
+        languageVersion.set(JavaLanguageVersion.of(javaVersion))
     }
 }
 
 kotlin {
     compilerOptions {
-        jvmTarget = JvmTarget.fromTarget(java_version)
+        jvmTarget = JvmTarget.fromTarget(javaVersion)
     }
 }
 
