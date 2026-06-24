@@ -20,7 +20,7 @@ val hypixel_mod_api_version: String by project
 plugins {
     id("org.jetbrains.kotlin.jvm") version "2.4.0"
     id("org.jetbrains.kotlin.plugin.compose") version "2.4.0"
-    id("net.fabricmc.fabric-loom") version "1.16-SNAPSHOT"
+    id("net.fabricmc.fabric-loom") version "1.17-SNAPSHOT"
     id("dev.deftu.gradle.bloom") version "0.2.0"
 }
 
