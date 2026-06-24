@@ -12,9 +12,13 @@ object Debug {
     private val LOGGER: Logger = LoggerFactory.getLogger(Constants.MOD_ID)
     //?}
 
-    fun println(message: String) {
+    fun print(message: String) {
         if (!HyModConfig.debugModeEnabled) return
 
+        forcePrint(message)
+    }
+
+    fun forcePrint(message: String) {
         //? if = 1.8.9 {
         /*kotlin.io.println("[${Constants.MOD_NAME}] $message")
         *///?} else {

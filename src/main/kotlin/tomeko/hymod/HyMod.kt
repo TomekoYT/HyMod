@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.common.event.FMLInitializationEvent
 *///?} else {
 import net.fabricmc.api.ClientModInitializer
- //?}
+//?}
 
 import tomeko.hymod.chat.*
 import tomeko.hymod.commands.*
@@ -26,14 +26,14 @@ import tomeko.hymod.utils.*
 *///?}
 class HyMod
 //? if >= 26.1 {
-: ClientModInitializer
+    : ClientModInitializer
 //?}
 {
     //? if = 1.8.9 {
     /*@Mod.EventHandler
     *///?} else {
-            override
-             //?}
+    override
+    //?}
     fun onInitializeClient(
         //? if = 1.8.9 {
         /*event: FMLInitializationEvent
@@ -48,7 +48,7 @@ class HyMod
         HideGuildMOTD.register()
         //? if >= 26.1 {
         MVPEmoji.register()
-         //?}
+        //?}
         WhiteChatMessages.register()
 
         HyModCommand.register()
@@ -63,5 +63,7 @@ class HyMod
         HypixelPackets.register()
         ItemTracker.register()
         WaypointRenderer.register()
+
+        Debug.forcePrint("Initialized!")
     }
 }
