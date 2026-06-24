@@ -54,7 +54,7 @@ public abstract class MiddleClickGUIItemsMixin {
             )
     )
     //?}
-    private void useMiddleClick(
+    private void hymod$useMiddleClick(
             //? if = 1.8.9 {
             /*GuiContainer instance,
              *///?} else {
@@ -72,7 +72,7 @@ public abstract class MiddleClickGUIItemsMixin {
             Operation<Void> original
             //?}
     ) {
-        if (shouldCallOriginal(instance, slotIn, clickedButton, clickType)) {
+        if (hymod$shouldCallOriginal(instance, slotIn, clickedButton, clickType)) {
             //? if = 1.8.9 {
             /*handleMouseClick(slotIn, slotId, clickedButton, clickType);
              *///?} else {
@@ -94,7 +94,8 @@ public abstract class MiddleClickGUIItemsMixin {
         //?}
     }
 
-    private static boolean shouldCallOriginal(
+
+    private static boolean hymod$shouldCallOriginal(
             //? if = 1.8.9 {
             /*GuiContainer instance,
              *///?} else {
@@ -150,7 +151,7 @@ public abstract class MiddleClickGUIItemsMixin {
             //?}
                 : tooltip
         ) {
-            if (moreThanOneButton(
+            if (hymod$moreThanOneButton(
                     line
                             //? if >= 26.1 {
                             .getString()
@@ -161,7 +162,7 @@ public abstract class MiddleClickGUIItemsMixin {
         return false;
     }
 
-    private static boolean moreThanOneButton(String text) {
+    private static boolean hymod$moreThanOneButton(String text) {
         text = text.toLowerCase();
 
         return text.contains("right-click")
