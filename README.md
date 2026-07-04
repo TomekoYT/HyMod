@@ -50,7 +50,7 @@ Multiversion mod for Hypixel and Ranked Bedwars adding features for bedwars (res
 #### Coords Waypoints
 - Show waypoint on coords sent by you / other players
 - Customizable color, beam opacity, box opacity and time to disappear
-- Render player nametag and distance to waypoint
+- Render player nametag, text and distance to waypoint
 
 
 ### GUI
