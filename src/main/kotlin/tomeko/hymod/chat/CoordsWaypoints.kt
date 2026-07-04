@@ -57,22 +57,27 @@ object CoordsWaypoints {
         )
 
         val pattern = Pattern.compile(
-            ".*?[<\\[]?([A-Za-z0-9_]+)[>\\]]?\\s*:?\\s*x:\\s*(-?\\d+),\\s*y:\\s*(-?\\d+),\\s*z:\\s*(-?\\d+)$"
+            """.*?[<\[]?([A-Za-z0-9_]+)[>\]]?\s*:?\s*x:\s*(-?\d+),\s*y:\s*(-?\d+),\s*z:\s*(-?\d+)(?:\s*(?:\|\s*)?(.*))?$"""
         )
+
         val matcher = pattern.matcher(message)
         if (!matcher.matches()) return
 
-        val nickname = matcher.group(1)
+        val owner = matcher.group(1)
         val x = matcher.group(2).toInt()
         val y = matcher.group(3).toInt()
         val z = matcher.group(4).toInt()
+        val text: String = matcher.group(5)?.takeIf { it.isNotBlank() } ?: ""
 
         WaypointRenderer.waypoints.add(
             Waypoint(
                 pos = BlockPos(x, y, z),
                 boxColor = HyModConfig.coordsWaypointsBoxColor,
                 beamColor = HyModConfig.coordsWaypointsBeamColor,
-                text = nickname,
+                owner = owner,
+                renderOwner = HyModConfig.coordsWaypointsRenderOwner,
+                ownerColor = HyModConfig.coordsWaypointsOwnerColor,
+                text = text,
                 renderText = HyModConfig.coordsWaypointsRenderText,
                 textColor = HyModConfig.coordsWaypointsTextColor,
                 renderDistance = HyModConfig.coordsWaypointsRenderDistance,

@@ -259,8 +259,18 @@ object DangerousTauntWaypoint {
                 pos = getPos(x, z),
                 boxColor = boxColor,
                 beamColor = beamColor,
-                text = animal,
-                renderText = true,
+                owner = animal,
+                renderOwner = true,
+                ownerColor =
+                    //? if = 1.8.9 {
+                    /*OneColor(
+                    *///?} else {
+                    PolyColor(
+                        //?}
+                        0xFFFFFFFF.toInt()
+                    ),
+                text = "",
+                renderText = false,
                 textColor =
                     //? if = 1.8.9 {
                     /*OneColor(

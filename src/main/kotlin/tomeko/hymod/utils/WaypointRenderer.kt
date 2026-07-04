@@ -203,13 +203,21 @@ object WaypointRenderer {
             //?}
             //?}
             waypoint.text,
+            waypoint.owner,
             //? if = 1.8.9 {
             /*waypoint.pos.up(2),
             *///?} else {
             waypoint.pos,
             //?}
             waypoint.renderText,
+            waypoint.renderOwner,
+            //? if = 1.8.9 {
+            /*waypoint.textColor,
+            waypoint.ownerColor,
+            *///?} else {
             waypoint.textColor,
+            waypoint.ownerColor,
+            //?}
             waypoint.renderDistance,
             waypoint.distanceTextColor
             //? if = 1.8.9 {
@@ -764,12 +772,16 @@ object WaypointRenderer {
         //?}
         //?}
         str: String,
+        owner: String,
         loc: BlockPos,
         renderText: Boolean,
+        renderOwner: Boolean,
         //? if = 1.8.9 {
         /*textColor: OneColor,
+        ownerColor: OneColor,
         *///?} else {
         textColor: PolyColor,
+        ownerColor: PolyColor,
         //?}
         renderDistance: Boolean,
         //? if = 1.8.9 {
@@ -805,21 +817,35 @@ object WaypointRenderer {
         GlStateManager.translate(x, y, z)
         GlStateManager.translate(0.0, viewer.eyeHeight.toDouble(), 0.0)
 
-        drawNametag(str, renderText, textColor)
+        if (renderOwner && !owner.isEmpty()) {
+            drawNametag(owner, true, ownerColor)
 
-        GlStateManager.rotate(-Minecraft.getMinecraft().renderManager.playerViewY, 0.0F, 1.0F, 0.0F)
-        GlStateManager.rotate(Minecraft.getMinecraft().renderManager.playerViewX, 1.0F, 0.0F, 0.0F)
-        GlStateManager.translate(0.0f, -0.25f, 0.0f)
-        GlStateManager.rotate(-Minecraft.getMinecraft().renderManager.playerViewX, 1.0F, 0.0F, 0.0F)
-        GlStateManager.rotate(Minecraft.getMinecraft().renderManager.playerViewY, 0.0F, 1.0F, 0.0F)
+            GlStateManager.rotate(-Minecraft.getMinecraft().renderManager.playerViewY, 0.0F, 1.0F, 0.0F)
+            GlStateManager.rotate(Minecraft.getMinecraft().renderManager.playerViewX, 1.0F, 0.0F, 0.0F)
+            GlStateManager.translate(0.0f, -0.25f, 0.0f)
+            GlStateManager.rotate(-Minecraft.getMinecraft().renderManager.playerViewX, 1.0F, 0.0F, 0.0F)
+            GlStateManager.rotate(Minecraft.getMinecraft().renderManager.playerViewY, 0.0F, 1.0F, 0.0F)
+        }
 
-        drawNametag("${dist.roundToInt()}m", renderDistance, distanceTextColor)
+        if (renderText && !str.isEmpty()) {
+            drawNametag(str, true, textColor)
+
+            GlStateManager.rotate(-Minecraft.getMinecraft().renderManager.playerViewY, 0.0F, 1.0F, 0.0F)
+            GlStateManager.rotate(Minecraft.getMinecraft().renderManager.playerViewX, 1.0F, 0.0F, 0.0F)
+            GlStateManager.translate(0.0f, -0.25f, 0.0f)
+            GlStateManager.rotate(-Minecraft.getMinecraft().renderManager.playerViewX, 1.0F, 0.0F, 0.0F)
+            GlStateManager.rotate(Minecraft.getMinecraft().renderManager.playerViewY, 0.0F, 1.0F, 0.0F)
+        }
+
+        if (renderDistance) {
+            drawNametag("${dist.roundToInt()}m", true, distanceTextColor)
+        }
 
         GlStateManager.popMatrix()
 
         GlStateManager.disableLighting()
         *///?} else {
-        if (!renderText && !renderDistance) return
+        if (!renderText && !renderDistance && !renderOwner) return
 
         val camera =
         //? if >= 26.2 {
@@ -856,9 +882,43 @@ object WaypointRenderer {
         val background = (Minecraft.getInstance().options.textBackgroundOpacity().get() * 255.0).toInt() shl 24
         var line = 0
 
-        if (renderText) {
+        val textColorArgb = (textColor.alpha shl 24) or (textColor.red shl 16) or (textColor.green shl 8) or textColor.blue
+        val ownerColorArgb = (ownerColor.alpha shl 24) or (ownerColor.red shl 16) or (ownerColor.green shl 8) or ownerColor.blue
+
+        if (renderOwner && !owner.isEmpty()) {
+            val width = -Minecraft.getInstance().font.width(owner) / 2f
+            //? if >= 26.2 {
+            /*collector.submitText(
+                matrices,
+                width,
+                line.toFloat(),
+                Component.literal(owner).visualOrderText,
+                false,
+                Font.DisplayMode.SEE_THROUGH,
+                15728880,
+                ownerColorArgb,
+                background,
+                0
+            )
+            *///?} else {
+            Minecraft.getInstance().font.drawInBatch(
+                Component.literal(owner),
+                width,
+                line.toFloat(),
+                ownerColorArgb,
+                false,
+                matrix,
+                consumers,
+                Font.DisplayMode.SEE_THROUGH,
+                background,
+                15728880
+            )
+            //?}
+            line += 10
+        }
+
+        if (renderText && !str.isEmpty()) {
             val width = -Minecraft.getInstance().font.width(str) / 2f
-            val textColorArgb = (textColor.alpha shl 24) or (textColor.red shl 16) or (textColor.green shl 8) or textColor.blue
             //? if >= 26.2 {
             /*collector.submitText(
                 matrices,
@@ -888,6 +948,7 @@ object WaypointRenderer {
             //?}
             line += 10
         }
+
         if (renderDistance) {
             val distText = "${dist.toInt()}m"
             val width = -Minecraft.getInstance().font.width(distText) / 2f

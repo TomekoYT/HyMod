@@ -51,6 +51,8 @@ object HyModConfig : Config(
             listOf(
                 "coordsWaypointsBoxColor",
                 "coordsWaypointsBeamColor",
+                "coordsWaypointsRenderOwner",
+                "coordsWaypointsOwnerColor",
                 "coordsWaypointsRenderText",
                 "coordsWaypointsTextColor",
                 "coordsWaypointsRenderDistance",
@@ -346,6 +348,42 @@ object HyModConfig : Config(
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS
     )
     var coordsWaypointsBeamColor =
+    //? if = 1.8.9 {
+            /*OneColor(
+            *///?} else {
+        PolyColor(
+            //?}
+            0xFFFFFFFF.toInt()
+        )
+
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Render Owner",
+        category = CATEGORY_CHAT,
+        subcategory = SUBCATEGORY_COORDS_WAYPOINTS
+    )
+    var coordsWaypointsRenderOwner = true
+
+    @Color(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Owner Color",
+        //? if = 1.8.9 {
+        /*allowAlpha = false,
+        *///?} else {
+        alpha = false,
+        //?}
+        category = CATEGORY_CHAT,
+        subcategory = SUBCATEGORY_COORDS_WAYPOINTS
+    )
+    var coordsWaypointsOwnerColor =
     //? if = 1.8.9 {
             /*OneColor(
             *///?} else {

@@ -23,6 +23,14 @@ class Waypoint(
     *///?} else {
     PolyColor,
     //?}
+    var owner: String,
+    var renderOwner: Boolean,
+    var ownerColor:
+    //? if = 1.8.9 {
+    /*OneColor,
+    *///?} else {
+    PolyColor,
+    //?}
     var text: String,
     var renderText: Boolean,
     var textColor:
