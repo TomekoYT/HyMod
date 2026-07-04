@@ -158,7 +158,7 @@ class BedwarsResourceDisplay
     //?}
     {
         //? if >= 26.1 {
-        if(!HyModConfig.bedwarsResourceDisplayEnabled) return
+        if (!HyModConfig.bedwarsResourceDisplayEnabled) return
         //?}
 
         if (
@@ -311,10 +311,12 @@ class BedwarsResourceDisplay
     override fun shouldShow(): Boolean =
         super.shouldShow() && (HypixelPackets.inBedwars || HypixelPackets.onRBW)
     *///?} else {
-    override val height: Float = actualHeight
     override val width: Float = actualWidth
+    override val height: Float = actualHeight
+    override fun minimumSize(): Pair<Float, Float> = actualWidth to actualHeight
     override fun update(): Boolean = true
     override fun multipleInstancesAllowed(): Boolean = false
+    override fun deletable(): Boolean = false
     //?}
 
     private fun getText(item: Item): String {
