@@ -39,7 +39,7 @@ class BedwarsResourceDisplay
     companion object {
         //? if >= 26.1 {
         fun register() {
-            HudManager.register(BedwarsResourceDisplay(), Constants.MOD_ID)
+            HudManager.register(BedwarsResourceDisplay(), Constants.MOD_ID, Constants.MOD_ICON)
         }
         //?}
 

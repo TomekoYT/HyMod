@@ -22,43 +22,37 @@ object HyModConfig : Config(
     /*Mod(
         Constants.MOD_NAME,
         ModType.HYPIXEL,
-        "/assets/${Constants.MOD_ID}/icon.png"
+        Constants.MOD_ICON
     ),
     "${Constants.MOD_ID}.json"
     *///?} else {
     "${Constants.MOD_ID}.json",
-    "/assets/${Constants.MOD_ID}/icon.png",
+    Constants.MOD_ICON,
     Constants.MOD_NAME,
     Category.HYPIXEL
     //?}
 ) {
     //? if >= 26.1 {
     val DEPENDENCIES: List<Pair<String, List<String>>> = listOf(
-        Pair(
-            "bedwarsResourceDisplayEnabled",
-            listOf(
-                "bedwarsResourceDisplayShowIron",
-                "bedwarsResourceDisplayShowGold",
-                "bedwarsResourceDisplayShowDiamond",
-                "bedwarsResourceDisplayShowEmerald",
-                "bedwarsResourceDisplayShowInventory",
-                "bedwarsResourceDisplayShowEnderChest",
-                "bedwarsResourceDisplayShowTotal"
-            )
+        "bedwarsResourceDisplayEnabled" to listOf(
+            "bedwarsResourceDisplayShowIron",
+            "bedwarsResourceDisplayShowGold",
+            "bedwarsResourceDisplayShowDiamond",
+            "bedwarsResourceDisplayShowEmerald",
+            "bedwarsResourceDisplayShowInventory",
+            "bedwarsResourceDisplayShowEnderChest",
+            "bedwarsResourceDisplayShowTotal"
         ),
-        Pair(
-            "coordsWaypointsEnabled",
-            listOf(
-                "coordsWaypointsBoxColor",
-                "coordsWaypointsBeamColor",
-                "coordsWaypointsRenderOwner",
-                "coordsWaypointsOwnerColor",
-                "coordsWaypointsRenderText",
-                "coordsWaypointsTextColor",
-                "coordsWaypointsRenderDistance",
-                "coordsWaypointsDistanceTextColor",
-                "coordsWaypointsTime"
-            )
+        "coordsWaypointsEnabled" to listOf(
+            "coordsWaypointsBoxColor",
+            "coordsWaypointsBeamColor",
+            "coordsWaypointsRenderOwner",
+            "coordsWaypointsOwnerColor",
+            "coordsWaypointsRenderText",
+            "coordsWaypointsTextColor",
+            "coordsWaypointsRenderDistance",
+            "coordsWaypointsDistanceTextColor",
+            "coordsWaypointsTime"
         )
     )
     //?}
