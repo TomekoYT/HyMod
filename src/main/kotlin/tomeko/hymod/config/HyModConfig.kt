@@ -347,7 +347,7 @@ object HyModConfig : Config(
             *///?} else {
         PolyColor(
             //?}
-            0xFFFFFFFF.toInt()
+            0xC0FFFFFF.toInt()
         )
 
     @Switch(

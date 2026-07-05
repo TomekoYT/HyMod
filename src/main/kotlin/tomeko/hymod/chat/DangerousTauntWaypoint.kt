@@ -178,7 +178,7 @@ object DangerousTauntWaypoint {
                 *///?} else {
                 PolyColor(
                     //?}
-                    0xFFFFFF00.toInt()
+                    0xC0FFFF00.toInt()
                 )
 
             "Sheep" ->
@@ -187,7 +187,7 @@ object DangerousTauntWaypoint {
                 *///?} else {
                 PolyColor(
                     //?}
-                    0xFFFFFFFF.toInt()
+                    0xC0FFFFFF.toInt()
                 )
 
             "Pig" ->
@@ -196,7 +196,7 @@ object DangerousTauntWaypoint {
                 *///?} else {
                 PolyColor(
                     //?}
-                    0xFFFFC0CB.toInt()
+                    0xC0FFC0CB.toInt()
                 )
 
             "Cow" ->
@@ -205,7 +205,7 @@ object DangerousTauntWaypoint {
                 *///?} else {
                 PolyColor(
                     //?}
-                    0xFF000000.toInt()
+                    0xC0000000.toInt()
                 )
 
             "Horse" ->
@@ -214,7 +214,7 @@ object DangerousTauntWaypoint {
                 *///?} else {
                 PolyColor(
                     //?}
-                    0xFF964B00.toInt()
+                    0xC0964B00.toInt()
                 )
 
             "Ocelot" ->
@@ -223,7 +223,7 @@ object DangerousTauntWaypoint {
                 *///?} else {
                 PolyColor(
                     //?}
-                    0xFFF1E2C9.toInt()
+                    0xC0F1E2C9.toInt()
                 )
 
             "Wolf" ->
@@ -232,7 +232,7 @@ object DangerousTauntWaypoint {
                 *///?} else {
                 PolyColor(
                     //?}
-                    0xFFD3D3D3.toInt()
+                    0xC0D3D3D3.toInt()
                 )
 
             "Donkey" ->
@@ -241,7 +241,7 @@ object DangerousTauntWaypoint {
                 *///?} else {
                 PolyColor(
                     //?}
-                    0xFF808080.toInt()
+                    0xC0808080.toInt()
                 )
 
             else ->
@@ -250,7 +250,7 @@ object DangerousTauntWaypoint {
                 *///?} else {
                 PolyColor(
                     //?}
-                    0xFF00FF00.toInt()
+                    0xC000FF00.toInt()
                 )
         }
 
