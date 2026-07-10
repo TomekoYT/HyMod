@@ -134,13 +134,6 @@ class BedwarsResourceDisplay
     var textColor: OneColor = OneColor(255, 255, 255)
     *///?}
 
-    //? if >= 26.1 {
-    @Switch(
-        title = "Enabled"
-    )
-    var enabled = true
-    //?}
-
     @Switch(
         //? if = 1.8.9 {
         /*name
@@ -233,15 +226,13 @@ class BedwarsResourceDisplay
     override fun render(mcCtx: GuiGraphicsExtractor)
     //?}
     {
-        //? if >= 26.1 {
-        if (!enabled) return
-        //?}
-
         if (
         //? if = 1.8.9 {
-        /*!example &&
-        *///?}
-            !HypixelPackets.inBedwars
+        /*!example
+        *///?} else {
+            !HudManager.isEditing
+            //?}
+            && !HypixelPackets.inBedwars
             && !HypixelPackets.onRBW
         ) return
 
