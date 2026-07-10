@@ -22,7 +22,6 @@ import org.polyfrost.oneconfig.api.hud.v1.HudManager
 import org.polyfrost.oneconfig.api.hud.v1.LegacyHud
 import tomeko.hymod.utils.Constants
 //?}
-import tomeko.hymod.config.HyModConfig
 import tomeko.hymod.utils.HypixelPackets
 import tomeko.hymod.utils.ItemTracker
 
@@ -135,6 +134,83 @@ class BedwarsResourceDisplay
     var textColor: OneColor = OneColor(255, 255, 255)
     *///?}
 
+    //? if >= 26.1 {
+    @Switch(
+        title = "Enabled"
+    )
+    var enabled = true
+    //?}
+
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Show Iron"
+    )
+    var showIron = true
+
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Show Gold"
+    )
+    var showGold = true
+
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Show Diamond"
+    )
+    var showDiamond = true
+
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Show Emerald"
+    )
+    var showEmerald = true
+
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Show Inventory"
+    )
+    var showInventory = true
+
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Show Ender Chest"
+    )
+    var showEnderChest = true
+
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Show Total"
+    )
+    var showTotal = true
+
     //? if = 1.8.9 {
     /*@Exclude
     *///?}
@@ -158,7 +234,7 @@ class BedwarsResourceDisplay
     //?}
     {
         //? if >= 26.1 {
-        if (!HyModConfig.bedwarsResourceDisplayEnabled) return
+        if (!enabled) return
         //?}
 
         if (
@@ -320,19 +396,19 @@ class BedwarsResourceDisplay
     //?}
 
     private fun getText(item: Item): String {
-        val inventoryAmount = ItemTracker.inventory[item]!!
-        val enderChestAmount = ItemTracker.enderChest[item]!!
+        val inventoryAmount = ItemTracker.inventory[item] ?: 0
+        val enderChestAmount = ItemTracker.enderChest[item] ?: 0
 
         var text = ""
-        if (HyModConfig.bedwarsResourceDisplayShowInventory) text += inventoryAmount.toString()
+        if (showInventory) text += inventoryAmount.toString()
 
-        if (HyModConfig.bedwarsResourceDisplayShowEnderChest) {
-            if (HyModConfig.bedwarsResourceDisplayShowInventory) text += " + "
+        if (showEnderChest) {
+            if (showInventory) text += " + "
             text += enderChestAmount.toString()
         }
 
-        if (HyModConfig.bedwarsResourceDisplayShowTotal) {
-            if (HyModConfig.bedwarsResourceDisplayShowInventory || HyModConfig.bedwarsResourceDisplayShowEnderChest) text += " "
+        if (showTotal) {
+            if (showInventory || showEnderChest) text += " "
             text += "(${inventoryAmount + enderChestAmount})"
         }
 
@@ -340,10 +416,10 @@ class BedwarsResourceDisplay
     }
 
     private fun showItem(item: Item): Boolean = when (item) {
-        IRON -> HyModConfig.bedwarsResourceDisplayShowIron
-        GOLD -> HyModConfig.bedwarsResourceDisplayShowGold
-        DIAMOND -> HyModConfig.bedwarsResourceDisplayShowDiamond
-        EMERALD -> HyModConfig.bedwarsResourceDisplayShowEmerald
+        IRON -> showIron
+        GOLD -> showGold
+        DIAMOND -> showDiamond
+        EMERALD -> showEmerald
         else -> false
     }
 }

@@ -12,6 +12,7 @@ import tomeko.hymod.hud.*
 import org.polyfrost.compose.render.PolyColor
 import org.polyfrost.oneconfig.api.config.v1.Config
 import org.polyfrost.oneconfig.api.config.v1.annotations.Color
+import org.polyfrost.oneconfig.api.config.v1.annotations.Info
 import org.polyfrost.oneconfig.api.config.v1.annotations.Slider
 import org.polyfrost.oneconfig.api.config.v1.annotations.Switch
 //?}
@@ -34,15 +35,6 @@ object HyModConfig : Config(
 ) {
     //? if >= 26.1 {
     val DEPENDENCIES: List<Pair<String, List<String>>> = listOf(
-        "bedwarsResourceDisplayEnabled" to listOf(
-            "bedwarsResourceDisplayShowIron",
-            "bedwarsResourceDisplayShowGold",
-            "bedwarsResourceDisplayShowDiamond",
-            "bedwarsResourceDisplayShowEmerald",
-            "bedwarsResourceDisplayShowInventory",
-            "bedwarsResourceDisplayShowEnderChest",
-            "bedwarsResourceDisplayShowTotal"
-        ),
         "coordsWaypointsEnabled" to listOf(
             "coordsWaypointsBoxColor",
             "coordsWaypointsBeamColor",
@@ -80,106 +72,20 @@ object HyModConfig : Config(
     *///?}
     const val SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY = "Bedwars Resource Display"
 
-    //? if >= 26.1 {
-    @Switch(
-        title = "Enabled",
-        category = CATEGORY_BEDWARS,
-        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
-    )
-    var bedwarsResourceDisplayEnabled = true
-    //?}
-
-    @Switch(
-        //? if = 1.8.9 {
-        /*name
-            *///?} else {
-        title
-            //?}
-        = "Show Iron",
-        category = CATEGORY_BEDWARS,
-        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
-    )
-    var bedwarsResourceDisplayShowIron = true
-
-    @Switch(
-        //? if = 1.8.9 {
-        /*name
-            *///?} else {
-        title
-            //?}
-        = "Show Gold",
-        category = CATEGORY_BEDWARS,
-        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
-    )
-    var bedwarsResourceDisplayShowGold = true
-
-    @Switch(
-        //? if = 1.8.9 {
-        /*name
-            *///?} else {
-        title
-            //?}
-        = "Show Diamond",
-        category = CATEGORY_BEDWARS,
-        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
-    )
-    var bedwarsResourceDisplayShowDiamond = true
-
-    @Switch(
-        //? if = 1.8.9 {
-        /*name
-            *///?} else {
-        title
-            //?}
-        = "Show Emerald",
-        category = CATEGORY_BEDWARS,
-        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
-    )
-    var bedwarsResourceDisplayShowEmerald = true
-
-    @Switch(
-        //? if = 1.8.9 {
-        /*name
-            *///?} else {
-        title
-            //?}
-        = "Show Inventory",
-        category = CATEGORY_BEDWARS,
-        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
-    )
-    var bedwarsResourceDisplayShowInventory = true
-
-    @Switch(
-        //? if = 1.8.9 {
-        /*name
-            *///?} else {
-        title
-            //?}
-        = "Show Ender Chest",
-        category = CATEGORY_BEDWARS,
-        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
-    )
-    var bedwarsResourceDisplayShowEnderChest = true
-
-    @Switch(
-        //? if = 1.8.9 {
-        /*name
-            *///?} else {
-        title
-            //?}
-        = "Show Total",
-        category = CATEGORY_BEDWARS,
-        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
-    )
-    var bedwarsResourceDisplayShowTotal = true
-
     //? if = 1.8.9 {
     /*@HUD(
-        name = "Bedwars Resource Display HUD",
+        name = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY,
         category = CATEGORY_BEDWARS
     )
     var bedwarsResourceDisplay = BedwarsResourceDisplay()
-    *///?}
+    *///?} else {
+    @Info(
+        title = "Bedwars Resource Display can be edited by clicking Edit HUD in the top left corner",
+        category = CATEGORY_BEDWARS,
+        subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
+    )
+    var bedwarsResourceDisplayInfo: Nothing? = null
+    //?}
 
     //? if = 1.8.9 {
     /*@Exclude
