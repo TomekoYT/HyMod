@@ -383,7 +383,7 @@ object HyModConfig : Config(
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS
     )
-    var coordsWaypointsTime = 30
+    var coordsWaypointsTime = 60
 
     //? if = 1.8.9 {
     /*@Exclude
