@@ -57,4 +57,4 @@ Multiversion mod for Hypixel and Ranked Bedwars adding features for bedwars (res
 
 #### Middle Click GUI Items
 - Replace left click with middle click in GUIs
-- Intended for overall Hypixel Network usage, use [Legacy Skyblock](https://modrinth.com/mod/legacyskyblock) for Hypixel Skyblock instead
+- Intended for overall Hypixel Network usage, for Hypixel Skyblock use [Legacy Skyblock](https://modrinth.com/mod/legacyskyblock) instead
