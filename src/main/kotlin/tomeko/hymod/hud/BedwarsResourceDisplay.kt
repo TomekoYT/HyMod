@@ -17,6 +17,7 @@ import net.minecraft.client.gui.GuiGraphicsExtractor
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import org.polyfrost.compose.render.PolyColor
 import org.polyfrost.oneconfig.api.config.v1.annotations.*
 import org.polyfrost.oneconfig.api.hud.v1.HudManager
 import org.polyfrost.oneconfig.api.hud.v1.LegacyHud
@@ -91,7 +92,46 @@ class BedwarsResourceDisplay
             DIAMOND,
             EMERALD
         )
+
+        //? if >= 26.1 {
+        private const val CATEGORY_GENERAL = "General"
+        private const val SUBCATEGORY_GENERAL = "General"
+        private const val SUBCATEGORY_RESOURCES = "Resources"
+        private const val CATEGORY_BACKGROUND = "Background"
+        //?}
     }
+
+    //? if = 1.8.9 {
+    /*@Dropdown(
+        name = "Text Type",
+        options = ["No Shadow", "Shadow", "Full Shadow"]
+    )
+    var textType = 0
+
+    @Color(name = "Text Color")
+    var textColor: OneColor = OneColor(255, 255, 255)
+    *///?} else {
+    @Color(
+        title = "Text Color",
+        category = CATEGORY_GENERAL,
+        subcategory = SUBCATEGORY_GENERAL
+    )
+    var txtColor = PolyColor(0xFFFFFFFF.toInt())
+
+    @Switch(
+        title = "Text Shadow",
+        category = CATEGORY_GENERAL,
+        subcategory = SUBCATEGORY_GENERAL
+    )
+    var textShadow = true
+
+    @Color(
+        title = "Text Shadow Color",
+        category = CATEGORY_GENERAL,
+        subcategory = SUBCATEGORY_GENERAL
+    )
+    var textShadowColor = PolyColor(0xFF000000.toInt())
+    //?}
 
     @Slider(
         //? if = 1.8.9 {
@@ -103,7 +143,9 @@ class BedwarsResourceDisplay
         min = 0f,
         max = 10f
         //? if >= 26.1 {
-        , step = 0.1f
+        , step = 0.1f,
+        category = CATEGORY_GENERAL,
+        subcategory = SUBCATEGORY_GENERAL
         //?}
     )
     var itemPadding = 5f
@@ -118,21 +160,12 @@ class BedwarsResourceDisplay
         min = 0f,
         max = 10f
         //? if >= 26.1 {
-        , step = 0.1f
+        , step = 0.1f,
+        category = CATEGORY_GENERAL,
+        subcategory = SUBCATEGORY_GENERAL
         //?}
     )
     var iconPadding = 5f
-
-    //? if = 1.8.9 {
-    /*@Dropdown(
-        name = "Text Type",
-        options = ["No Shadow", "Shadow", "Full Shadow"]
-    )
-    var textType = 0
-
-    @Color(name = "Text Color")
-    var textColor: OneColor = OneColor(255, 255, 255)
-    *///?}
 
     @Switch(
         //? if = 1.8.9 {
@@ -141,6 +174,10 @@ class BedwarsResourceDisplay
         title
             //?}
         = "Show Iron"
+        //? if >= 26.1 {
+        , category = CATEGORY_GENERAL,
+        subcategory = SUBCATEGORY_RESOURCES
+        //?}
     )
     var showIron = true
 
@@ -151,6 +188,10 @@ class BedwarsResourceDisplay
         title
             //?}
         = "Show Gold"
+        //? if >= 26.1 {
+        , category = CATEGORY_GENERAL,
+        subcategory = SUBCATEGORY_RESOURCES
+        //?}
     )
     var showGold = true
 
@@ -161,6 +202,10 @@ class BedwarsResourceDisplay
         title
             //?}
         = "Show Diamond"
+        //? if >= 26.1 {
+        , category = CATEGORY_GENERAL,
+        subcategory = SUBCATEGORY_RESOURCES
+        //?}
     )
     var showDiamond = true
 
@@ -171,6 +216,10 @@ class BedwarsResourceDisplay
         title
             //?}
         = "Show Emerald"
+        //? if >= 26.1 {
+        , category = CATEGORY_GENERAL,
+        subcategory = SUBCATEGORY_RESOURCES
+        //?}
     )
     var showEmerald = true
 
@@ -181,6 +230,10 @@ class BedwarsResourceDisplay
         title
             //?}
         = "Show Inventory"
+        //? if >= 26.1 {
+        , category = CATEGORY_GENERAL,
+        subcategory = SUBCATEGORY_RESOURCES
+        //?}
     )
     var showInventory = true
 
@@ -191,6 +244,10 @@ class BedwarsResourceDisplay
         title
             //?}
         = "Show Ender Chest"
+        //? if >= 26.1 {
+        , category = CATEGORY_GENERAL,
+        subcategory = SUBCATEGORY_RESOURCES
+        //?}
     )
     var showEnderChest = true
 
@@ -201,8 +258,35 @@ class BedwarsResourceDisplay
         title
             //?}
         = "Show Total"
+        //? if >= 26.1 {
+        , category = CATEGORY_GENERAL,
+        subcategory = SUBCATEGORY_RESOURCES
+        //?}
     )
     var showTotal = true
+
+    //? if >= 26.1 {
+    @Switch(
+        title = "Show Background",
+        category = CATEGORY_BACKGROUND
+    )
+    var background = false
+
+    @Color(
+        title = "Background Color",
+        category = CATEGORY_BACKGROUND
+    )
+    var backgroundColor = PolyColor(0x80000000.toInt())
+
+    @Slider(
+        title = "Background Radius",
+        category = CATEGORY_BACKGROUND,
+        min = 0f,
+        max = 10f,
+        step = 0.1f
+    )
+    var backgroundRadius = 5f
+    //?}
 
     //? if = 1.8.9 {
     /*@Exclude
@@ -276,13 +360,13 @@ class BedwarsResourceDisplay
         //?}
 
         //? if >= 26.1 {
-        if (showBackground) {
+        if (background) {
             mcCtx.fill(
-                -bgRadius.toInt(),
-                -bgRadius.toInt(),
-                (longestWidth + iconPadding + iconSize).toInt() + bgRadius.toInt(),
-                (size * offset - itemPadding).toInt() + bgRadius.toInt(),
-                bgColor
+                -backgroundRadius.toInt(),
+                -backgroundRadius.toInt(),
+                (longestWidth + iconPadding + iconSize).toInt() + backgroundRadius.toInt(),
+                (size * offset - itemPadding).toInt() + backgroundRadius.toInt(),
+                backgroundColor.argb
             )
         }
         //?}
@@ -334,13 +418,13 @@ class BedwarsResourceDisplay
             *///?} else {
             val textY = itemY + (16 - mc.font.lineHeight) / 2
 
-            if (showShadow) {
+            if (textShadow) {
                 mcCtx.text(
                     mc.font,
                     getText(item),
                     textX + 1,
                     textY + 1,
-                    shadowColor,
+                    textShadowColor.argb,
                     false
                 )
             }
@@ -350,7 +434,7 @@ class BedwarsResourceDisplay
                 getText(item),
                 textX,
                 textY,
-                textColor,
+                txtColor.argb,
                 false
             )
             //?}
