@@ -1,14 +1,15 @@
 package tomeko.hymod.commands
 
-import net.minecraft.client.Minecraft
 //? if = 1.8.9 {
-/*import net.minecraft.client.entity.EntityPlayerSP
+/*import net.minecraft.client.Minecraft
+import net.minecraft.client.entity.EntityPlayerSP
 import net.minecraft.command.CommandBase
 import net.minecraft.command.ICommandSender
 import net.minecraftforge.client.ClientCommandHandler
 *///?} else {
 import com.mojang.brigadier.arguments.StringArgumentType
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
+import net.minecraft.client.Minecraft
 import net.minecraft.client.player.LocalPlayer
 import net.fabricmc.fabric.api.client.command.v2.ClientCommands.argument
 import net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal
@@ -19,7 +20,7 @@ import tomeko.hymod.utils.HypixelPackets
 
 object SendCoordsCommand
 //? if = 1.8.9 {
-    /*: CommandBase()
+/*: CommandBase()
 *///?}
 {
     private const val COMMAND_NAME = "sendcoords"
@@ -34,10 +35,17 @@ object SendCoordsCommand
         ClientCommandRegistrationCallback.EVENT.register { dispatcher, _ ->
             dispatcher.register(
                 literal(COMMAND_NAME)
-                    .executes { _ ->
-                        sendCoords(defaultMode)
+                    .executes {
+                        sendCoords(defaultMode, "")
                         1
                     }
+                    .then(
+                        argument("message", StringArgumentType.greedyString())
+                            .executes { ctx ->
+                                sendCoords(defaultMode, ctx.getArgument("message", String::class.java))
+                                1
+                            }
+                    )
                     .then(
                         argument("mode", StringArgumentType.word())
                             .suggests { _, builder ->
@@ -46,11 +54,19 @@ object SendCoordsCommand
                                 builder.buildFuture()
                             }
                             .executes { ctx ->
-                                val mode = ctx.getArgument("mode", String::class.java)
-                                    .lowercase()
-                                sendCoords(mode)
+                                sendCoords(ctx.getArgument("mode", String::class.java), "")
                                 1
                             }
+                            .then(
+                                argument("message", StringArgumentType.greedyString())
+                                    .executes { ctx ->
+                                        sendCoords(
+                                            ctx.getArgument("mode", String::class.java),
+                                            ctx.getArgument("message", String::class.java)
+                                        )
+                                        1
+                                    }
+                            )
                     )
             )
         }
@@ -64,47 +80,56 @@ object SendCoordsCommand
         "/$COMMAND_NAME <all/party>"
 
     override fun processCommand(sender: ICommandSender, args: Array<String>) {
-        val mode = if (args.isNotEmpty()) args[0] else defaultMode
-        sendCoords(mode)
-    }
+    val first = args.firstOrNull()?.lowercase()
+
+    val (mode, message) =
+        if (first == "all" || first == "party") {
+            first to args.drop(1).joinToString(" ")
+        } else {
+            defaultMode to args.joinToString(" ")
+        }
+
+    sendCoords(mode, message)
+}
 
     override fun getRequiredPermissionLevel(): Int = 0
     *///?}
 
-    private fun sendCoords(mode: String) {
+    private fun sendCoords(mode: String, text: String) {
         //? if = 1.8.9 {
         /*val player: EntityPlayerSP = Minecraft.getMinecraft().thePlayer
         *///?} else {
         val player: LocalPlayer = Minecraft.getInstance().player!!
-         //?}
+        //?}
 
         val x =
-            //? if = 1.8.9 {
-            /*player.posX.toInt()
-        *///?} else {
-        player.x.toInt()
-         //?}
+        //? if = 1.8.9 {
+                /*player.posX.toInt()
+            *///?} else {
+            player.x.toInt()
+        //?}
 
         val y =
-            //? if = 1.8.9 {
-            /*player.posY.toInt()
-        *///?} else {
-        player.y.toInt()
-         //?}
+        //? if = 1.8.9 {
+                /*player.posY.toInt()
+            *///?} else {
+            player.y.toInt()
+        //?}
 
         val z =
-            //? if = 1.8.9 {
-            /*player.posZ.toInt()
-        *///?} else {
-        player.z.toInt()
-         //?}
-
-        var message = "x: $x, y: $y, z: $z"
+        //? if = 1.8.9 {
+                /*player.posZ.toInt()
+            *///?} else {
+            player.z.toInt()
+        //?}
 
         var actualMode = mode
         if (actualMode != "all" && actualMode != "party") {
             actualMode = defaultMode
         }
+
+        var message = "x: $x, y: $y, z: $z"
+        if (!text.isEmpty()) message += " | $text"
 
         if (HypixelPackets.onHypixel) {
             if (actualMode == "all") {
@@ -118,6 +143,6 @@ object SendCoordsCommand
         /*player.sendChatMessage(message)
         *///?} else {
         player.connection.sendChat(message)
-         //?}
+        //?}
     }
 }
