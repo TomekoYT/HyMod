@@ -16,7 +16,6 @@ import tomeko.hymod.utils.StringFormatting
 import tomeko.hymod.utils.Waypoint
 import tomeko.hymod.utils.WaypointRenderer
 
-import java.awt.Color
 import java.util.regex.Pattern
 
 object CoordsWaypoints {
