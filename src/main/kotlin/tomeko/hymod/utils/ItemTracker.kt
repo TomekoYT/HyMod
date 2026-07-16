@@ -1,13 +1,14 @@
 package tomeko.hymod.utils
 
-import net.minecraft.client.Minecraft
 //? if = 1.8.9 {
-/*import net.minecraft.client.gui.inventory.GuiChest
-import net.minecraft.inventory.Container
+/*import net.minecraft.block.Block
+import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.inventory.GuiChest
+import net.minecraft.init.Blocks
 import net.minecraft.inventory.ContainerChest
-import net.minecraft.inventory.IInventory
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraft.util.MovingObjectPosition
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
@@ -15,13 +16,16 @@ import net.minecraftforge.fml.common.gameevent.TickEvent
 *///?} else {
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents
+import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.screens.inventory.ContainerScreen
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
-import net.minecraft.world.Container
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.item.Item
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.phys.BlockHitResult
 //?}
 
 import tomeko.hymod.config.HyModConfig
@@ -30,13 +34,19 @@ import java.util.regex.Pattern
 
 object ItemTracker {
     private val mc =
-    //? if = 1.8.9 {
-            /*Minecraft.getMinecraft()
-        *///?} else {
-        Minecraft.getInstance()
-    //?}
+        //? if = 1.8.9 {
+        /*Minecraft.getMinecraft()
+    *///?} else {
+    Minecraft.getInstance()
+//?}
 
     private var lastServerName: String? = null
+    private var lastBlock: Block =
+        //? if = 1.8.9 {
+        /*Blocks.chest
+    *///?} else {
+    Blocks.CHEST
+    //?}
 
     var inventory = HashMap<Item, Int>()
     var enderChest = HashMap<Item, Int>()
@@ -56,6 +66,7 @@ object ItemTracker {
             scanInventory()
             scanEnderChest()
             stopTracking()
+            trackBlock()
         }
 
         ClientReceiveMessageEvents.GAME.register(ItemTracker::scanMessage)
@@ -99,11 +110,11 @@ object ItemTracker {
             for (item in BedwarsResourceDisplay.items) {
                 if (item == stack.item) {
                     val count =
-                    //? if = 1.8.9 {
-                            /*stack.stackSize
-                        *///?} else {
-                        stack.count
-                    //?}
+                        //? if = 1.8.9 {
+                        /*stack.stackSize
+                    *///?} else {
+                    stack.count
+                //?}
 
                     newInventory[item] = newInventory[item]!! + count
                 }
@@ -121,41 +132,35 @@ object ItemTracker {
         /*event: TickEvent.ClientTickEvent
         *///?}
     ) {
-        //? if = 1.8.9 {
-        /*if (event.phase != TickEvent.Phase.END || mc.currentScreen !is GuiChest) return
-
-        val container: Container = mc.thePlayer.openContainer
-        if (container !is ContainerChest) return
-
-        val chest: ContainerChest = container
-        val containerInventory: IInventory = chest.lowerChestInventory
-
-        if (
-            containerInventory.displayName == null ||
-            containerInventory.displayName.unformattedText != "Ender Chest"
-        ) return
-        *///?} else {
-        if (
-        //? if >= 26.2 {
-        /*mc.gui.screen()
-                *///?} else {
-            mc.screen
-                    //?}
-                    !is ContainerScreen
-        ) return
-
         val screen =
-        //? if >= 26.2 {
-                /*mc.gui.screen()
-                        *///?} else {
-            mc.screen
-                    //?}
-                    as ContainerScreen
+            //? if = 1.8.9 {
+            /*mc.currentScreen
+        *///?} else if >= 26.2 {
+        //mc.gui.screen()
+        //?} else {
+        mc.screen
+    //?}
 
-        if (screen.title.string != "Ender Chest") return
-
-        val containerInventory: Container = screen.menu.container
+        //? if = 1.8.9 {
+        /*if (event.phase != TickEvent.Phase.END || screen !is GuiChest || mc.thePlayer.openContainer !is ContainerChest) return
+        *///?} else {
+        if (screen !is ContainerScreen) return
         //?}
+
+        if (lastBlock !=
+            //? if = 1.8.9 {
+            /*Blocks.ender_chest
+        *///?} else {
+        Blocks.ENDER_CHEST
+        //?}
+        ) return
+
+        val containerInventory =
+            //? if = 1.8.9 {
+            /*(mc.thePlayer.openContainer as ContainerChest).lowerChestInventory
+        *///?} else {
+        screen.menu.container
+    //?}
 
         val newEnderChest = HashMap<Item, Int>()
         for (item in BedwarsResourceDisplay.items) {
@@ -167,15 +172,15 @@ object ItemTracker {
                 //? if = 1.8.9 {
                 /*containerInventory.sizeInventory
         *///?} else {
-                containerInventory.containerSize
-        //?}
+        containerInventory.containerSize
+//?}
         ) {
             val stack =
-            //? if = 1.8.9 {
-                    /*containerInventory.getStackInSlot(i) ?: continue
-                *///?} else {
-                containerInventory.getItem(i)
-            //?}
+                //? if = 1.8.9 {
+                /*containerInventory.getStackInSlot(i) ?: continue
+            *///?} else {
+            containerInventory.getItem(i)
+        //?}
 
             //? if >= 26.1 {
             if (stack.isEmpty) continue
@@ -184,11 +189,11 @@ object ItemTracker {
             for (item in BedwarsResourceDisplay.items) {
                 if (item == stack.item) {
                     val count =
-                    //? if = 1.8.9 {
-                            /*stack.stackSize
-                        *///?} else {
-                        stack.count
-                    //?}
+                        //? if = 1.8.9 {
+                        /*stack.stackSize
+                    *///?} else {
+                    stack.count
+                //?}
 
                     newEnderChest[item] = newEnderChest[item]!! + count
                 }
@@ -275,5 +280,46 @@ object ItemTracker {
             inventory[item] = 0
             enderChest[item] = 0
         }
+    }
+
+    //? if = 1.8.9 {
+    /*@SubscribeEvent
+    *///?}
+    fun trackBlock(
+        //? if = 1.8.9 {
+        /*event: TickEvent.ClientTickEvent
+        *///?}
+    ) {
+        //? if = 1.8.9 {
+        /*if (event.phase != TickEvent.Phase.END) return
+        *///?}
+
+        val lookingAt =
+        //? if = 1.8.9 {
+            /*mc.objectMouseOver ?: return
+        *///?} else {
+        mc.hitResult ?: return
+        //?}
+
+        //? if = 1.8.9 {
+        /*if (lookingAt.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) return
+        *///?} else {
+        if (lookingAt !is BlockHitResult) return
+        //?}
+
+        val block =
+            //? if = 1.8.9 {
+            /*mc.theWorld?.getBlockState(lookingAt.blockPos)?.block ?: return
+        *///?} else {
+        mc.level?.getBlockState(lookingAt.blockPos)?.block ?: return
+        //?}
+
+        //? if = 1.8.9 {
+        /*if (block != Blocks.chest && block != Blocks.trapped_chest && block != Blocks.ender_chest) return
+        *///?} else {
+        if (block != Blocks.CHEST && block != Blocks.TRAPPED_CHEST && block != Blocks.ENDER_CHEST) return
+        //?}
+
+        lastBlock = block
     }
 }

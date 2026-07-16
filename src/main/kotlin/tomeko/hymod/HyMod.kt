@@ -12,7 +12,7 @@ import net.fabricmc.api.ClientModInitializer
 import tomeko.hymod.chat.*
 import tomeko.hymod.commands.*
 import tomeko.hymod.config.*
-import tomeko.hymod.hud.BedwarsResourceDisplay
+import tomeko.hymod.hud.*
 import tomeko.hymod.utils.*
 
 //? if = 1.8.9 {
@@ -64,6 +64,6 @@ class HyMod
         ItemTracker.register()
         WaypointRenderer.register()
 
-        Debug.forcePrint("Initialized!")
+        Debug.forceLog("Initialized!")
     }
 }
