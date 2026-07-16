@@ -31,7 +31,7 @@ class BedwarsResourceDisplay
 //? if = 1.8.9 {
 /*: BasicHud(true)
 *///?} else {
-    : LegacyHud("bedwars-resource-display", "Bedwars Resource Display", Category.COMBAT)
+    : LegacyHud("${Constants.MOD_ID}/bedwars_resource_display.json", "Bedwars Resource Display", Category.COMBAT)
 //?}
 {
     //? if = 1.8.9 {
