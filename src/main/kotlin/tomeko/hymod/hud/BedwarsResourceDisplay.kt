@@ -21,8 +21,9 @@ import org.polyfrost.compose.render.PolyColor
 import org.polyfrost.oneconfig.api.config.v1.annotations.*
 import org.polyfrost.oneconfig.api.hud.v1.HudManager
 import org.polyfrost.oneconfig.api.hud.v1.LegacyHud
-import tomeko.hymod.utils.Constants
 //?}
+import tomeko.hymod.config.HyModConfig
+import tomeko.hymod.utils.Constants
 import tomeko.hymod.utils.HypixelPackets
 import tomeko.hymod.utils.ItemTracker
 
@@ -316,6 +317,7 @@ class BedwarsResourceDisplay
         *///?} else {
             !HudManager.isEditing
             //?}
+            && !HyModConfig.debugModeEnabled
             && !HypixelPackets.inBedwars
             && !HypixelPackets.onRBW
         ) return
@@ -460,7 +462,7 @@ class BedwarsResourceDisplay
         actualHeight * scale
 
     override fun shouldShow(): Boolean =
-        super.shouldShow() && (HypixelPackets.inBedwars || HypixelPackets.onRBW)
+        super.shouldShow() && (HyModConfig.debugModeEnabled || HypixelPackets.inBedwars || HypixelPackets.onRBW)
     *///?} else {
     override val width: Float = actualWidth
     override val height: Float = actualHeight

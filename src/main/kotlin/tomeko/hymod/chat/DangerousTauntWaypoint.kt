@@ -63,7 +63,7 @@ object DangerousTauntWaypoint {
         //?}
             return
 
-        if (!HyModConfig.dangerousTauntWaypointEnabled || !HypixelPackets.inFarmHunt) return
+        if (!HyModConfig.debugModeEnabled && (!HyModConfig.dangerousTauntWaypointEnabled || !HypixelPackets.inFarmHunt)) return
 
         val message = StringFormatting.removeFormatting(
             //? if = 1.8.9 {

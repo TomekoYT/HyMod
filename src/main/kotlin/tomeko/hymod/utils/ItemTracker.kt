@@ -24,6 +24,7 @@ import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.item.Item
 //?}
 
+import tomeko.hymod.config.HyModConfig
 import tomeko.hymod.hud.BedwarsResourceDisplay
 import java.util.regex.Pattern
 
@@ -136,18 +137,18 @@ object ItemTracker {
         *///?} else {
         if (
         //? if >= 26.2 {
-            /*mc.gui.screen()
-                    *///?} else {
-                    mc.screen
+        /*mc.gui.screen()
+                *///?} else {
+            mc.screen
                     //?}
                     !is ContainerScreen
         ) return
 
         val screen =
-            //? if >= 26.2 {
-            /*mc.gui.screen()
-                    *///?} else {
-                    mc.screen
+        //? if >= 26.2 {
+                /*mc.gui.screen()
+                        *///?} else {
+            mc.screen
                     //?}
                     as ContainerScreen
 
@@ -264,7 +265,7 @@ object ItemTracker {
 
         lastServerName = HypixelPackets.currentServerName
 
-        if (HypixelPackets.inBedwars || HypixelPackets.onRBW) return
+        if (HyModConfig.debugModeEnabled || HypixelPackets.inBedwars || HypixelPackets.onRBW) return
 
         resetTracker()
     }
