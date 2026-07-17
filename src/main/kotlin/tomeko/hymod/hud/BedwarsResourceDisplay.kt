@@ -31,7 +31,7 @@ class BedwarsResourceDisplay
 //? if = 1.8.9 {
 /*: BasicHud(true)
 *///?} else {
-    : LegacyHud("${Constants.MOD_ID}/bedwars_resource_display.json", "Bedwars Resource Display", Category.COMBAT)
+    : LegacyHud("bedwars_resource_display.json", "Bedwars Resource Display", Category.COMBAT)
 //?}
 {
     //? if = 1.8.9 {
@@ -468,8 +468,8 @@ class BedwarsResourceDisplay
     override val height: Float = actualHeight
     override fun minimumSize(): Pair<Float, Float> = actualWidth to actualHeight
     override fun update(): Boolean = true
-    override fun multipleInstancesAllowed(): Boolean = false
-    override fun deletable(): Boolean = false
+    override fun multipleInstancesAllowed(): Boolean = true
+    override fun deletable(): Boolean = true
     //?}
 
     private fun getText(item: Item): String {
