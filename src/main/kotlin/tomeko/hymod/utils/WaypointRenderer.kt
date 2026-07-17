@@ -20,6 +20,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font
+import net.minecraft.client.renderer.OrderedSubmitNodeCollector
 //? if = 26.2 {
 /*import net.minecraft.client.renderer.SubmitNodeCollector
 *///?} else {
@@ -29,7 +30,9 @@ import net.minecraft.client.renderer.rendertype.RenderTypes
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
+//? if = 26.1 {
 import org.joml.Matrix4f
+//?}
 //?}
 
 import java.util.ArrayList
@@ -160,7 +163,7 @@ object WaypointRenderer {
             //? if >= 26.1 {
             context.poseStack(),
             //? if >= 26.2 {
-            /*context.submitNodeCollector(),
+            /*context.submitNodeCollector().order(1),
             *///?} else {
             context.bufferSource(),
             //?}
@@ -176,7 +179,7 @@ object WaypointRenderer {
             //? if >= 26.1 {
             context.poseStack(),
             //? if >= 26.2 {
-            /*context.submitNodeCollector(),
+            /*context.submitNodeCollector().order(1),
             *///?} else {
             context.bufferSource(),
             //?}
@@ -202,7 +205,7 @@ object WaypointRenderer {
             //? if >= 26.1 {
             context.poseStack(),
             //? if >= 26.2 {
-            /*context.submitNodeCollector(),
+            /*context.submitNodeCollector().order(2),
             *///?} else {
             context.bufferSource(),
             //?}
@@ -218,7 +221,7 @@ object WaypointRenderer {
         //? if >= 26.1 {
         matrices: PoseStack,
         //? if >= 26.2 {
-        /*collector: SubmitNodeCollector,
+        /*collector: OrderedSubmitNodeCollector,
         *///?} else {
         consumers: MultiBufferSource,
         //?}
@@ -290,13 +293,13 @@ object WaypointRenderer {
 
         //? if = 1.8.9 {
         /*tessellator.draw()
-        GlStateManager.enableTexture2D()
-        GlStateManager.disableBlend()
-        GlStateManager.popMatrix()
+    GlStateManager.enableTexture2D()
+    GlStateManager.disableBlend()
+    GlStateManager.popMatrix()
+    *///?} else if >= 26.2 {
+        /*}
+        matrices.popPose()
         *///?} else {
-        //? if >= 26.2 {
-        //}
-        //?}
         matrices.popPose()
         //?}
     }
@@ -350,7 +353,7 @@ object WaypointRenderer {
         //? if >= 26.1 {
         matrices: PoseStack,
         //? if >= 26.2 {
-        /*collector: SubmitNodeCollector,
+        /*collector: OrderedSubmitNodeCollector,
         *///?} else {
         consumers: MultiBufferSource,
         //?}
@@ -462,10 +465,10 @@ object WaypointRenderer {
         //? if = 1.8.9 {
         /*tessellator.draw()
         GlStateManager.popMatrix()
+        *///?} else if >= 26.2 {
+        /*}
+        matrices.popPose()
         *///?} else {
-        //? if >= 26.2 {
-        //}
-        //?}
         matrices.popPose()
         //?}
     }
@@ -517,7 +520,7 @@ object WaypointRenderer {
         //? if >= 26.1 {
         matrices: PoseStack,
         //? if >= 26.2 {
-        /*collector: SubmitNodeCollector,
+        /*collector: OrderedSubmitNodeCollector,
         *///?} else {
         consumers: MultiBufferSource,
         //?}
@@ -643,11 +646,11 @@ object WaypointRenderer {
     }
 
     private fun drawNametag(
-        str: String, colorArgb: Int, line: Int, scaleMultiplier: Float,
+        text: String, colorArgb: Int, line: Int, scaleMultiplier: Float,
         //? if >= 26.1 {
         matrices: PoseStack,
         //? if >= 26.2 {
-        /*collector: SubmitNodeCollector
+        /*collector: OrderedSubmitNodeCollector
         *///?} else {
         consumers: MultiBufferSource
         //?}
@@ -669,7 +672,7 @@ object WaypointRenderer {
 
         val tessellator = Tessellator.getInstance()
         val worldrenderer = tessellator.worldRenderer
-        val j = fontrenderer.getStringWidth(str) / 2
+        val j = fontrenderer.getStringWidth(text) / 2
 
         GlStateManager.disableTexture2D()
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR)
@@ -680,16 +683,16 @@ object WaypointRenderer {
         tessellator.draw()
         GlStateManager.enableTexture2D()
 
-        fontrenderer.drawString(str, -j, 0, 553648127)
+        fontrenderer.drawString(text, -j, 0, 553648127)
         GlStateManager.depthMask(true)
-        fontrenderer.drawString(str, -j, 0, colorArgb)
+        fontrenderer.drawString(text, -j, 0, colorArgb)
 
         GlStateManager.enableDepth()
         GlStateManager.enableBlend()
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F)
         GlStateManager.popMatrix()
         *///?} else {
-        val width = -Minecraft.getInstance().font.width(str) / 2f
+        val width = -Minecraft.getInstance().font.width(text) / 2f
         val background = (Minecraft.getInstance().options.textBackgroundOpacity().get() * 255.0).toInt() shl 24
 
         //? if >= 26.2 {
@@ -697,7 +700,7 @@ object WaypointRenderer {
             matrices,
             width,
             line.toFloat(),
-            Component.literal(str).visualOrderText,
+            Component.literal(text).visualOrderText,
             false,
             Font.DisplayMode.SEE_THROUGH,
             15728880,
@@ -706,7 +709,7 @@ object WaypointRenderer {
             0
         )
         *///?} else {
-        Minecraft.getInstance().font.drawInBatch(Component.literal(str), width, line.toFloat(), colorArgb, false, matrices.last().pose(), consumers, Font.DisplayMode.SEE_THROUGH, background, 15728880)
+        Minecraft.getInstance().font.drawInBatch(Component.literal(text), width, line.toFloat(), colorArgb, false, matrices.last().pose(), consumers, Font.DisplayMode.SEE_THROUGH, background, 15728880)
         //?}
         //?}
     }
