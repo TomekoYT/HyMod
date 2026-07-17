@@ -26,12 +26,13 @@ import tomeko.hymod.config.HyModConfig
 import tomeko.hymod.utils.Constants
 import tomeko.hymod.utils.HypixelPackets
 import tomeko.hymod.utils.ItemTracker
+import kotlin.math.max
 
 class BedwarsResourceDisplay
 //? if = 1.8.9 {
 /*: BasicHud(true)
 *///?} else {
-    : LegacyHud("bedwars_resource_display.json", "Bedwars Resource Display", Category.COMBAT)
+    : LegacyHud("${Constants.MOD_ID}_bedwars_resource_display.json", "Bedwars Resource Display", Category.COMBAT)
 //?}
 {
     //? if = 1.8.9 {
@@ -292,12 +293,12 @@ class BedwarsResourceDisplay
     //? if = 1.8.9 {
     /*@Exclude
     *///?}
-    private var actualWidth = 0f
+    private var actualWidth = 1f
 
     //? if = 1.8.9 {
     /*@Exclude
     *///?}
-    private var actualHeight = 0f
+    private var actualHeight = 1f
 
     //? if = 1.8.9 {
     /*override fun draw(
