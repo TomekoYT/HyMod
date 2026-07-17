@@ -152,7 +152,7 @@ object HyModConfig : Config(
             *///?} else {
         title
             //?}
-        = "Enabled",
+        = "Hide Guild MOTD",
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_HIDE_GUILD_MOTD
     )
@@ -169,7 +169,7 @@ object HyModConfig : Config(
             *///?} else {
         title
             //?}
-        = "Enabled",
+        = "MVP++ Emojis",
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_MVP_EMOJIS
     )
@@ -208,7 +208,7 @@ object HyModConfig : Config(
             *///?} else {
         title
             //?}
-        = "Enabled",
+        = "Coords Waypoints",
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS
     )
@@ -404,12 +404,11 @@ object HyModConfig : Config(
             *///?} else {
         title
             //?}
-        = "Enabled",
+        = "Middle Click GUI Items",
         category = CATEGORY_GUI,
         subcategory = SUBCATEGORY_MIDDLE_CLICK_GUI_ITEMS
     )
     var middleClickGUIItemsEnabled = true
-
 
     //? if = 1.8.9 {
     /*@Exclude
@@ -436,7 +435,7 @@ object HyModConfig : Config(
             *///?} else {
         title
             //?}
-        = "Debug Mode Enabled",
+        = "Debug Mode",
         category = CATEGORY_DEBUG
     )
     var debugModeEnabled = false
