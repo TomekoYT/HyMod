@@ -1,8 +1,8 @@
 package tomeko.hymod.utils
 
-import net.minecraft.client.Minecraft
 //? if = 1.8.9 {
-/*import net.minecraft.client.renderer.GlStateManager
+/*import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
 import net.minecraft.util.*
@@ -11,7 +11,6 @@ import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 import org.lwjgl.opengl.GL11
-import cc.polyfrost.oneconfig.config.core.OneColor
 *///?} else {
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
@@ -19,6 +18,7 @@ import com.mojang.math.Axis
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents
+import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font
 //? if = 26.2 {
 /*import net.minecraft.client.renderer.SubmitNodeCollector
@@ -26,12 +26,10 @@ import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.MultiBufferSource
 //?}
 import net.minecraft.client.renderer.rendertype.RenderTypes
-import net.minecraft.core.BlockBox
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
 import org.joml.Matrix4f
-import org.polyfrost.compose.render.PolyColor
 //?}
 
 import java.util.ArrayList
@@ -57,8 +55,8 @@ object WaypointRenderer {
         //? if = 1.8.9 {
         /*MinecraftForge.EVENT_BUS.register(WaypointRenderer)
         *///?} else {
-        LevelRenderEvents.AFTER_TRANSLUCENT_FEATURES.register(WaypointRenderer::onWorldRender)
-        ClientTickEvents.END_CLIENT_TICK.register(WaypointRenderer::onTick)
+        LevelRenderEvents.AFTER_TRANSLUCENT_FEATURES.register(::onWorldRender)
+        ClientTickEvents.END_CLIENT_TICK.register(::onTick)
         //?}
     }
 
@@ -127,55 +125,50 @@ object WaypointRenderer {
         if (Minecraft.getInstance().player == null || Minecraft.getInstance().level == null) return
         //?}
 
-        //? if = 1.8.9 {
-        /*val viewer = Minecraft.getMinecraft().renderViewEntity
-        *///?}
-
         val viewerX =
         //? if = 1.8.9 {
-                /*viewer.lastTickPosX + (viewer.posX - viewer.lastTickPosX) * event.partialTicks
-            *///?} else if >= 26.2 {
-                /*Minecraft.getInstance().gameRenderer.mainCamera().position().x
-            *///?} else {
-            Minecraft.getInstance().gameRenderer.mainCamera.position().x
+                /*Minecraft.getMinecraft().renderViewEntity.let { it.lastTickPosX + (it.posX - it.lastTickPosX) * event.partialTicks }
+                *///?} else if >= 26.2 {
+            /*Minecraft.getInstance().gameRenderer.mainCamera().position().x
+        *///?} else {
+        Minecraft.getInstance().gameRenderer.mainCamera.position().x
 //?}
         val viewerY =
         //? if = 1.8.9 {
-                /*viewer.lastTickPosY + (viewer.posY - viewer.lastTickPosY) * event.partialTicks
-            *///?} else if >= 26.2 {
-                /*Minecraft.getInstance().gameRenderer.mainCamera().position().y
-            *///?} else {
-            Minecraft.getInstance().gameRenderer.mainCamera.position().y
+                /*Minecraft.getMinecraft().renderViewEntity.let { it.lastTickPosY + (it.posY - it.lastTickPosY) * event.partialTicks }
+                *///?} else if >= 26.2 {
+            /*Minecraft.getInstance().gameRenderer.mainCamera().position().y
+        *///?} else {
+        Minecraft.getInstance().gameRenderer.mainCamera.position().y
 //?}
         val viewerZ =
         //? if = 1.8.9 {
-                /*viewer.lastTickPosZ + (viewer.posZ - viewer.lastTickPosZ) * event.partialTicks
-            *///?} else if >= 26.2 {
-                /*Minecraft.getInstance().gameRenderer.mainCamera().position().z
-            *///?} else {
-            Minecraft.getInstance().gameRenderer.mainCamera.position().z
+                /*Minecraft.getMinecraft().renderViewEntity.let { it.lastTickPosZ + (it.posZ - it.lastTickPosZ) * event.partialTicks }
+                *///?} else if >= 26.2 {
+            /*Minecraft.getInstance().gameRenderer.mainCamera().position().z
+        *///?} else {
+        Minecraft.getInstance().gameRenderer.mainCamera.position().z
 //?}
         val renderX = waypoint.pos.x - viewerX
         val renderY = waypoint.pos.y - viewerY
         val renderZ = waypoint.pos.z - viewerZ
 
-        drawFilledBoundingBox(
-            //? if = 1.8.9 {
-            /*AxisAlignedBB(renderX, renderY, renderZ, renderX + 1, renderY + 1, renderZ + 1),
-            *///?} else {
+        drawBox(
+            //? if >= 26.1 {
             context.poseStack(),
             //? if >= 26.2 {
             /*context.submitNodeCollector(),
             *///?} else {
             context.bufferSource(),
             //?}
-            BlockBox(
-                waypoint.pos,
-                waypoint.pos.offset(1, 1, 1)
-            ),
             //?}
-            waypoint.boxColor
+            renderX, renderY, renderZ,
+            waypoint.boxColor.red / 255f,
+            waypoint.boxColor.green / 255f,
+            waypoint.boxColor.blue / 255f,
+            waypoint.boxColor.alpha / 255f
         )
+
         renderBeaconBeam(
             //? if >= 26.1 {
             context.poseStack(),
@@ -185,14 +178,23 @@ object WaypointRenderer {
             context.bufferSource(),
             //?}
             //?}
-            renderX,
-            renderY + 1,
-            renderZ,
-            waypoint.beamColor
+            renderX, renderY + 1, renderZ,
+            waypoint.beamColor.red / 255f,
+            waypoint.beamColor.green / 255f,
+            waypoint.beamColor.blue / 255f,
+            waypoint.beamColor.alpha / 255f
             //? if = 1.8.9 {
             /*, event.partialTicks
             *///?}
         )
+
+        val textArgb =
+            (waypoint.textColor.alpha shl 24) or (waypoint.textColor.red shl 16) or (waypoint.textColor.green shl 8) or waypoint.textColor.blue
+        val ownerArgb =
+            (waypoint.ownerColor.alpha shl 24) or (waypoint.ownerColor.red shl 16) or (waypoint.ownerColor.green shl 8) or waypoint.ownerColor.blue
+        val distArgb =
+            (waypoint.distanceTextColor.alpha shl 24) or (waypoint.distanceTextColor.red shl 16) or (waypoint.distanceTextColor.green shl 8) or waypoint.distanceTextColor.blue
+
         renderWaypointText(
             //? if >= 26.1 {
             context.poseStack(),
@@ -202,219 +204,107 @@ object WaypointRenderer {
             context.bufferSource(),
             //?}
             //?}
-            waypoint.text,
-            waypoint.owner,
-            //? if = 1.8.9 {
-            /*waypoint.pos.up(2),
-            *///?} else {
-            waypoint.pos,
-            //?}
-            waypoint.renderText,
-            waypoint.renderOwner,
-            //? if = 1.8.9 {
-            /*waypoint.textColor,
-            waypoint.ownerColor,
-            *///?} else {
-            waypoint.textColor,
-            waypoint.ownerColor,
-            //?}
-            waypoint.renderDistance,
-            waypoint.distanceTextColor
-            //? if = 1.8.9 {
-            /*, event.partialTicks
-            *///?}
+            waypoint.text, waypoint.owner, waypoint.pos,
+            waypoint.renderText, waypoint.renderOwner, waypoint.renderDistance,
+            textArgb, ownerArgb, distArgb,
+            viewerX, viewerY, viewerZ
         )
     }
 
-    private fun drawFilledBoundingBox(
-        //? if = 1.8.9 {
-        /*aabb: AxisAlignedBB,
-        *///?} else {
+    private fun drawBox(
+        //? if >= 26.1 {
         matrices: PoseStack,
         //? if >= 26.2 {
         /*collector: SubmitNodeCollector,
         *///?} else {
         consumers: MultiBufferSource,
         //?}
-        box: BlockBox,
         //?}
-        //? if = 1.8.9 {
-        /*c: OneColor
-        *///?} else {
-        c: PolyColor
-        //?}
+        x: Double, y: Double, z: Double,
+        r: Float, g: Float, b: Float, a: Float
     ) {
         //? if = 1.8.9 {
-        /*GlStateManager.enableBlend()
+        /*GlStateManager.pushMatrix()
+        GlStateManager.translate(x, y, z)
+
+        GlStateManager.enableBlend()
         GlStateManager.disableLighting()
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
         GlStateManager.disableTexture2D()
+        GlStateManager.color(r, g, b, a)
 
         val tessellator = Tessellator.getInstance()
         val worldrenderer = tessellator.worldRenderer
-
-        GlStateManager.color(c.red / 255f, c.green / 255f, c.blue / 255f, c.alpha / 255f)
-
         worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION)
-        worldrenderer.pos(aabb.minX, aabb.minY, aabb.minZ).endVertex()
-        worldrenderer.pos(aabb.maxX, aabb.minY, aabb.minZ).endVertex()
-        worldrenderer.pos(aabb.maxX, aabb.minY, aabb.maxZ).endVertex()
-        worldrenderer.pos(aabb.minX, aabb.minY, aabb.maxZ).endVertex()
-        tessellator.draw()
-        worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION)
-        worldrenderer.pos(aabb.minX, aabb.maxY, aabb.maxZ).endVertex()
-        worldrenderer.pos(aabb.maxX, aabb.maxY, aabb.maxZ).endVertex()
-        worldrenderer.pos(aabb.maxX, aabb.maxY, aabb.minZ).endVertex()
-        worldrenderer.pos(aabb.minX, aabb.maxY, aabb.minZ).endVertex()
-        tessellator.draw()
-
-        GlStateManager.color(
-            c.red / 255f * 0.8f,
-            c.green / 255f * 0.8f,
-            c.blue / 255f * 0.8f,
-            c.alpha / 255f
-        )
-
-        worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION)
-        worldrenderer.pos(aabb.minX, aabb.minY, aabb.maxZ).endVertex()
-        worldrenderer.pos(aabb.minX, aabb.maxY, aabb.maxZ).endVertex()
-        worldrenderer.pos(aabb.minX, aabb.maxY, aabb.minZ).endVertex()
-        worldrenderer.pos(aabb.minX, aabb.minY, aabb.minZ).endVertex()
-        tessellator.draw()
-        worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION)
-        worldrenderer.pos(aabb.maxX, aabb.minY, aabb.minZ).endVertex()
-        worldrenderer.pos(aabb.maxX, aabb.maxY, aabb.minZ).endVertex()
-        worldrenderer.pos(aabb.maxX, aabb.maxY, aabb.maxZ).endVertex()
-        worldrenderer.pos(aabb.maxX, aabb.minY, aabb.maxZ).endVertex()
-        tessellator.draw()
-
-        GlStateManager.color(
-            c.red / 255f * 0.9f,
-            c.green / 255f * 0.9f,
-            c.blue / 255f * 0.9f,
-            c.alpha / 255f
-        )
-
-        worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION)
-        worldrenderer.pos(aabb.minX, aabb.maxY, aabb.minZ).endVertex()
-        worldrenderer.pos(aabb.maxX, aabb.maxY, aabb.minZ).endVertex()
-        worldrenderer.pos(aabb.maxX, aabb.minY, aabb.minZ).endVertex()
-        worldrenderer.pos(aabb.minX, aabb.minY, aabb.minZ).endVertex()
-        tessellator.draw()
-        worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION)
-        worldrenderer.pos(aabb.minX, aabb.minY, aabb.maxZ).endVertex()
-        worldrenderer.pos(aabb.maxX, aabb.minY, aabb.maxZ).endVertex()
-        worldrenderer.pos(aabb.maxX, aabb.maxY, aabb.maxZ).endVertex()
-        worldrenderer.pos(aabb.minX, aabb.maxY, aabb.maxZ).endVertex()
-        tessellator.draw()
-        GlStateManager.enableTexture2D()
-        GlStateManager.disableBlend()
         *///?} else {
-        val camera =
-        //? if >= 26.2 {
-                /*Minecraft.getInstance().gameRenderer.mainCamera()
-            *///?} else {
-            Minecraft.getInstance().gameRenderer.mainCamera
-        //?}
-
-        val camX = camera.position().x
-        val camY = camera.position().y
-        val camZ = camera.position().z
-
         matrices.pushPose()
-        matrices.translate(-camX, -camY, -camZ)
+        matrices.translate(x, y, z)
 
         //? if >= 26.2 {
-        /*collector.submitCustomGeometry(
-            matrices,
-            RenderTypes.debugFilledBox()
-        ) { pose, buffer ->
+        /*collector.submitCustomGeometry(matrices, RenderTypes.debugFilledBox()) { pose, buffer ->
             *///?} else {
-        val buffer = consumers.getBuffer(RenderTypes.debugFilledBox())
+            val buffer = consumers.getBuffer(RenderTypes.debugFilledBox())
         val pose = matrices.last().pose()
         //?}
+            //?}
 
-        val r = c.red / 255f
-        val g = c.green / 255f
-        val b = c.blue / 255f
-        val a = c.alpha / 255f
+            addDoubleSidedQuad(
+                //? if >= 26.1 {
+                buffer, pose,
+                //?}
+                0f, 0f, 0f, 1f, 0f, 0f, 1f, 0f, 1f, 0f, 0f, 1f, r, g, b, a
+            )
+            addDoubleSidedQuad(
+                //? if >= 26.1 {
+                buffer, pose,
+                //?}
+                0f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 0f, 0f, 1f, 0f, r, g, b, a
+            )
+            addDoubleSidedQuad(
+                //? if >= 26.1 {
+                buffer, pose,
+                //?}
+                0f, 0f, 0f, 1f, 0f, 0f, 1f, 1f, 0f, 0f, 1f, 0f, r, g, b, a
+            )
+            addDoubleSidedQuad(
+                //? if >= 26.1 {
+                buffer, pose,
+                //?}
+                0f, 0f, 1f, 1f, 0f, 1f, 1f, 1f, 1f, 0f, 1f, 1f, r, g, b, a
+            )
+            addDoubleSidedQuad(
+                //? if >= 26.1 {
+                buffer, pose,
+                //?}
+                0f, 0f, 0f, 0f, 0f, 1f, 0f, 1f, 1f, 0f, 1f, 0f, r, g, b, a
+            )
+            addDoubleSidedQuad(
+                //? if >= 26.1 {
+                buffer, pose,
+                //?}
+                1f, 0f, 0f, 1f, 0f, 1f, 1f, 1f, 1f, 1f, 1f, 0f, r, g, b, a
+            )
 
-        val minX = box.min().x.toFloat()
-        val minY = box.min().y.toFloat()
-        val minZ = box.min().z.toFloat()
-
-        val maxX = box.max().x.toFloat()
-        val maxY = box.max().y.toFloat()
-        val maxZ = box.max().z.toFloat()
-
-        addDoubleSidedQuad(
-            buffer, pose,
-            minX, minY, minZ,
-            maxX, minY, minZ,
-            maxX, minY, maxZ,
-            minX, minY, maxZ,
-            r, g, b, a
-        )
-
-        addDoubleSidedQuad(
-            buffer, pose,
-            minX, maxY, maxZ,
-            maxX, maxY, maxZ,
-            maxX, maxY, minZ,
-            minX, maxY, minZ,
-            r, g, b, a
-        )
-
-        addDoubleSidedQuad(
-            buffer, pose,
-            minX, minY, minZ,
-            maxX, minY, minZ,
-            maxX, maxY, minZ,
-            minX, maxY, minZ,
-            r, g, b, a
-        )
-
-        addDoubleSidedQuad(
-            buffer, pose,
-            minX, minY, maxZ,
-            maxX, minY, maxZ,
-            maxX, maxY, maxZ,
-            minX, maxY, maxZ,
-            r, g, b, a
-        )
-
-        addDoubleSidedQuad(
-            buffer, pose,
-            minX, minY, minZ,
-            minX, minY, maxZ,
-            minX, maxY, maxZ,
-            minX, maxY, minZ,
-            r, g, b, a
-        )
-
-        addDoubleSidedQuad(
-            buffer, pose,
-            maxX, minY, minZ,
-            maxX, minY, maxZ,
-            maxX, maxY, maxZ,
-            maxX, maxY, minZ,
-            r, g, b, a
-        )
-        //? if >= 26.2 {
+            //? if = 1.8.9 {
+            /*tessellator.draw()
+        GlStateManager.enableTexture2D()
+        GlStateManager.disableBlend()
+        GlStateManager.popMatrix()
+        *///?} else if >= 26.2 {
         /*}
-        *///?}
-
+        *///?} else {
         matrices.popPose()
         //?}
     }
 
-    //? if >= 26.1 {
     private fun addDoubleSidedQuad(
+        //? if >= 26.1 {
         buffer: VertexConsumer,
         //? if >= 26.2 {
         /*pose: PoseStack.Pose,
         *///?} else {
         pose: Matrix4f,
+        //?}
         //?}
         x1: Float, y1: Float, z1: Float,
         x2: Float, y2: Float, z2: Float,
@@ -422,17 +312,35 @@ object WaypointRenderer {
         x4: Float, y4: Float, z4: Float,
         r: Float, g: Float, b: Float, a: Float
     ) {
-        buffer.addVertex(pose, x1, y1, z1).setColor(r, g, b, a)
-        buffer.addVertex(pose, x2, y2, z2).setColor(r, g, b, a)
-        buffer.addVertex(pose, x3, y3, z3).setColor(r, g, b, a)
-        buffer.addVertex(pose, x4, y4, z4).setColor(r, g, b, a)
+        //? if = 1.8.9 {
+        /*val wr = Tessellator.getInstance().worldRenderer
+        wr.pos(x1.toDouble(), y1.toDouble(), z1.toDouble()).endVertex()
+        wr.pos(x2.toDouble(), y2.toDouble(), z2.toDouble()).endVertex()
+        wr.pos(x3.toDouble(), y3.toDouble(), z3.toDouble()).endVertex()
+        wr.pos(x4.toDouble(), y4.toDouble(), z4.toDouble()).endVertex()
 
-        buffer.addVertex(pose, x4, y4, z4).setColor(r, g, b, a)
-        buffer.addVertex(pose, x3, y3, z3).setColor(r, g, b, a)
-        buffer.addVertex(pose, x2, y2, z2).setColor(r, g, b, a)
-        buffer.addVertex(pose, x1, y1, z1).setColor(r, g, b, a)
+        wr.pos(x4.toDouble(), y4.toDouble(), z4.toDouble()).endVertex()
+        wr.pos(x3.toDouble(), y3.toDouble(), z3.toDouble()).endVertex()
+        wr.pos(x2.toDouble(), y2.toDouble(), z2.toDouble()).endVertex()
+        wr.pos(x1.toDouble(), y1.toDouble(), z1.toDouble()).endVertex()
+        *///?} else {
+        //? if >= 26.2 {
+        /*val p = pose.pose()
+        *///?} else {
+        val p = pose
+        //?}
+
+        buffer.addVertex(p, x1, y1, z1).setColor(r, g, b, a)
+        buffer.addVertex(p, x2, y2, z2).setColor(r, g, b, a)
+        buffer.addVertex(p, x3, y3, z3).setColor(r, g, b, a)
+        buffer.addVertex(p, x4, y4, z4).setColor(r, g, b, a)
+
+        buffer.addVertex(p, x4, y4, z4).setColor(r, g, b, a)
+        buffer.addVertex(p, x3, y3, z3).setColor(r, g, b, a)
+        buffer.addVertex(p, x2, y2, z2).setColor(r, g, b, a)
+        buffer.addVertex(p, x1, y1, z1).setColor(r, g, b, a)
+        //?}
     }
-    //?}
 
     private fun renderBeaconBeam(
         //? if >= 26.1 {
@@ -443,129 +351,25 @@ object WaypointRenderer {
         consumers: MultiBufferSource,
         //?}
         //?}
-        x: Double,
-        y: Double,
-        z: Double,
-        //? if = 1.8.9 {
-        /*c: OneColor
-        *///?} else {
-        c: PolyColor
-        //?}
+        x: Double, y: Double, z: Double,
+        r: Float, g: Float, b: Float, a: Float
         //? if = 1.8.9 {
         /*, partialTicks: Float
         *///?}
     ) {
         //? if = 1.8.9 {
-        /*val height = 300
-        val bottomOffset = 0
-        val topOffset = bottomOffset + height
-
-        val tessellator = Tessellator.getInstance()
-        val worldrenderer = tessellator.worldRenderer
-
-        Minecraft.getMinecraft().textureManager.bindTexture(BEAM_TEXTURE)
-        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, 10497.0F)
-        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, 10497.0F)
-        GlStateManager.disableLighting()
-        GlStateManager.enableCull()
-        GlStateManager.enableTexture2D()
-        GlStateManager.tryBlendFuncSeparate(770, 1, 1, 0)
-        GlStateManager.enableBlend()
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
-
-        val time = Minecraft.getMinecraft().theWorld.totalWorldTime + partialTicks.toDouble()
-        val d1 = MathHelper.func_181162_h(-time * 0.2 - MathHelper.floor_double(-time * 0.1).toDouble())
-
-        val r = c.red / 255f
-        val g = c.green / 255f
-        val b = c.blue / 255f
-        val alphaMultiplier = c.alpha / 255f
-
-        val d2 = time * 0.025 * -1.5
-        val d4 = 0.5 + cos(d2 + 2.356194490192345) * 0.2
-        val d5 = 0.5 + sin(d2 + 2.356194490192345) * 0.2
-        val d6 = 0.5 + cos(d2 + (Math.PI / 4)) * 0.2
-        val d7 = 0.5 + sin(d2 + (Math.PI / 4)) * 0.2
-        val d8 = 0.5 + cos(d2 + 3.9269908169872414) * 0.2
-        val d9 = 0.5 + sin(d2 + 3.9269908169872414) * 0.2
-        val d10 = 0.5 + cos(d2 + 5.497787143782138) * 0.2
-        val d11 = 0.5 + sin(d2 + 5.497787143782138) * 0.2
-        val d14 = -1.0 + d1
-        val d15 = height.toDouble() * 2.5 + d14
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR)
-        worldrenderer.pos(x + d4, y + topOffset, z + d5).tex(1.0, d15).color(r, g, b, alphaMultiplier).endVertex()
-        worldrenderer.pos(x + d4, y + bottomOffset, z + d5).tex(1.0, d14).color(r, g, b, 1.0F).endVertex()
-        worldrenderer.pos(x + d6, y + bottomOffset, z + d7).tex(0.0, d14).color(r, g, b, 1.0F).endVertex()
-        worldrenderer.pos(x + d6, y + topOffset, z + d7).tex(0.0, d15).color(r, g, b, alphaMultiplier).endVertex()
-        worldrenderer.pos(x + d10, y + topOffset, z + d11).tex(1.0, d15).color(r, g, b, alphaMultiplier).endVertex()
-        worldrenderer.pos(x + d10, y + bottomOffset, z + d11).tex(1.0, d14).color(r, g, b, 1.0F).endVertex()
-        worldrenderer.pos(x + d8, y + bottomOffset, z + d9).tex(0.0, d14).color(r, g, b, 1.0F).endVertex()
-        worldrenderer.pos(x + d8, y + topOffset, z + d9).tex(0.0, d15).color(r, g, b, alphaMultiplier).endVertex()
-        worldrenderer.pos(x + d6, y + topOffset, z + d7).tex(1.0, d15).color(r, g, b, alphaMultiplier).endVertex()
-        worldrenderer.pos(x + d6, y + bottomOffset, z + d7).tex(1.0, d14).color(r, g, b, 1.0F).endVertex()
-        worldrenderer.pos(x + d10, y + bottomOffset, z + d11).tex(0.0, d14).color(r, g, b, 1.0F).endVertex()
-        worldrenderer.pos(x + d10, y + topOffset, z + d11).tex(0.0, d15).color(r, g, b, alphaMultiplier).endVertex()
-        worldrenderer.pos(x + d8, y + topOffset, z + d9).tex(1.0, d15).color(r, g, b, alphaMultiplier).endVertex()
-        worldrenderer.pos(x + d8, y + bottomOffset, z + d9).tex(1.0, d14).color(r, g, b, 1.0F).endVertex()
-        worldrenderer.pos(x + d4, y + bottomOffset, z + d5).tex(0.0, d14).color(r, g, b, 1.0F).endVertex()
-        worldrenderer.pos(x + d4, y + topOffset, z + d5).tex(0.0, d15).color(r, g, b, alphaMultiplier).endVertex()
-        tessellator.draw()
-
-        GlStateManager.disableCull()
-        val d12 = -1.0 + d1
-        val d13 = height.toDouble() + d12
-
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR)
-        worldrenderer.pos(x + 0.2, y + topOffset, z + 0.2).tex(1.0, d13).color(r, g, b, 0.25F * alphaMultiplier)
-            .endVertex()
-        worldrenderer.pos(x + 0.2, y + bottomOffset, z + 0.2).tex(1.0, d12).color(r, g, b, 0.25F).endVertex()
-        worldrenderer.pos(x + 0.8, y + bottomOffset, z + 0.2).tex(0.0, d12).color(r, g, b, 0.25F).endVertex()
-        worldrenderer.pos(x + 0.8, y + topOffset, z + 0.2).tex(0.0, d13).color(r, g, b, 0.25F * alphaMultiplier)
-            .endVertex()
-        worldrenderer.pos(x + 0.8, y + topOffset, z + 0.8).tex(1.0, d13).color(r, g, b, 0.25F * alphaMultiplier)
-            .endVertex()
-        worldrenderer.pos(x + 0.8, y + bottomOffset, z + 0.8).tex(1.0, d12).color(r, g, b, 0.25F).endVertex()
-        worldrenderer.pos(x + 0.2, y + bottomOffset, z + 0.8).tex(0.0, d12).color(r, g, b, 0.25F).endVertex()
-        worldrenderer.pos(x + 0.2, y + topOffset, z + 0.8).tex(0.0, d13).color(r, g, b, 0.25F * alphaMultiplier)
-            .endVertex()
-        worldrenderer.pos(x + 0.8, y + topOffset, z + 0.2).tex(1.0, d13).color(r, g, b, 0.25F * alphaMultiplier)
-            .endVertex()
-        worldrenderer.pos(x + 0.8, y + bottomOffset, z + 0.2).tex(1.0, d12).color(r, g, b, 0.25F).endVertex()
-        worldrenderer.pos(x + 0.8, y + bottomOffset, z + 0.8).tex(0.0, d12).color(r, g, b, 0.25F).endVertex()
-        worldrenderer.pos(x + 0.8, y + topOffset, z + 0.8).tex(0.0, d13).color(r, g, b, 0.25F * alphaMultiplier)
-            .endVertex()
-        worldrenderer.pos(x + 0.2, y + topOffset, z + 0.8).tex(1.0, d13).color(r, g, b, 0.25F * alphaMultiplier)
-            .endVertex()
-        worldrenderer.pos(x + 0.2, y + bottomOffset, z + 0.8).tex(1.0, d12).color(r, g, b, 0.25F).endVertex()
-        worldrenderer.pos(x + 0.2, y + bottomOffset, z + 0.2).tex(0.0, d12).color(r, g, b, 0.25F).endVertex()
-        worldrenderer.pos(x + 0.2, y + topOffset, z + 0.2).tex(0.0, d13).color(r, g, b, 0.25F * alphaMultiplier)
-            .endVertex()
-        tessellator.draw()
+        /*val time = Minecraft.getMinecraft().theWorld.totalWorldTime + partialTicks.toDouble()
         *///?} else {
-        matrices.pushPose()
-        matrices.translate(x, y, z)
-
-        //? if >= 26.2 {
-        /*collector.submitCustomGeometry(
-            matrices,
-            RenderTypes.beaconBeam(BEAM_TEXTURE, true)
-        ) { pose, buffer ->
-            *///?} else {
-        val pose = matrices.last()
-        val buffer = consumers.getBuffer(RenderTypes.beaconBeam(BEAM_TEXTURE, true))
+        val time =
+            Minecraft.getInstance().level!!.gameTime + Minecraft.getInstance().deltaTracker.gameTimeDeltaTicks.toDouble()
         //?}
-
-        val gameTime = Minecraft.getInstance().level!!.gameTime
-        val tickDelta = Minecraft.getInstance().deltaTracker.gameTimeDeltaTicks
-        val time = gameTime + tickDelta.toDouble()
 
         val t1 = -time * 0.2
         val d1 = t1 - floor(t1)
-
-        val r = c.red / 255f
-        val g = c.green / 255f
-        val b = c.blue / 255f
-        val alphaMultiplier = c.alpha / 255f
+        val d14 = (-1.0 + d1).toFloat()
+        val d15 = (300.0 * 2.5 + d14).toFloat()
+        val d12 = (-1.0 + d1).toFloat()
+        val d13 = 300.0f + d12
 
         val d2 = time * 0.025 * -1.5
         val d4 = (0.5 + cos(d2 + 2.356194490192345) * 0.2).toFloat()
@@ -577,190 +381,132 @@ object WaypointRenderer {
         val d10 = (0.5 + cos(d2 + 5.497787143782138) * 0.2).toFloat()
         val d11 = (0.5 + sin(d2 + 5.497787143782138) * 0.2).toFloat()
 
-        val d14 = (-1.0 + d1).toFloat()
-        val d15 = (300.0 * 2.5 + d14.toDouble()).toFloat()
+        //? if = 1.8.9 {
+        /*GlStateManager.pushMatrix()
+        GlStateManager.translate(x, y, z)
 
-        val topOffset = 300.0f
-        val bottomOffset = 0.0f
+        val tessellator = Tessellator.getInstance()
+        val worldrenderer = tessellator.worldRenderer
+        Minecraft.getMinecraft().textureManager.bindTexture(BEAM_TEXTURE)
+        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, 10497.0F)
+        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, 10497.0F)
+        GlStateManager.disableLighting()
+        GlStateManager.enableCull()
+        GlStateManager.enableTexture2D()
+        GlStateManager.tryBlendFuncSeparate(770, 1, 1, 0)
+        GlStateManager.enableBlend()
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
 
-        renderBeamSide(
-            pose,
-            buffer,
-            r,
-            g,
-            b,
-            alphaMultiplier,
-            bottomOffset,
-            topOffset,
-            d4,
-            d5,
-            d6,
-            d7,
-            1.0f,
-            0.0f,
-            d14,
-            d15
-        )
-        renderBeamSide(
-            pose,
-            buffer,
-            r,
-            g,
-            b,
-            alphaMultiplier,
-            bottomOffset,
-            topOffset,
-            d10,
-            d11,
-            d8,
-            d9,
-            1.0f,
-            0.0f,
-            d14,
-            d15
-        )
-        renderBeamSide(
-            pose,
-            buffer,
-            r,
-            g,
-            b,
-            alphaMultiplier,
-            bottomOffset,
-            topOffset,
-            d6,
-            d7,
-            d10,
-            d11,
-            1.0f,
-            0.0f,
-            d14,
-            d15
-        )
-        renderBeamSide(
-            pose,
-            buffer,
-            r,
-            g,
-            b,
-            alphaMultiplier,
-            bottomOffset,
-            topOffset,
-            d8,
-            d9,
-            d4,
-            d5,
-            1.0f,
-            0.0f,
-            d14,
-            d15
-        )
-
-        val d12 = (-1.0 + d1).toFloat()
-        val d13 = 300.0f + d12
-        val innerAlpha = 0.25f * alphaMultiplier
-
-        renderBeamSide(
-            pose,
-            buffer,
-            r,
-            g,
-            b,
-            innerAlpha,
-            bottomOffset,
-            topOffset,
-            0.2f,
-            0.2f,
-            0.8f,
-            0.2f,
-            1.0f,
-            0.0f,
-            d12,
-            d13
-        )
-        renderBeamSide(
-            pose,
-            buffer,
-            r,
-            g,
-            b,
-            innerAlpha,
-            bottomOffset,
-            topOffset,
-            0.8f,
-            0.8f,
-            0.2f,
-            0.8f,
-            1.0f,
-            0.0f,
-            d12,
-            d13
-        )
-        renderBeamSide(
-            pose,
-            buffer,
-            r,
-            g,
-            b,
-            innerAlpha,
-            bottomOffset,
-            topOffset,
-            0.8f,
-            0.2f,
-            0.8f,
-            0.8f,
-            1.0f,
-            0.0f,
-            d12,
-            d13
-        )
-        renderBeamSide(
-            pose,
-            buffer,
-            r,
-            g,
-            b,
-            innerAlpha,
-            bottomOffset,
-            topOffset,
-            0.2f,
-            0.8f,
-            0.2f,
-            0.2f,
-            1.0f,
-            0.0f,
-            d12,
-            d13
-        )
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR)
+        *///?} else {
+        matrices.pushPose()
+        matrices.translate(x, y, z)
         //? if >= 26.2 {
-        /*}
-        *///?}
+        /*collector.submitCustomGeometry(matrices, RenderTypes.beaconBeam(BEAM_TEXTURE, true)) { pose, buffer ->
+            *///?} else {
+            val pose = matrices.last()
+            val buffer = consumers.getBuffer(RenderTypes.beaconBeam(BEAM_TEXTURE, true))
+            //?}
+            //?}
 
+            val yMin = 0.0f
+            val yMax = 300.0f
+
+            renderBeamSide(//? if >= 26.1 {
+                pose, buffer, //?}
+                r, g, b, a, 1.0f, yMin, yMax, d4, d5, d6, d7, 1.0f, 0.0f, d14, d15
+            )
+            renderBeamSide(//? if >= 26.1 {
+                pose, buffer, //?}
+                r, g, b, a, 1.0f, yMin, yMax, d10, d11, d8, d9, 1.0f, 0.0f, d14, d15
+            )
+            renderBeamSide(//? if >= 26.1 {
+                pose, buffer, //?}
+                r, g, b, a, 1.0f, yMin, yMax, d6, d7, d10, d11, 1.0f, 0.0f, d14, d15
+            )
+            renderBeamSide(//? if >= 26.1 {
+                pose, buffer, //?}
+                r, g, b, a, 1.0f, yMin, yMax, d8, d9, d4, d5, 1.0f, 0.0f, d14, d15
+            )
+
+            //? if = 1.8.9 {
+            /*tessellator.draw()
+            GlStateManager.disableCull()
+            worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR)
+            *///?}
+
+            val innerTopA = 0.25f * a
+            val innerBotA = 0.25f
+
+            renderBeamSide(//? if >= 26.1 {
+                pose, buffer, //?}
+                r, g, b, innerTopA, innerBotA, yMin, yMax, 0.2f, 0.2f, 0.8f, 0.2f, 1.0f, 0.0f, d12, d13
+            )
+            renderBeamSide(//? if >= 26.1 {
+                pose, buffer, //?}
+                r, g, b, innerTopA, innerBotA, yMin, yMax, 0.8f, 0.8f, 0.2f, 0.8f, 1.0f, 0.0f, d12, d13
+            )
+            renderBeamSide(//? if >= 26.1 {
+                pose, buffer, //?}
+                r, g, b, innerTopA, innerBotA, yMin, yMax, 0.8f, 0.2f, 0.8f, 0.8f, 1.0f, 0.0f, d12, d13
+            )
+            renderBeamSide(//? if >= 26.1 {
+                pose, buffer, //?}
+                r, g, b, innerTopA, innerBotA, yMin, yMax, 0.2f, 0.8f, 0.2f, 0.2f, 1.0f, 0.0f, d12, d13
+            )
+
+            //? if = 1.8.9 {
+            /*tessellator.draw()
+            GlStateManager.popMatrix()
+            *///?} else if >= 26.2 {
+        /*}
+        *///?} else {
         matrices.popPose()
         //?}
     }
 
-    //? if >= 26.1 {
     private fun renderBeamSide(
+        //? if >= 26.1 {
         pose: PoseStack.Pose,
         buffer: VertexConsumer,
-        r: Float, g: Float, b: Float, a: Float,
+        //?}
+        r: Float, g: Float, b: Float, topA: Float, botA: Float,
         yMin: Float, yMax: Float,
         x1: Float, z1: Float,
         x2: Float, z2: Float,
         u1: Float, u2: Float,
         v1: Float, v2: Float
     ) {
-        buffer.addVertex(pose.pose(), x1, yMax, z1).setColor(r, g, b, a).setUv(u1, v2).setUv2(15, 15)
-            .setNormal(pose, 0.0f, 1.0f, 0.0f)
-        buffer.addVertex(pose.pose(), x1, yMin, z1).setColor(r, g, b, a).setUv(u1, v1).setUv2(15, 15)
-            .setNormal(pose, 0.0f, 1.0f, 0.0f)
-        buffer.addVertex(pose.pose(), x2, yMin, z2).setColor(r, g, b, a).setUv(u2, v1).setUv2(15, 15)
-            .setNormal(pose, 0.0f, 1.0f, 0.0f)
-        buffer.addVertex(pose.pose(), x2, yMax, z2).setColor(r, g, b, a).setUv(u2, v2).setUv2(15, 15)
-            .setNormal(pose, 0.0f, 1.0f, 0.0f)
+        //? if = 1.8.9 {
+        /*val wr = Tessellator.getInstance().worldRenderer
+        wr.pos(x1.toDouble(), yMax.toDouble(), z1.toDouble()).tex(u1.toDouble(), v2.toDouble()).color(r, g, b, topA).endVertex()
+        wr.pos(x1.toDouble(), yMin.toDouble(), z1.toDouble()).tex(u1.toDouble(), v1.toDouble()).color(r, g, b, botA).endVertex()
+        wr.pos(x2.toDouble(), yMin.toDouble(), z2.toDouble()).tex(u2.toDouble(), v1.toDouble()).color(r, g, b, botA).endVertex()
+        wr.pos(x2.toDouble(), yMax.toDouble(), z2.toDouble()).tex(u2.toDouble(), v2.toDouble()).color(r, g, b, topA).endVertex()
+        *///?} else {
+        //? if >= 26.2 {
+        /*val p = pose.pose()
+        *///?} else {
+        val p = pose
+        //?}
+        buffer.addVertex(p, x1, yMax, z1).setColor(r, g, b, topA).setUv(u1, v2).setUv2(15, 15)
+            //? if >= 26.2 {
+            /*.setNormal(pose, 0.0f, 1.0f, 0.0f)*///?} else {
+        .setNormal(0.0f, 1.0f, 0.0f)//?}
+        buffer.addVertex(p, x1, yMin, z1).setColor(r, g, b, botA).setUv(u1, v1).setUv2(15, 15)
+            //? if >= 26.2 {
+            /*.setNormal(pose, 0.0f, 1.0f, 0.0f)*///?} else {
+        .setNormal(0.0f, 1.0f, 0.0f)//?}
+        buffer.addVertex(p, x2, yMin, z2).setColor(r, g, b, botA).setUv(u2, v1).setUv2(15, 15)
+            //? if >= 26.2 {
+            /*.setNormal(pose, 0.0f, 1.0f, 0.0f)*///?} else {
+        .setNormal(0.0f, 1.0f, 0.0f)//?}
+        buffer.addVertex(p, x2, yMax, z2).setColor(r, g, b, topA).setUv(u2, v2).setUv2(15, 15)
+            //? if >= 26.2 {
+            /*.setNormal(pose, 0.0f, 1.0f, 0.0f)*///?} else {
+        .setNormal(0.0f, 1.0f, 0.0f)//?}
+        //?}
     }
-    //?}
 
     private fun renderWaypointText(
         //? if >= 26.1 {
@@ -771,227 +517,145 @@ object WaypointRenderer {
         consumers: MultiBufferSource,
         //?}
         //?}
-        str: String,
-        owner: String,
-        loc: BlockPos,
-        renderText: Boolean,
-        renderOwner: Boolean,
-        //? if = 1.8.9 {
-        /*textColor: OneColor,
-        ownerColor: OneColor,
-        *///?} else {
-        textColor: PolyColor,
-        ownerColor: PolyColor,
-        //?}
-        renderDistance: Boolean,
-        //? if = 1.8.9 {
-        /*distanceTextColor: OneColor
-        *///?} else {
-        distanceTextColor: PolyColor
-        //?}
-        //? if = 1.8.9 {
-        /*, partialTicks: Float
-        *///?}
+        str: String, owner: String, loc: BlockPos,
+        renderText: Boolean, renderOwner: Boolean, renderDistance: Boolean,
+        textArgb: Int, ownerArgb: Int, distArgb: Int,
+        viewerX: Double, viewerY: Double, viewerZ: Double
     ) {
+        if (!renderText && !renderDistance && !renderOwner) return
+
+        val dx = loc.x + 0.5 - viewerX
+        val dy = loc.y + 2.0 - viewerY
+        val dz = loc.z + 0.5 - viewerZ
+
+        val distSq = dx * dx + dy * dy + dz * dz
+        val distText = "${sqrt(distSq).roundToInt()}m"
+
         //? if = 1.8.9 {
-        /*GlStateManager.alphaFunc(516, 0.1F)
 
-        GlStateManager.pushMatrix()
+        /*val viewer = Minecraft.getMinecraft().renderViewEntity
+        var x = dx
+        var y = dy - viewer.eyeHeight
+        var z = dz
 
-        val viewer = Minecraft.getMinecraft().renderViewEntity
-        val viewerX = viewer.lastTickPosX + (viewer.posX - viewer.lastTickPosX) * partialTicks
-        val viewerY = viewer.lastTickPosY + (viewer.posY - viewer.lastTickPosY) * partialTicks
-        val viewerZ = viewer.lastTickPosZ + (viewer.posZ - viewer.lastTickPosZ) * partialTicks
-
-        var x = loc.x + 0.5 - viewerX
-        var y = loc.y - viewerY - viewer.eyeHeight
-        var z = loc.z + 0.5 - viewerZ
-
-        val distSq = x * x + y * y + z * z
-        val dist = sqrt(distSq)
         if (distSq > 144) {
+            val dist = sqrt(distSq)
             x *= 12 / dist
             y *= 12 / dist
             z *= 12 / dist
         }
+
+        GlStateManager.alphaFunc(516, 0.1F)
+        GlStateManager.pushMatrix()
         GlStateManager.translate(x, y, z)
         GlStateManager.translate(0.0, viewer.eyeHeight.toDouble(), 0.0)
-
-        if (renderOwner && !owner.isEmpty()) {
-            drawNametag(owner, true, ownerColor)
-
-            GlStateManager.rotate(-Minecraft.getMinecraft().renderManager.playerViewY, 0.0F, 1.0F, 0.0F)
-            GlStateManager.rotate(Minecraft.getMinecraft().renderManager.playerViewX, 1.0F, 0.0F, 0.0F)
-            GlStateManager.translate(0.0f, -0.25f, 0.0f)
-            GlStateManager.rotate(-Minecraft.getMinecraft().renderManager.playerViewX, 1.0F, 0.0F, 0.0F)
-            GlStateManager.rotate(Minecraft.getMinecraft().renderManager.playerViewY, 0.0F, 1.0F, 0.0F)
-        }
-
-        if (renderText && !str.isEmpty()) {
-            drawNametag(str, true, textColor)
-
-            GlStateManager.rotate(-Minecraft.getMinecraft().renderManager.playerViewY, 0.0F, 1.0F, 0.0F)
-            GlStateManager.rotate(Minecraft.getMinecraft().renderManager.playerViewX, 1.0F, 0.0F, 0.0F)
-            GlStateManager.translate(0.0f, -0.25f, 0.0f)
-            GlStateManager.rotate(-Minecraft.getMinecraft().renderManager.playerViewX, 1.0F, 0.0F, 0.0F)
-            GlStateManager.rotate(Minecraft.getMinecraft().renderManager.playerViewY, 0.0F, 1.0F, 0.0F)
-        }
-
-        if (renderDistance) {
-            drawNametag("${dist.roundToInt()}m", true, distanceTextColor)
-        }
-
-        GlStateManager.popMatrix()
-
-        GlStateManager.disableLighting()
         *///?} else {
-        if (!renderText && !renderDistance && !renderOwner) return
-
         val camera =
-        //? if >= 26.2 {
-                /*Minecraft.getInstance().gameRenderer.mainCamera()
-            *///?} else {
-            Minecraft.getInstance().gameRenderer.mainCamera
-        //?}
-
-        val viewerX = camera.position().x
-        val viewerY = camera.position().y
-        val viewerZ = camera.position().z
-
-        val renderX = loc.x + 0.5 - viewerX
-        val renderY = loc.y + 2.0 - viewerY
-        val renderZ = loc.z + 0.5 - viewerZ
-
-        val dist = sqrt(
-            Minecraft.getInstance().player!!.distanceToSqr(
-                loc.x.toDouble(),
-                loc.y.toDouble(),
-                loc.z.toDouble()
-            )
-        )
+            //? if >= 26.2 {
+            /*Minecraft.getInstance().gameRenderer.mainCamera()
+        *///?} else {
+        Minecraft.getInstance().gameRenderer.mainCamera
+    //?}
 
         matrices.pushPose()
-        matrices.translate(renderX, renderY, renderZ)
+        matrices.translate(dx, dy, dz)
         matrices.mulPose(Axis.YP.rotationDegrees(-camera.yRot()))
         matrices.mulPose(Axis.XP.rotationDegrees(camera.xRot()))
 
         val scale = 0.025f
         matrices.scale(-scale, -scale, scale)
+        //?}
 
-        val matrix = matrices.last().pose()
-        val background = (Minecraft.getInstance().options.textBackgroundOpacity().get() * 255.0).toInt() shl 24
-        var line = 0
+        var lineOffset = 0
 
-        val textColorArgb = (textColor.alpha shl 24) or (textColor.red shl 16) or (textColor.green shl 8) or textColor.blue
-        val ownerColorArgb = (ownerColor.alpha shl 24) or (ownerColor.red shl 16) or (ownerColor.green shl 8) or ownerColor.blue
-
-        if (renderOwner && !owner.isEmpty()) {
-            val width = -Minecraft.getInstance().font.width(owner) / 2f
-            //? if >= 26.2 {
-            /*collector.submitText(
+        if (renderOwner && owner.isNotEmpty()) {
+            drawNametag(
+                owner, ownerArgb, lineOffset,
+                //? if >= 26.1 {
                 matrices,
-                width,
-                line.toFloat(),
-                Component.literal(owner).visualOrderText,
-                false,
-                Font.DisplayMode.SEE_THROUGH,
-                15728880,
-                ownerColorArgb,
-                background,
-                0
+                //? if >= 26.2 {
+                /*collector
+                *///?} else {
+                consumers
+                //?}
+                //?}
             )
+
+            //? if = 1.8.9 {
+
+            /*GlStateManager.rotate(-Minecraft.getMinecraft().renderManager.playerViewY, 0.0F, 1.0F, 0.0F)
+            GlStateManager.rotate(Minecraft.getMinecraft().renderManager.playerViewX, 1.0F, 0.0F, 0.0F)
+            GlStateManager.translate(0.0f, -0.25f, 0.0f)
+            GlStateManager.rotate(-Minecraft.getMinecraft().renderManager.playerViewX, 1.0F, 0.0F, 0.0F)
+            GlStateManager.rotate(Minecraft.getMinecraft().renderManager.playerViewY, 0.0F, 1.0F, 0.0F)
             *///?} else {
-            Minecraft.getInstance().font.drawInBatch(
-                Component.literal(owner),
-                width,
-                line.toFloat(),
-                ownerColorArgb,
-                false,
-                matrix,
-                consumers,
-                Font.DisplayMode.SEE_THROUGH,
-                background,
-                15728880
-            )
+            lineOffset += 10
             //?}
-            line += 10
         }
 
-        if (renderText && !str.isEmpty()) {
-            val width = -Minecraft.getInstance().font.width(str) / 2f
-            //? if >= 26.2 {
-            /*collector.submitText(
+        if (renderText && str.isNotEmpty()) {
+            drawNametag(
+                str, textArgb, lineOffset,
+                //? if >= 26.1 {
                 matrices,
-                width,
-                line.toFloat(),
-                Component.literal(str).visualOrderText,
-                false,
-                Font.DisplayMode.SEE_THROUGH,
-                15728880,
-                textColorArgb,
-                background,
-                0
+                //? if >= 26.2 {
+                /*collector
+                *///?} else {
+                consumers
+                //?}
+                //?}
             )
+
+            //? if = 1.8.9 {
+
+            /*GlStateManager.rotate(-Minecraft.getMinecraft().renderManager.playerViewY, 0.0F, 1.0F, 0.0F)
+            GlStateManager.rotate(Minecraft.getMinecraft().renderManager.playerViewX, 1.0F, 0.0F, 0.0F)
+            GlStateManager.translate(0.0f, -0.25f, 0.0f)
+            GlStateManager.rotate(-Minecraft.getMinecraft().renderManager.playerViewX, 1.0F, 0.0F, 0.0F)
+            GlStateManager.rotate(Minecraft.getMinecraft().renderManager.playerViewY, 0.0F, 1.0F, 0.0F)
             *///?} else {
-            Minecraft.getInstance().font.drawInBatch(
-                Component.literal(str),
-                width,
-                line.toFloat(),
-                textColorArgb,
-                false,
-                matrix,
-                consumers,
-                Font.DisplayMode.SEE_THROUGH,
-                background,
-                15728880
-            )
+            lineOffset += 10
             //?}
-            line += 10
         }
 
         if (renderDistance) {
-            val distText = "${dist.toInt()}m"
-            val width = -Minecraft.getInstance().font.width(distText) / 2f
-            val distanceColorArgb = (distanceTextColor.alpha shl 24) or (distanceTextColor.red shl 16) or (distanceTextColor.green shl 8) or distanceTextColor.blue
-            //? if >= 26.2 {
-            /*collector.submitText(
+            drawNametag(
+                distText, distArgb, lineOffset,
+                //? if >= 26.1 {
                 matrices,
-                width,
-                line.toFloat(),
-                Component.literal(distText).visualOrderText,
-                false,
-                Font.DisplayMode.SEE_THROUGH,
-                15728880,
-                distanceColorArgb,
-                background,
-                0
+                //? if >= 26.2 {
+                /*collector
+                *///?} else {
+                consumers
+                //?}
+                //?}
             )
-            *///?} else {
-            Minecraft.getInstance().font.drawInBatch(
-                Component.literal(distText),
-                width,
-                line.toFloat(),
-                distanceColorArgb,
-                false,
-                matrix,
-                consumers,
-                Font.DisplayMode.SEE_THROUGH,
-                background,
-                15728880
-            )
-            //?}
         }
+
+        //? if = 1.8.9 {
+
+        /*GlStateManager.popMatrix()
+        GlStateManager.disableLighting()
+        *///?} else {
         matrices.popPose()
         //?}
     }
 
-    //? if = 1.8.9 {
-    /*private fun drawNametag(str: String, render: Boolean, color: OneColor) {
-        if (!render) return
+    private fun drawNametag(
+        str: String, colorArgb: Int, line: Int,
+        //? if >= 26.1 {
+        matrices: PoseStack,
+        //? if >= 26.2 {
+        /*collector: SubmitNodeCollector
+        *///?} else {
+        consumers: MultiBufferSource
+        //?}
+        //?}
+    ) {
+        //? if = 1.8.9 {
 
-        val fontrenderer = Minecraft.getMinecraft().fontRendererObj
-        val f = 1.6F
-        val f1 = 0.016666668F * f
+        /*val fontrenderer = Minecraft.getMinecraft().fontRendererObj
+        val f1 = 0.016666668F * 1.6F
         GlStateManager.pushMatrix()
         GL11.glNormal3f(0.0F, 1.0F, 0.0F)
         GlStateManager.rotate(-Minecraft.getMinecraft().renderManager.playerViewY, 0.0F, 1.0F, 0.0F)
@@ -1002,29 +666,48 @@ object WaypointRenderer {
         GlStateManager.disableDepth()
         GlStateManager.enableBlend()
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0)
+
         val tessellator = Tessellator.getInstance()
         val worldrenderer = tessellator.worldRenderer
-        val i = 0
-
         val j = fontrenderer.getStringWidth(str) / 2
+
         GlStateManager.disableTexture2D()
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR)
-        worldrenderer.pos(-j - 1.0, -1.0 + i, 0.0).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex()
-        worldrenderer.pos(-j - 1.0, 8.0 + i, 0.0).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex()
-        worldrenderer.pos(j + 1.0, 8.0 + i, 0.0).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex()
-        worldrenderer.pos(j + 1.0, -1.0 + i, 0.0).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex()
+        worldrenderer.pos(-j - 1.0, -1.0, 0.0).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex()
+        worldrenderer.pos(-j - 1.0, 8.0, 0.0).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex()
+        worldrenderer.pos(j + 1.0, 8.0, 0.0).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex()
+        worldrenderer.pos(j + 1.0, -1.0, 0.0).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex()
         tessellator.draw()
         GlStateManager.enableTexture2D()
-        fontrenderer.drawString(str, -fontrenderer.getStringWidth(str) / 2, i, 553648127)
-        GlStateManager.depthMask(true)
 
-        val argb = (color.alpha shl 24) or (color.red shl 16) or (color.green shl 8) or color.blue
-        fontrenderer.drawString(str, -fontrenderer.getStringWidth(str) / 2, i, argb)
+        fontrenderer.drawString(str, -j, 0, 553648127)
+        GlStateManager.depthMask(true)
+        fontrenderer.drawString(str, -j, 0, colorArgb)
 
         GlStateManager.enableDepth()
         GlStateManager.enableBlend()
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F)
         GlStateManager.popMatrix()
+        *///?} else {
+        val width = -Minecraft.getInstance().font.width(str) / 2f
+        val background = (Minecraft.getInstance().options.textBackgroundOpacity().get() * 255.0).toInt() shl 24
+
+        //? if >= 26.2 {
+        /*collector.submitText(
+            matrices,
+            width,
+            line.toFloat(),
+            Component.literal(str).visualOrderText,
+            false,
+            Font.DisplayMode.SEE_THROUGH,
+            15728880,
+            colorArgb,
+            background,
+            0
+        )
+        *///?} else {
+        Minecraft.getInstance().font.drawInBatch(Component.literal(str), width, line.toFloat(), colorArgb, false, matrices.last().pose(), consumers, Font.DisplayMode.SEE_THROUGH, background, 15728880)
+        //?}
+        //?}
     }
-    *///?}
 }
