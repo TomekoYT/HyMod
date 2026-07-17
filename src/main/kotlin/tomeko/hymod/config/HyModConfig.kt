@@ -1,20 +1,17 @@
 package tomeko.hymod.config
 
 //? if = 1.8.9 {
-
 /*import cc.polyfrost.oneconfig.config.Config
 import cc.polyfrost.oneconfig.config.annotations.*
 import cc.polyfrost.oneconfig.config.core.OneColor
+import cc.polyfrost.oneconfig.config.data.InfoType
 import cc.polyfrost.oneconfig.config.data.Mod
 import cc.polyfrost.oneconfig.config.data.ModType
 import tomeko.hymod.hud.*
 *///?} else {
 import org.polyfrost.compose.render.PolyColor
 import org.polyfrost.oneconfig.api.config.v1.Config
-import org.polyfrost.oneconfig.api.config.v1.annotations.Color
-import org.polyfrost.oneconfig.api.config.v1.annotations.Info
-import org.polyfrost.oneconfig.api.config.v1.annotations.Slider
-import org.polyfrost.oneconfig.api.config.v1.annotations.Switch
+import org.polyfrost.oneconfig.api.config.v1.annotations.*
 //?}
 import tomeko.hymod.utils.Constants
 
@@ -183,17 +180,22 @@ object HyModConfig : Config(
     *///?}
     const val SUBCATEGORY_SENDCOORDS_COMMAND = "/sendcoords Command"
 
-    @Switch(
+    @Dropdown(
         //? if = 1.8.9 {
         /*name
             *///?} else {
-        title
-            //?}
-        = "Use party as default",
+            title
+                //?}
+        = "Default Mode",
+        options = [
+            "All",
+            "Party",
+            "Guild"
+        ],
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_SENDCOORDS_COMMAND
     )
-    var sendcoordsToParty = true
+    var sendcoordsMode = 1
 
     //? if = 1.8.9 {
     /*@Exclude
@@ -413,6 +415,20 @@ object HyModConfig : Config(
     /*@Exclude
     *///?}
     const val CATEGORY_DEBUG = "Debug"
+
+    @Info(
+        //? if = 1.8.9 {
+        /*text
+            *///?} else {
+            title
+                //?}
+        = "Probably should stay disabled",
+        //? if = 1.8.9 {
+        /*type = InfoType.WARNING,
+        *///?}
+        category = CATEGORY_DEBUG
+    )
+    var debugModeInfo: Nothing? = null
 
     @Switch(
         //? if = 1.8.9 {

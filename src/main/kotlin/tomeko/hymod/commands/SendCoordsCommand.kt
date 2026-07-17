@@ -14,7 +14,6 @@ import net.minecraft.client.player.LocalPlayer
 import net.fabricmc.fabric.api.client.command.v2.ClientCommands.argument
 import net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal
 //?}
-
 import tomeko.hymod.config.HyModConfig
 import tomeko.hymod.utils.HypixelPackets
 
@@ -25,9 +24,6 @@ object SendCoordsCommand
 {
     private const val COMMAND_NAME = "sendcoords"
 
-    private val defaultMode: String
-        get() = if (HyModConfig.sendcoordsToParty) "party" else "all"
-
     fun register() {
         //? if = 1.8.9 {
         /*ClientCommandHandler.instance.registerCommand(this)
@@ -36,37 +32,15 @@ object SendCoordsCommand
             dispatcher.register(
                 literal(COMMAND_NAME)
                     .executes {
-                        sendCoords(defaultMode, "")
+                        sendCoords("")
                         1
                     }
                     .then(
                         argument("message", StringArgumentType.greedyString())
                             .executes { ctx ->
-                                sendCoords(defaultMode, ctx.getArgument("message", String::class.java))
+                                sendCoords(ctx.getArgument("message", String::class.java))
                                 1
                             }
-                    )
-                    .then(
-                        argument("mode", StringArgumentType.word())
-                            .suggests { _, builder ->
-                                builder.suggest("all")
-                                builder.suggest("party")
-                                builder.buildFuture()
-                            }
-                            .executes { ctx ->
-                                sendCoords(ctx.getArgument("mode", String::class.java), "")
-                                1
-                            }
-                            .then(
-                                argument("message", StringArgumentType.greedyString())
-                                    .executes { ctx ->
-                                        sendCoords(
-                                            ctx.getArgument("mode", String::class.java),
-                                            ctx.getArgument("message", String::class.java)
-                                        )
-                                        1
-                                    }
-                            )
                     )
             )
         }
@@ -77,25 +51,26 @@ object SendCoordsCommand
     /*override fun getCommandName(): String = COMMAND_NAME
 
     override fun getCommandUsage(sender: ICommandSender): String =
-        "/$COMMAND_NAME <all/party>"
+        "/$COMMAND_NAME <all/party/guild>"
 
     override fun processCommand(sender: ICommandSender, args: Array<String>) {
-    val first = args.firstOrNull()?.lowercase()
-
-    val (mode, message) =
-        if (first == "all" || first == "party") {
-            first to args.drop(1).joinToString(" ")
-        } else {
-            defaultMode to args.joinToString(" ")
-        }
-
-    sendCoords(mode, message)
+    sendCoords(args.joinToString(" "))
 }
 
     override fun getRequiredPermissionLevel(): Int = 0
     *///?}
 
-    private fun sendCoords(mode: String, text: String) {
+    private fun sendCoords(args: String) {
+        val first = args.substringBefore(" ")
+        val text =
+            if (isMode(first)) args.substringAfter(" ", "")
+            else args
+
+        val prefix = convertToPrefix(
+            if (isMode(first)) first
+            else convertToMode(HyModConfig.sendcoordsMode)
+        )
+
         //? if = 1.8.9 {
         /*val player: EntityPlayerSP = Minecraft.getMinecraft().thePlayer
         *///?} else {
@@ -123,20 +98,11 @@ object SendCoordsCommand
             player.z.toInt()
         //?}
 
-        var actualMode = mode
-        if (actualMode != "all" && actualMode != "party") {
-            actualMode = defaultMode
-        }
-
         var message = "x: $x, y: $y, z: $z"
         if (!text.isEmpty()) message += " | $text"
 
         if (HypixelPackets.onHypixel) {
-            if (actualMode == "all") {
-                message = "/ac $message"
-            } else if (actualMode == "party") {
-                message = "/pc $message"
-            }
+            message = "$prefix $message"
         }
 
         //? if = 1.8.9 {
@@ -144,5 +110,21 @@ object SendCoordsCommand
         *///?} else {
         player.connection.sendChat(message)
         //?}
+    }
+
+    private fun isMode(string: String): Boolean {
+        return string == "all" || string == "party" || string == "guild"
+    }
+
+    private fun convertToMode(dropdown: Int) : String = when(dropdown) {
+        1 -> "party"
+        2 -> "guild"
+        else -> "all"
+    }
+
+    private fun convertToPrefix(mode: String): String = when (mode) {
+        "party" -> "/pc"
+        "guild" -> "/gc"
+        else -> "/ac"
     }
 }
