@@ -10,13 +10,10 @@ import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 //?}
-
 import tomeko.hymod.config.HyModConfig
 import tomeko.hymod.utils.StringFormatting
 import tomeko.hymod.utils.Waypoint
 import tomeko.hymod.utils.WaypointRenderer
-
-import java.util.regex.Pattern
 
 object CoordsWaypoints {
     fun register() {
@@ -55,18 +52,15 @@ object CoordsWaypoints {
             //?}
         )
 
-        val pattern = Pattern.compile(
-            """.*?[<\[]?([A-Za-z0-9_]+)[>\]]?\s*:?\s*x:\s*(-?\d+),\s*y:\s*(-?\d+),\s*z:\s*(-?\d+)(?:\s*(?:\|\s*)?(.*))?$"""
-        )
+        val match = Regex(
+            """^(?:<|\[[^]]+]\s*)*(\w+)[>:]\s*x:\s*(-?\d+),\s*y:\s*(-?\d+),\s*z:\s*(-?\d+)(?:\s*(?:\|\s*)?(.*))?$"""
+        ).find(message) ?: return
 
-        val matcher = pattern.matcher(message)
-        if (!matcher.matches()) return
-
-        val owner = matcher.group(1)
-        val x = matcher.group(2).toInt()
-        val y = matcher.group(3).toInt()
-        val z = matcher.group(4).toInt()
-        val text: String = matcher.group(5)?.takeIf { it.isNotBlank() } ?: ""
+        val owner = match.groupValues[1]
+        val x = match.groupValues[2].toInt()
+        val y = match.groupValues[3].toInt()
+        val z = match.groupValues[4].toInt()
+        val text: String = match.groupValues[5].takeIf { it.isNotBlank() } ?: ""
 
         WaypointRenderer.waypoints.add(
             Waypoint(
