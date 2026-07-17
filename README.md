@@ -44,8 +44,8 @@ Multiversion mod for Hypixel and Ranked Bedwars adding features for bedwars (res
 - Replace emojis like "<3" with "❤"
 
 #### /sendcoords Command
-- Usage: /sendcoords <all/party>
-- Send your coords to <all/party> chat
+- Usage: /sendcoords <all/party/guild>
+- Send your coords to <all/party/guild> chat
 
 #### Coords Waypoints
 - Show waypoint on coords sent by you / other players
