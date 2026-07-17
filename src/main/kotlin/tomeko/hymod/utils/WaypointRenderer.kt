@@ -43,6 +43,9 @@ object WaypointRenderer {
         "textures/entity/beacon/beacon_beam.png"
     //?}
 
+    private const val TEXT_SCALE_START_DISTANCE = 12.0
+    private const val TEXT_SCALE_EXPONENT = 1.3
+
     //? if = 1.8.9 {
     /*private val BEAM_TEXTURE = ResourceLocation(BEACON_PNG)
     *///?} else {
@@ -129,25 +132,25 @@ object WaypointRenderer {
         //? if = 1.8.9 {
                 /*Minecraft.getMinecraft().renderViewEntity.let { it.lastTickPosX + (it.posX - it.lastTickPosX) * event.partialTicks }
                 *///?} else if >= 26.2 {
-            /*Minecraft.getInstance().gameRenderer.mainCamera().position().x
-        *///?} else {
-        Minecraft.getInstance().gameRenderer.mainCamera.position().x
+                /*Minecraft.getInstance().gameRenderer.mainCamera().position().x
+            *///?} else {
+            Minecraft.getInstance().gameRenderer.mainCamera.position().x
 //?}
         val viewerY =
         //? if = 1.8.9 {
                 /*Minecraft.getMinecraft().renderViewEntity.let { it.lastTickPosY + (it.posY - it.lastTickPosY) * event.partialTicks }
                 *///?} else if >= 26.2 {
-            /*Minecraft.getInstance().gameRenderer.mainCamera().position().y
-        *///?} else {
-        Minecraft.getInstance().gameRenderer.mainCamera.position().y
+                /*Minecraft.getInstance().gameRenderer.mainCamera().position().y
+            *///?} else {
+            Minecraft.getInstance().gameRenderer.mainCamera.position().y
 //?}
         val viewerZ =
         //? if = 1.8.9 {
                 /*Minecraft.getMinecraft().renderViewEntity.let { it.lastTickPosZ + (it.posZ - it.lastTickPosZ) * event.partialTicks }
                 *///?} else if >= 26.2 {
-            /*Minecraft.getInstance().gameRenderer.mainCamera().position().z
-        *///?} else {
-        Minecraft.getInstance().gameRenderer.mainCamera.position().z
+                /*Minecraft.getInstance().gameRenderer.mainCamera().position().z
+            *///?} else {
+            Minecraft.getInstance().gameRenderer.mainCamera.position().z
 //?}
         val renderX = waypoint.pos.x - viewerX
         val renderY = waypoint.pos.y - viewerY
@@ -243,56 +246,57 @@ object WaypointRenderer {
         //? if >= 26.2 {
         /*collector.submitCustomGeometry(matrices, RenderTypes.debugFilledBox()) { pose, buffer ->
             *///?} else {
-            val buffer = consumers.getBuffer(RenderTypes.debugFilledBox())
+        val buffer = consumers.getBuffer(RenderTypes.debugFilledBox())
         val pose = matrices.last().pose()
         //?}
+        //?}
+
+        addDoubleSidedQuad(
+            //? if >= 26.1 {
+            buffer, pose,
             //?}
+            0f, 0f, 0f, 1f, 0f, 0f, 1f, 0f, 1f, 0f, 0f, 1f, r, g, b, a
+        )
+        addDoubleSidedQuad(
+            //? if >= 26.1 {
+            buffer, pose,
+            //?}
+            0f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 0f, 0f, 1f, 0f, r, g, b, a
+        )
+        addDoubleSidedQuad(
+            //? if >= 26.1 {
+            buffer, pose,
+            //?}
+            0f, 0f, 0f, 1f, 0f, 0f, 1f, 1f, 0f, 0f, 1f, 0f, r, g, b, a
+        )
+        addDoubleSidedQuad(
+            //? if >= 26.1 {
+            buffer, pose,
+            //?}
+            0f, 0f, 1f, 1f, 0f, 1f, 1f, 1f, 1f, 0f, 1f, 1f, r, g, b, a
+        )
+        addDoubleSidedQuad(
+            //? if >= 26.1 {
+            buffer, pose,
+            //?}
+            0f, 0f, 0f, 0f, 0f, 1f, 0f, 1f, 1f, 0f, 1f, 0f, r, g, b, a
+        )
+        addDoubleSidedQuad(
+            //? if >= 26.1 {
+            buffer, pose,
+            //?}
+            1f, 0f, 0f, 1f, 0f, 1f, 1f, 1f, 1f, 1f, 1f, 0f, r, g, b, a
+        )
 
-            addDoubleSidedQuad(
-                //? if >= 26.1 {
-                buffer, pose,
-                //?}
-                0f, 0f, 0f, 1f, 0f, 0f, 1f, 0f, 1f, 0f, 0f, 1f, r, g, b, a
-            )
-            addDoubleSidedQuad(
-                //? if >= 26.1 {
-                buffer, pose,
-                //?}
-                0f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 0f, 0f, 1f, 0f, r, g, b, a
-            )
-            addDoubleSidedQuad(
-                //? if >= 26.1 {
-                buffer, pose,
-                //?}
-                0f, 0f, 0f, 1f, 0f, 0f, 1f, 1f, 0f, 0f, 1f, 0f, r, g, b, a
-            )
-            addDoubleSidedQuad(
-                //? if >= 26.1 {
-                buffer, pose,
-                //?}
-                0f, 0f, 1f, 1f, 0f, 1f, 1f, 1f, 1f, 0f, 1f, 1f, r, g, b, a
-            )
-            addDoubleSidedQuad(
-                //? if >= 26.1 {
-                buffer, pose,
-                //?}
-                0f, 0f, 0f, 0f, 0f, 1f, 0f, 1f, 1f, 0f, 1f, 0f, r, g, b, a
-            )
-            addDoubleSidedQuad(
-                //? if >= 26.1 {
-                buffer, pose,
-                //?}
-                1f, 0f, 0f, 1f, 0f, 1f, 1f, 1f, 1f, 1f, 1f, 0f, r, g, b, a
-            )
-
-            //? if = 1.8.9 {
-            /*tessellator.draw()
+        //? if = 1.8.9 {
+        /*tessellator.draw()
         GlStateManager.enableTexture2D()
         GlStateManager.disableBlend()
         GlStateManager.popMatrix()
-        *///?} else if >= 26.2 {
-        /*}
         *///?} else {
+        //? if >= 26.2 {
+        //}
+        //?}
         matrices.popPose()
         //?}
     }
@@ -404,63 +408,64 @@ object WaypointRenderer {
         //? if >= 26.2 {
         /*collector.submitCustomGeometry(matrices, RenderTypes.beaconBeam(BEAM_TEXTURE, true)) { pose, buffer ->
             *///?} else {
-            val pose = matrices.last()
-            val buffer = consumers.getBuffer(RenderTypes.beaconBeam(BEAM_TEXTURE, true))
-            //?}
-            //?}
+        val pose = matrices.last()
+        val buffer = consumers.getBuffer(RenderTypes.beaconBeam(BEAM_TEXTURE, true))
+        //?}
+        //?}
 
-            val yMin = 0.0f
-            val yMax = 300.0f
+        val yMin = 0.0f
+        val yMax = 300.0f
 
-            renderBeamSide(//? if >= 26.1 {
-                pose, buffer, //?}
-                r, g, b, a, 1.0f, yMin, yMax, d4, d5, d6, d7, 1.0f, 0.0f, d14, d15
-            )
-            renderBeamSide(//? if >= 26.1 {
-                pose, buffer, //?}
-                r, g, b, a, 1.0f, yMin, yMax, d10, d11, d8, d9, 1.0f, 0.0f, d14, d15
-            )
-            renderBeamSide(//? if >= 26.1 {
-                pose, buffer, //?}
-                r, g, b, a, 1.0f, yMin, yMax, d6, d7, d10, d11, 1.0f, 0.0f, d14, d15
-            )
-            renderBeamSide(//? if >= 26.1 {
-                pose, buffer, //?}
-                r, g, b, a, 1.0f, yMin, yMax, d8, d9, d4, d5, 1.0f, 0.0f, d14, d15
-            )
+        renderBeamSide(//? if >= 26.1 {
+            pose, buffer, //?}
+            r, g, b, a, 1.0f, yMin, yMax, d4, d5, d6, d7, 1.0f, 0.0f, d14, d15
+        )
+        renderBeamSide(//? if >= 26.1 {
+            pose, buffer, //?}
+            r, g, b, a, 1.0f, yMin, yMax, d10, d11, d8, d9, 1.0f, 0.0f, d14, d15
+        )
+        renderBeamSide(//? if >= 26.1 {
+            pose, buffer, //?}
+            r, g, b, a, 1.0f, yMin, yMax, d6, d7, d10, d11, 1.0f, 0.0f, d14, d15
+        )
+        renderBeamSide(//? if >= 26.1 {
+            pose, buffer, //?}
+            r, g, b, a, 1.0f, yMin, yMax, d8, d9, d4, d5, 1.0f, 0.0f, d14, d15
+        )
 
-            //? if = 1.8.9 {
-            /*tessellator.draw()
-            GlStateManager.disableCull()
-            worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR)
-            *///?}
+        //? if = 1.8.9 {
+        /*tessellator.draw()
+        GlStateManager.disableCull()
+        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR)
+        *///?}
 
-            val innerTopA = 0.25f * a
-            val innerBotA = 0.25f
+        val innerTopA = 0.25f * a
+        val innerBotA = 0.25f
 
-            renderBeamSide(//? if >= 26.1 {
-                pose, buffer, //?}
-                r, g, b, innerTopA, innerBotA, yMin, yMax, 0.2f, 0.2f, 0.8f, 0.2f, 1.0f, 0.0f, d12, d13
-            )
-            renderBeamSide(//? if >= 26.1 {
-                pose, buffer, //?}
-                r, g, b, innerTopA, innerBotA, yMin, yMax, 0.8f, 0.8f, 0.2f, 0.8f, 1.0f, 0.0f, d12, d13
-            )
-            renderBeamSide(//? if >= 26.1 {
-                pose, buffer, //?}
-                r, g, b, innerTopA, innerBotA, yMin, yMax, 0.8f, 0.2f, 0.8f, 0.8f, 1.0f, 0.0f, d12, d13
-            )
-            renderBeamSide(//? if >= 26.1 {
-                pose, buffer, //?}
-                r, g, b, innerTopA, innerBotA, yMin, yMax, 0.2f, 0.8f, 0.2f, 0.2f, 1.0f, 0.0f, d12, d13
-            )
+        renderBeamSide(//? if >= 26.1 {
+            pose, buffer, //?}
+            r, g, b, innerTopA, innerBotA, yMin, yMax, 0.2f, 0.2f, 0.8f, 0.2f, 1.0f, 0.0f, d12, d13
+        )
+        renderBeamSide(//? if >= 26.1 {
+            pose, buffer, //?}
+            r, g, b, innerTopA, innerBotA, yMin, yMax, 0.8f, 0.8f, 0.2f, 0.8f, 1.0f, 0.0f, d12, d13
+        )
+        renderBeamSide(//? if >= 26.1 {
+            pose, buffer, //?}
+            r, g, b, innerTopA, innerBotA, yMin, yMax, 0.8f, 0.2f, 0.8f, 0.8f, 1.0f, 0.0f, d12, d13
+        )
+        renderBeamSide(//? if >= 26.1 {
+            pose, buffer, //?}
+            r, g, b, innerTopA, innerBotA, yMin, yMax, 0.2f, 0.8f, 0.2f, 0.2f, 1.0f, 0.0f, d12, d13
+        )
 
-            //? if = 1.8.9 {
-            /*tessellator.draw()
-            GlStateManager.popMatrix()
-            *///?} else if >= 26.2 {
-        /*}
+        //? if = 1.8.9 {
+        /*tessellator.draw()
+        GlStateManager.popMatrix()
         *///?} else {
+        //? if >= 26.2 {
+        //}
+        //?}
         matrices.popPose()
         //?}
     }
@@ -492,19 +497,19 @@ object WaypointRenderer {
         buffer.addVertex(p, x1, yMax, z1).setColor(r, g, b, topA).setUv(u1, v2).setUv2(15, 15)
             //? if >= 26.2 {
             /*.setNormal(pose, 0.0f, 1.0f, 0.0f)*///?} else {
-        .setNormal(0.0f, 1.0f, 0.0f)//?}
+            .setNormal(0.0f, 1.0f, 0.0f)//?}
         buffer.addVertex(p, x1, yMin, z1).setColor(r, g, b, botA).setUv(u1, v1).setUv2(15, 15)
             //? if >= 26.2 {
             /*.setNormal(pose, 0.0f, 1.0f, 0.0f)*///?} else {
-        .setNormal(0.0f, 1.0f, 0.0f)//?}
+            .setNormal(0.0f, 1.0f, 0.0f)//?}
         buffer.addVertex(p, x2, yMin, z2).setColor(r, g, b, botA).setUv(u2, v1).setUv2(15, 15)
             //? if >= 26.2 {
             /*.setNormal(pose, 0.0f, 1.0f, 0.0f)*///?} else {
-        .setNormal(0.0f, 1.0f, 0.0f)//?}
+            .setNormal(0.0f, 1.0f, 0.0f)//?}
         buffer.addVertex(p, x2, yMax, z2).setColor(r, g, b, topA).setUv(u2, v2).setUv2(15, 15)
             //? if >= 26.2 {
             /*.setNormal(pose, 0.0f, 1.0f, 0.0f)*///?} else {
-        .setNormal(0.0f, 1.0f, 0.0f)//?}
+            .setNormal(0.0f, 1.0f, 0.0f)//?}
         //?}
     }
 
@@ -529,21 +534,20 @@ object WaypointRenderer {
         val dz = loc.z + 0.5 - viewerZ
 
         val distSq = dx * dx + dy * dy + dz * dz
-        val distText = "${sqrt(distSq).roundToInt()}m"
+        val dist = sqrt(distSq)
+        val distText = "${dist.roundToInt()}m"
+
+        val scaleMultiplier =
+            if (dist > TEXT_SCALE_START_DISTANCE)
+                (dist / TEXT_SCALE_START_DISTANCE).pow(TEXT_SCALE_EXPONENT).toFloat()
+            else
+                1f
 
         //? if = 1.8.9 {
-
         /*val viewer = Minecraft.getMinecraft().renderViewEntity
-        var x = dx
-        var y = dy - viewer.eyeHeight
-        var z = dz
-
-        if (distSq > 144) {
-            val dist = sqrt(distSq)
-            x *= 12 / dist
-            y *= 12 / dist
-            z *= 12 / dist
-        }
+        val x = dx
+        val y = dy - viewer.eyeHeight
+        val z = dz
 
         GlStateManager.alphaFunc(516, 0.1F)
         GlStateManager.pushMatrix()
@@ -551,18 +555,18 @@ object WaypointRenderer {
         GlStateManager.translate(0.0, viewer.eyeHeight.toDouble(), 0.0)
         *///?} else {
         val camera =
-            //? if >= 26.2 {
-            /*Minecraft.getInstance().gameRenderer.mainCamera()
-        *///?} else {
-        Minecraft.getInstance().gameRenderer.mainCamera
-    //?}
+        //? if >= 26.2 {
+                /*Minecraft.getInstance().gameRenderer.mainCamera()
+            *///?} else {
+            Minecraft.getInstance().gameRenderer.mainCamera
+        //?}
 
         matrices.pushPose()
         matrices.translate(dx, dy, dz)
         matrices.mulPose(Axis.YP.rotationDegrees(-camera.yRot()))
         matrices.mulPose(Axis.XP.rotationDegrees(camera.xRot()))
 
-        val scale = 0.025f
+        val scale = 0.025f * scaleMultiplier
         matrices.scale(-scale, -scale, scale)
         //?}
 
@@ -570,7 +574,7 @@ object WaypointRenderer {
 
         if (renderOwner && owner.isNotEmpty()) {
             drawNametag(
-                owner, ownerArgb, lineOffset,
+                owner, ownerArgb, lineOffset, scaleMultiplier,
                 //? if >= 26.1 {
                 matrices,
                 //? if >= 26.2 {
@@ -582,10 +586,9 @@ object WaypointRenderer {
             )
 
             //? if = 1.8.9 {
-
             /*GlStateManager.rotate(-Minecraft.getMinecraft().renderManager.playerViewY, 0.0F, 1.0F, 0.0F)
             GlStateManager.rotate(Minecraft.getMinecraft().renderManager.playerViewX, 1.0F, 0.0F, 0.0F)
-            GlStateManager.translate(0.0f, -0.25f, 0.0f)
+            GlStateManager.translate(0.0f, -0.25f * scaleMultiplier, 0.0f)
             GlStateManager.rotate(-Minecraft.getMinecraft().renderManager.playerViewX, 1.0F, 0.0F, 0.0F)
             GlStateManager.rotate(Minecraft.getMinecraft().renderManager.playerViewY, 0.0F, 1.0F, 0.0F)
             *///?} else {
@@ -595,7 +598,7 @@ object WaypointRenderer {
 
         if (renderText && str.isNotEmpty()) {
             drawNametag(
-                str, textArgb, lineOffset,
+                str, textArgb, lineOffset, scaleMultiplier,
                 //? if >= 26.1 {
                 matrices,
                 //? if >= 26.2 {
@@ -607,10 +610,9 @@ object WaypointRenderer {
             )
 
             //? if = 1.8.9 {
-
             /*GlStateManager.rotate(-Minecraft.getMinecraft().renderManager.playerViewY, 0.0F, 1.0F, 0.0F)
             GlStateManager.rotate(Minecraft.getMinecraft().renderManager.playerViewX, 1.0F, 0.0F, 0.0F)
-            GlStateManager.translate(0.0f, -0.25f, 0.0f)
+            GlStateManager.translate(0.0f, -0.25f * scaleMultiplier, 0.0f)
             GlStateManager.rotate(-Minecraft.getMinecraft().renderManager.playerViewX, 1.0F, 0.0F, 0.0F)
             GlStateManager.rotate(Minecraft.getMinecraft().renderManager.playerViewY, 0.0F, 1.0F, 0.0F)
             *///?} else {
@@ -620,7 +622,7 @@ object WaypointRenderer {
 
         if (renderDistance) {
             drawNametag(
-                distText, distArgb, lineOffset,
+                distText, distArgb, lineOffset, scaleMultiplier,
                 //? if >= 26.1 {
                 matrices,
                 //? if >= 26.2 {
@@ -633,7 +635,6 @@ object WaypointRenderer {
         }
 
         //? if = 1.8.9 {
-
         /*GlStateManager.popMatrix()
         GlStateManager.disableLighting()
         *///?} else {
@@ -642,7 +643,7 @@ object WaypointRenderer {
     }
 
     private fun drawNametag(
-        str: String, colorArgb: Int, line: Int,
+        str: String, colorArgb: Int, line: Int, scaleMultiplier: Float,
         //? if >= 26.1 {
         matrices: PoseStack,
         //? if >= 26.2 {
@@ -653,9 +654,8 @@ object WaypointRenderer {
         //?}
     ) {
         //? if = 1.8.9 {
-
         /*val fontrenderer = Minecraft.getMinecraft().fontRendererObj
-        val f1 = 0.016666668F * 1.6F
+        val f1 = 0.016666668F * 1.6F * scaleMultiplier
         GlStateManager.pushMatrix()
         GL11.glNormal3f(0.0F, 1.0F, 0.0F)
         GlStateManager.rotate(-Minecraft.getMinecraft().renderManager.playerViewY, 0.0F, 1.0F, 0.0F)
