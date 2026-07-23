@@ -48,10 +48,10 @@ loom {
         mixinConfig("mixins.$modId.json")
     }
 
-    /*@Suppress("UnstableApiUsage")
+    @Suppress("UnstableApiUsage")
     mixin {
         defaultRefmapName.set("mixins.$modId.refmap.json")
-    }*/
+    }
 }
 
 tasks.compileJava {

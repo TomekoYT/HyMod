@@ -1,6 +1,7 @@
 {
   "plugin": "${base_group}.plugins.MixinPlugin",
   "package": "${base_group}.mixins",
+  "refmap": "mixins.${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_${java_version}",
   "overwrites": {
     "requireAnnotations": false
