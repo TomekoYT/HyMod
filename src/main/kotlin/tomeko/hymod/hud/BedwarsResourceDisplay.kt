@@ -468,6 +468,7 @@ class BedwarsResourceDisplay
     override val width: Float = actualWidth
     override val height: Float = actualHeight
     override fun minimumSize(): Pair<Float, Float> = actualWidth to actualHeight
+    override fun defaultPosition(): Pair<Float, Float> = 0f to 0f
     override fun update(): Boolean = true
     override fun multipleInstancesAllowed(): Boolean = true
     override fun deletable(): Boolean = true
