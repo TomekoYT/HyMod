@@ -101,6 +101,7 @@ object HyModConfig : Config(
         title
             //?}
         = "Dangerous Taunt Waypoint",
+        description = "Show waypoint on dangerous taunt message in Farm Hunt",
         category = CATEGORY_ARCADE,
         subcategory = SUBCATEGORY_FARM_HUNT
     )
@@ -124,6 +125,7 @@ object HyModConfig : Config(
         title
             //?}
         = "White Private Messages",
+        description = "Color private messages white instead of gray on Hypixel",
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_WHITE_CHAT_MESSAGES
     )
@@ -136,6 +138,7 @@ object HyModConfig : Config(
         title
             //?}
         = "White No Rank Messages",
+        description = "Color messages from players with no rank white instead of gray on Hypixel",
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_WHITE_CHAT_MESSAGES
     )
@@ -153,6 +156,7 @@ object HyModConfig : Config(
         title
             //?}
         = "Hide Guild MOTD",
+        description = "Hide guild message of the day on Hypixel",
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_HIDE_GUILD_MOTD
     )
@@ -170,6 +174,7 @@ object HyModConfig : Config(
         title
             //?}
         = "MVP++ Emojis",
+        description = "Replace emojis like <3 with ❤ on Hypixel",
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_MVP_EMOJIS
     )
@@ -187,6 +192,7 @@ object HyModConfig : Config(
             title
                 //?}
         = "Default Mode",
+        description = "Set default /sendcoords command mode",
         options = [
             "All",
             "Party",
@@ -209,6 +215,7 @@ object HyModConfig : Config(
         title
             //?}
         = "Coords Waypoints",
+        description = "Show waypoint on coords from chat",
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS
     )
@@ -405,6 +412,7 @@ object HyModConfig : Config(
         title
             //?}
         = "Middle Click GUI Items",
+        description = "Replace left click with middle click in GUIs while on Hypixel",
         category = CATEGORY_GUI,
         subcategory = SUBCATEGORY_MIDDLE_CLICK_GUI_ITEMS
     )
