@@ -26,6 +26,8 @@ import tomeko.hymod.utils.HypixelPackets;
 
 import java.util.List;
 
+import static tomeko.hymod.utils.HypixelPackets.inRavengard;
+
 //? if = 1.8.9 {
 /*@Mixin(GuiContainer.class)
  *///?} else {
@@ -53,7 +55,7 @@ public abstract class MiddleClickGUIItemsMixin {
                     target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;slotClicked(Lnet/minecraft/world/inventory/Slot;IILnet/minecraft/world/inventory/ContainerInput;)V"
             )
     )
-    //?}
+            //?}
     private void hymod$useMiddleClick(
             //? if = 1.8.9 {
             /*GuiContainer instance,
@@ -137,6 +139,8 @@ public abstract class MiddleClickGUIItemsMixin {
                         .contains("Chest")
 
         ) return true;
+
+        if (inRavengard) return true;
 
         //? if = 1.8.9 {
         /*List<String> tooltip = slotIn.getStack().getTooltip(Minecraft.getMinecraft().thePlayer, Minecraft.getMinecraft().gameSettings.advancedItemTooltips);
