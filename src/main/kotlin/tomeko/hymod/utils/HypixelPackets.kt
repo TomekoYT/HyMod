@@ -27,8 +27,6 @@ object HypixelPackets {
     var inArcade = false
 
     var inFarmHunt = false
-    var inRavengardHub = false
-    var inRavengardDungeon = false
 
     fun register() {
         //? if = 1.8.9 {
@@ -111,8 +109,6 @@ object HypixelPackets {
         inFarmHunt = inArcade && modeName == "FARM_HUNT"
 
         inRavengard = modeName.startsWith("RAVENGARD")
-        inRavengardHub = modeName == "RAVENGARD_HUB"
-        inRavengardDungeon = modeName.startsWith("RAVENGARD_DUNGEON")
     }
 
     private fun disableAll() {
@@ -130,7 +126,5 @@ object HypixelPackets {
     private fun disableModes() {
         inFarmHunt = false
         inRavengard = false
-        inRavengardHub = false
-        inRavengardDungeon = false
     }
 }
