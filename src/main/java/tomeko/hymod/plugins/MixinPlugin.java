@@ -36,7 +36,7 @@ public class MixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public void onLoad(String mixinPackage) {
-        //? if >= 26.1 {
+        //? if >= 1.21.11 {
         MixinExtrasBootstrap.init();
         //?}
         this.mixinPackage = mixinPackage;

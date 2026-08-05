@@ -38,7 +38,7 @@ object WhiteChatMessages {
         message: Component, fromActionBar: Boolean
          //?}
     )
-//? if >= 26.1 {
+//? if >= 1.21.11 {
             : Component
              //?}
     {

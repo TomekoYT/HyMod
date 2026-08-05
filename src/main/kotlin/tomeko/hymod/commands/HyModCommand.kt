@@ -12,7 +12,11 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.minecraft.commands.CommandBuildContext
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import org.polyfrost.oneconfig.utils.v1.dsl.openUI
+//? if >= 26.1 {
 import net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal
+//?} else {
+/*import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal
+*///?}
 import net.minecraft.client.Minecraft
 //?}
 import tomeko.hymod.config.HyModConfig
@@ -22,7 +26,7 @@ import tomeko.hymod.utils.Constants
 /*@Command(value = Constants.MOD_ID)
 *///?}
 object HyModCommand {
-    //? if >= 26.1 {
+    //? if >= 1.21.11 {
     private var shouldOpenConfig: Boolean = false
     //?}
 

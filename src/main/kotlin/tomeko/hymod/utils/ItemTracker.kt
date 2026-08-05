@@ -29,7 +29,7 @@ import net.minecraft.world.phys.BlockHitResult
 //?}
 
 import tomeko.hymod.config.HyModConfig
-import tomeko.hymod.hud.BedwarsResourceDisplay
+import tomeko.hymod.bedwars.BedwarsResourceDisplay
 import java.util.regex.Pattern
 
 object ItemTracker {
@@ -182,7 +182,7 @@ object ItemTracker {
             containerInventory.getItem(i)
         //?}
 
-            //? if >= 26.1 {
+            //? if >= 1.21.11 {
             if (stack.isEmpty) continue
             //?}
 

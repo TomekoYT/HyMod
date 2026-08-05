@@ -1,4 +1,4 @@
-package tomeko.hymod.hud
+package tomeko.hymod.bedwars
 
 import net.minecraft.client.Minecraft
 //? if = 1.8.9 {
@@ -13,7 +13,11 @@ import net.minecraft.init.Items
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 *///?} else {
+//? if >= 26.1 {
 import net.minecraft.client.gui.GuiGraphicsExtractor
+//?} else {
+/*import net.minecraft.client.gui.GuiGraphics as GuiGraphicsExtractor
+*///?}
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
@@ -26,7 +30,6 @@ import tomeko.hymod.config.HyModConfig
 import tomeko.hymod.utils.Constants
 import tomeko.hymod.utils.HypixelPackets
 import tomeko.hymod.utils.ItemTracker
-import kotlin.math.max
 
 class BedwarsResourceDisplay
 //? if = 1.8.9 {
@@ -39,7 +42,7 @@ class BedwarsResourceDisplay
     /*@Exclude
     *///?}
     companion object {
-        //? if >= 26.1 {
+        //? if >= 1.21.11 {
         fun register() {
             HudManager.register(BedwarsResourceDisplay(), Constants.MOD_ID, Constants.MOD_ICON)
         }
@@ -95,7 +98,7 @@ class BedwarsResourceDisplay
             EMERALD
         )
 
-        //? if >= 26.1 {
+        //? if >= 1.21.11 {
         private const val CATEGORY_GENERAL = "General"
         private const val SUBCATEGORY_GENERAL = "General"
         private const val SUBCATEGORY_RESOURCES = "Resources"
@@ -144,7 +147,7 @@ class BedwarsResourceDisplay
         = "Item Padding",
         min = 0f,
         max = 10f
-        //? if >= 26.1 {
+        //? if >= 1.21.11 {
         , step = 0.1f,
         category = CATEGORY_GENERAL,
         subcategory = SUBCATEGORY_GENERAL
@@ -161,7 +164,7 @@ class BedwarsResourceDisplay
         = "Icon Padding",
         min = 0f,
         max = 10f
-        //? if >= 26.1 {
+        //? if >= 1.21.11 {
         , step = 0.1f,
         category = CATEGORY_GENERAL,
         subcategory = SUBCATEGORY_GENERAL
@@ -176,7 +179,7 @@ class BedwarsResourceDisplay
         title
             //?}
         = "Show Iron"
-        //? if >= 26.1 {
+        //? if >= 1.21.11 {
         , category = CATEGORY_GENERAL,
         subcategory = SUBCATEGORY_RESOURCES
         //?}
@@ -190,7 +193,7 @@ class BedwarsResourceDisplay
         title
             //?}
         = "Show Gold"
-        //? if >= 26.1 {
+        //? if >= 1.21.11 {
         , category = CATEGORY_GENERAL,
         subcategory = SUBCATEGORY_RESOURCES
         //?}
@@ -204,7 +207,7 @@ class BedwarsResourceDisplay
         title
             //?}
         = "Show Diamond"
-        //? if >= 26.1 {
+        //? if >= 1.21.11 {
         , category = CATEGORY_GENERAL,
         subcategory = SUBCATEGORY_RESOURCES
         //?}
@@ -218,7 +221,7 @@ class BedwarsResourceDisplay
         title
             //?}
         = "Show Emerald"
-        //? if >= 26.1 {
+        //? if >= 1.21.11 {
         , category = CATEGORY_GENERAL,
         subcategory = SUBCATEGORY_RESOURCES
         //?}
@@ -232,7 +235,7 @@ class BedwarsResourceDisplay
         title
             //?}
         = "Show Inventory"
-        //? if >= 26.1 {
+        //? if >= 1.21.11 {
         , category = CATEGORY_GENERAL,
         subcategory = SUBCATEGORY_RESOURCES
         //?}
@@ -246,7 +249,7 @@ class BedwarsResourceDisplay
         title
             //?}
         = "Show Ender Chest"
-        //? if >= 26.1 {
+        //? if >= 1.21.11 {
         , category = CATEGORY_GENERAL,
         subcategory = SUBCATEGORY_RESOURCES
         //?}
@@ -260,14 +263,14 @@ class BedwarsResourceDisplay
         title
             //?}
         = "Show Total"
-        //? if >= 26.1 {
+        //? if >= 1.21.11 {
         , category = CATEGORY_GENERAL,
         subcategory = SUBCATEGORY_RESOURCES
         //?}
     )
     var showTotal = true
 
-    //? if >= 26.1 {
+    //? if >= 1.21.11 {
     @Switch(
         title = "Show Background",
         category = CATEGORY_BACKGROUND
@@ -362,7 +365,7 @@ class BedwarsResourceDisplay
         mcCtx.pose().pushMatrix()
         //?}
 
-        //? if >= 26.1 {
+        //? if >= 1.21.11 {
         if (background) {
             mcCtx.fill(
                 -backgroundRadius.toInt(),
@@ -398,7 +401,11 @@ class BedwarsResourceDisplay
                 ""
             )
             *///?} else {
+            //? if >= 26.1 {
             mcCtx.item(
+            //?} else {
+            /*mcCtx.renderItem(
+                *///?}
                 stack,
                 iconX,
                 itemY
@@ -422,7 +429,11 @@ class BedwarsResourceDisplay
             val textY = itemY + (16 - mc.font.lineHeight) / 2
 
             if (textShadow) {
+                //? if >= 26.1 {
                 mcCtx.text(
+                //?} else {
+                /*mcCtx.drawString(
+                    *///?}
                     mc.font,
                     getText(item),
                     textX + 1,
@@ -432,7 +443,11 @@ class BedwarsResourceDisplay
                 )
             }
 
+            //? if >= 26.1 {
             mcCtx.text(
+            //?} else {
+            /*mcCtx.drawString(
+                *///?}
                 mc.font,
                 getText(item),
                 textX,

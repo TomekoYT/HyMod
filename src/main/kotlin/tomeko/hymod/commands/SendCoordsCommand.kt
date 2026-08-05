@@ -11,8 +11,13 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
 import net.minecraft.client.Minecraft
 import net.minecraft.client.player.LocalPlayer
+//? if >= 26.1 {
 import net.fabricmc.fabric.api.client.command.v2.ClientCommands.argument
 import net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal
+//?} else {
+/*import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.argument
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal
+*///?}
 //?}
 import tomeko.hymod.config.HyModConfig
 import tomeko.hymod.utils.HypixelPackets

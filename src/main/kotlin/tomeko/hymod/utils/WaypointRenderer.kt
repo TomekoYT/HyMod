@@ -17,8 +17,13 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.VertexConsumer
 import com.mojang.math.Axis
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
+//? if >= 26.1 {
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents
+//?} else {
+/*import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext as LevelRenderContext
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents as LevelRenderEvents
+*///?}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.OrderedSubmitNodeCollector
@@ -57,11 +62,11 @@ class Waypoint(
 
 object WaypointRenderer {
     private const val BEACON_PNG =
-    //? if = 1.8.9 {
-            /*"textures/entity/beacon_beam.png"
-            *///?} else {
-        "textures/entity/beacon/beacon_beam.png"
-    //?}
+    //? if >= 26.1 {
+            "textures/entity/beacon/beacon_beam.png"
+            //?} else {
+        /*"textures/entity/beacon_beam.png"
+    *///?}
 
     private const val TEXT_SCALE_START_DISTANCE = 12.0
     private const val TEXT_SCALE_EXPONENT = 1.3
@@ -78,7 +83,11 @@ object WaypointRenderer {
         //? if = 1.8.9 {
         /*MinecraftForge.EVENT_BUS.register(WaypointRenderer)
         *///?} else {
+        //? if >= 26.1 {
         LevelRenderEvents.AFTER_TRANSLUCENT_FEATURES.register(::onWorldRender)
+        //?} else {
+        /*LevelRenderEvents.AFTER_ENTITIES.register(::onWorldRender)
+        *///?}
         ClientTickEvents.END_CLIENT_TICK.register(::onTick)
         //?}
     }
@@ -178,12 +187,18 @@ object WaypointRenderer {
 
         drawBox(
             //? if >= 1.21.11 {
+            //? if >= 26.1 {
             context.poseStack(),
+            //?} else {
+            /*context.matrices(),
+            *///?}
             //? if >= 26.2 {
             /*context.submitNodeCollector().order(1),
-            *///?} else {
+            *///?} else if >= 26.1 {
             context.bufferSource(),
-            //?}
+            //?} else {
+            /*context.consumers(),
+            *///?}
             //?}
             renderX, renderY, renderZ,
             waypoint.boxColor.red / 255f,
@@ -193,13 +208,19 @@ object WaypointRenderer {
         )
 
         renderBeaconBeam(
+            //? if >= 1.21.11 {
             //? if >= 26.1 {
             context.poseStack(),
+            //?} else {
+            /*context.matrices(),
+            *///?}
             //? if >= 26.2 {
-            /*context.submitNodeCollector().order(1),
-            *///?} else {
+            //context.submitNodeCollector().order(1),
+            //?} else if >= 26.1 {
             context.bufferSource(),
-            //?}
+            //?} else {
+            /*context.consumers(),
+            *///?}
             //?}
             renderX, renderY + 1, renderZ,
             waypoint.beamColor.red / 255f,
@@ -219,13 +240,19 @@ object WaypointRenderer {
             (waypoint.distanceTextColor.alpha shl 24) or (waypoint.distanceTextColor.red shl 16) or (waypoint.distanceTextColor.green shl 8) or waypoint.distanceTextColor.blue
 
         renderWaypointText(
+            //? if >= 1.21.11 {
             //? if >= 26.1 {
             context.poseStack(),
+            //?} else {
+            /*context.matrices(),
+            *///?}
             //? if >= 26.2 {
-            /*context.submitNodeCollector().order(2),
-            *///?} else {
+            //context.submitNodeCollector().order(1),
+            //?} else if >= 26.1 {
             context.bufferSource(),
-            //?}
+            //?} else {
+            /*context.consumers(),
+            *///?}
             //?}
             waypoint.text, waypoint.owner, waypoint.pos,
             waypoint.renderText, waypoint.renderOwner, waypoint.renderDistance,
@@ -718,7 +745,7 @@ object WaypointRenderer {
             width,
             line.toFloat(),
             Component.literal(text).visualOrderText,
-            false,
+            true,
             Font.DisplayMode.SEE_THROUGH,
             15728880,
             colorArgb,
@@ -726,7 +753,18 @@ object WaypointRenderer {
             0
         )
         *///?} else {
-        Minecraft.getInstance().font.drawInBatch(Component.literal(text), width, line.toFloat(), colorArgb, false, matrices.last().pose(), consumers, Font.DisplayMode.SEE_THROUGH, background, 15728880)
+        Minecraft.getInstance().font.drawInBatch(
+            Component.literal(text),
+            width,
+            line.toFloat(),
+            colorArgb,
+            true,
+            matrices.last().pose(),
+            consumers,
+            Font.DisplayMode.SEE_THROUGH,
+            background,
+            15728880
+        )
         //?}
         //?}
     }

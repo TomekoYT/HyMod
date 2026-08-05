@@ -12,7 +12,7 @@ import net.fabricmc.api.ClientModInitializer
 import tomeko.hymod.chat.*
 import tomeko.hymod.commands.*
 import tomeko.hymod.config.*
-import tomeko.hymod.hud.*
+import tomeko.hymod.bedwars.*
 import tomeko.hymod.utils.*
 
 //? if = 1.8.9 {
@@ -25,7 +25,7 @@ import tomeko.hymod.utils.*
 )
 *///?}
 class HyMod
-//? if >= 26.1 {
+//? if >= 1.21.11 {
     : ClientModInitializer
 //?}
 {
@@ -46,7 +46,7 @@ class HyMod
         CoordsWaypoints.register()
         DangerousTauntWaypoint.register()
         HideGuildMOTD.register()
-        //? if >= 26.1 {
+        //? if >= 1.21.11 {
         MVPEmoji.register()
         //?}
         WhiteChatMessages.register()
@@ -56,7 +56,7 @@ class HyMod
 
         HyModConfig.register()
 
-        //? if >= 26.1 {
+        //? if >= 1.21.11 {
         BedwarsResourceDisplay.register()
         //?}
 

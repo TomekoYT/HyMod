@@ -7,11 +7,13 @@ import cc.polyfrost.oneconfig.config.core.OneColor
 import cc.polyfrost.oneconfig.config.data.InfoType
 import cc.polyfrost.oneconfig.config.data.Mod
 import cc.polyfrost.oneconfig.config.data.ModType
-import tomeko.hymod.hud.*
 *///?} else {
 import org.polyfrost.compose.render.PolyColor
 import org.polyfrost.oneconfig.api.config.v1.Config
 import org.polyfrost.oneconfig.api.config.v1.annotations.*
+//?}
+//? if = 1.8.9 {
+//import tomeko.hymod.bedwars.BedwarsResourceDisplay
 //?}
 import tomeko.hymod.utils.Constants
 
@@ -30,7 +32,7 @@ object HyModConfig : Config(
     Category.HYPIXEL
     //?}
 ) {
-    //? if >= 26.1 {
+    //? if >= 1.21.11 {
     val DEPENDENCIES: List<Pair<String, List<String>>> = listOf(
         "coordsWaypointsEnabled" to listOf(
             "coordsWaypointsBoxColor",

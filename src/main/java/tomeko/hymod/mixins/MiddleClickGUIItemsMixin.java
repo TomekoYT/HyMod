@@ -14,7 +14,11 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.ChestMenu;
+//? if >= 26.1 {
 import net.minecraft.world.inventory.ContainerInput;
+//?} else {
+/*import net.minecraft.world.inventory.ClickType;
+*///?}
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.TooltipFlag;
@@ -52,7 +56,12 @@ public abstract class MiddleClickGUIItemsMixin {
             method = "mouseClicked",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;slotClicked(Lnet/minecraft/world/inventory/Slot;IILnet/minecraft/world/inventory/ContainerInput;)V"
+                    target =
+                            //? if >= 26.1 {
+                            "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;slotClicked(Lnet/minecraft/world/inventory/Slot;IILnet/minecraft/world/inventory/ContainerInput;)V"
+                            //?} else {
+                            /*"Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;slotClicked(Lnet/minecraft/world/inventory/Slot;IILnet/minecraft/world/inventory/ClickType;)V"
+                    *///?}
             )
     )
             //?}
@@ -68,9 +77,14 @@ public abstract class MiddleClickGUIItemsMixin {
             //? if = 1.8.9 {
             /*int clickType
              *///?} else {
-            ContainerInput clickType,
-            //?}
             //? if >= 26.1 {
+            ContainerInput
+            //?} else {
+            /*ClickType
+                    *///?}
+                    clickType,
+            //?}
+            //? if >= 1.21.11 {
             Operation<Void> original
             //?}
     ) {
@@ -91,7 +105,11 @@ public abstract class MiddleClickGUIItemsMixin {
                 slotIn,
                 slotId,
                 2,
+                //? if >= 26.1 {
                 ContainerInput.CLONE
+                //?} else {
+                /*ClickType.CLONE
+                *///?}
         );
         //?}
     }
@@ -108,7 +126,12 @@ public abstract class MiddleClickGUIItemsMixin {
             //? if = 1.8.9 {
             /*int clickType
              *///?} else {
-            ContainerInput clickType
+            //? if >= 26.1 {
+            ContainerInput
+            //?} else {
+            /*ClickType
+                    *///?}
+                    clickType
             //?}
     ) {
         if (
@@ -116,7 +139,12 @@ public abstract class MiddleClickGUIItemsMixin {
                         //? if = 1.8.9 {
                         /*|| clickType != 0
                          *///?} else {
-                        || clickType != ContainerInput.PICKUP
+                        || clickType !=
+                        //? if >= 26.1 {
+                        ContainerInput.PICKUP
+                        //?} else {
+                        /*ClickType.PICKUP
+                        *///?}
                         //?}
                         || !HyModConfig.middleClickGUIItemsEnabled
                         //? if = 1.8.9 {
@@ -157,7 +185,7 @@ public abstract class MiddleClickGUIItemsMixin {
         ) {
             if (hymod$moreThanOneButton(
                     line
-                            //? if >= 26.1 {
+                            //? if >= 1.21.11 {
                             .getString()
                     //?}
             )) return true;
