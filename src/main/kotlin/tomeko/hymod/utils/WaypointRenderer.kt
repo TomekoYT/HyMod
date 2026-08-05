@@ -1,7 +1,8 @@
 package tomeko.hymod.utils
 
 //? if = 1.8.9 {
-/*import net.minecraft.client.Minecraft
+/*import cc.polyfrost.oneconfig.config.core.OneColor as PolyColor
+import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
@@ -21,7 +22,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.OrderedSubmitNodeCollector
-//? if = 26.2 {
+//? if >= 26.2 {
 /*import net.minecraft.client.renderer.SubmitNodeCollector
 *///?} else {
 import net.minecraft.client.renderer.MultiBufferSource
@@ -30,13 +31,29 @@ import net.minecraft.client.renderer.rendertype.RenderTypes
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
-//? if = 26.1 {
+//? if <= 26.1 {
 import org.joml.Matrix4f
 //?}
+import org.polyfrost.compose.render.PolyColor
 //?}
 
 import java.util.ArrayList
 import kotlin.math.*
+
+class Waypoint(
+    var pos: BlockPos,
+    var boxColor: PolyColor,
+    var beamColor: PolyColor,
+    var owner: String,
+    var renderOwner: Boolean,
+    var ownerColor: PolyColor,
+    var text: String,
+    var renderText: Boolean,
+    var textColor: PolyColor,
+    var renderDistance: Boolean,
+    var distanceTextColor: PolyColor,
+    var tickTime: Int
+)
 
 object WaypointRenderer {
     private const val BEACON_PNG =
@@ -127,7 +144,7 @@ object WaypointRenderer {
     ) {
         if (waypoint == null) return
 
-        //? if >= 26.1 {
+        //? if >= 1.21.11 {
         if (Minecraft.getInstance().player == null || Minecraft.getInstance().level == null) return
         //?}
 
@@ -160,7 +177,7 @@ object WaypointRenderer {
         val renderZ = waypoint.pos.z - viewerZ
 
         drawBox(
-            //? if >= 26.1 {
+            //? if >= 1.21.11 {
             context.poseStack(),
             //? if >= 26.2 {
             /*context.submitNodeCollector().order(1),
@@ -218,7 +235,7 @@ object WaypointRenderer {
     }
 
     private fun drawBox(
-        //? if >= 26.1 {
+        //? if >= 1.21.11 {
         matrices: PoseStack,
         //? if >= 26.2 {
         /*collector: OrderedSubmitNodeCollector,
@@ -255,37 +272,37 @@ object WaypointRenderer {
         //?}
 
         addDoubleSidedQuad(
-            //? if >= 26.1 {
+            //? if >= 1.21.11 {
             buffer, pose,
             //?}
             0f, 0f, 0f, 1f, 0f, 0f, 1f, 0f, 1f, 0f, 0f, 1f, r, g, b, a
         )
         addDoubleSidedQuad(
-            //? if >= 26.1 {
+            //? if >= 1.21.11 {
             buffer, pose,
             //?}
             0f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 0f, 0f, 1f, 0f, r, g, b, a
         )
         addDoubleSidedQuad(
-            //? if >= 26.1 {
+            //? if >= 1.21.11 {
             buffer, pose,
             //?}
             0f, 0f, 0f, 1f, 0f, 0f, 1f, 1f, 0f, 0f, 1f, 0f, r, g, b, a
         )
         addDoubleSidedQuad(
-            //? if >= 26.1 {
+            //? if >= 1.21.11 {
             buffer, pose,
             //?}
             0f, 0f, 1f, 1f, 0f, 1f, 1f, 1f, 1f, 0f, 1f, 1f, r, g, b, a
         )
         addDoubleSidedQuad(
-            //? if >= 26.1 {
+            //? if >= 1.21.11 {
             buffer, pose,
             //?}
             0f, 0f, 0f, 0f, 0f, 1f, 0f, 1f, 1f, 0f, 1f, 0f, r, g, b, a
         )
         addDoubleSidedQuad(
-            //? if >= 26.1 {
+            //? if >= 1.21.11 {
             buffer, pose,
             //?}
             1f, 0f, 0f, 1f, 0f, 1f, 1f, 1f, 1f, 1f, 1f, 0f, r, g, b, a
@@ -305,7 +322,7 @@ object WaypointRenderer {
     }
 
     private fun addDoubleSidedQuad(
-        //? if >= 26.1 {
+        //? if >= 1.21.11 {
         buffer: VertexConsumer,
         //? if >= 26.2 {
         /*pose: PoseStack.Pose,
@@ -350,7 +367,7 @@ object WaypointRenderer {
     }
 
     private fun renderBeaconBeam(
-        //? if >= 26.1 {
+        //? if >= 1.21.11 {
         matrices: PoseStack,
         //? if >= 26.2 {
         /*collector: OrderedSubmitNodeCollector,
@@ -419,19 +436,19 @@ object WaypointRenderer {
         val yMin = 0.0f
         val yMax = 300.0f
 
-        renderBeamSide(//? if >= 26.1 {
+        renderBeamSide(//? if >= 1.21.11 {
             pose, buffer, //?}
             r, g, b, a, 1.0f, yMin, yMax, d4, d5, d6, d7, 1.0f, 0.0f, d14, d15
         )
-        renderBeamSide(//? if >= 26.1 {
+        renderBeamSide(//? if >= 1.21.11 {
             pose, buffer, //?}
             r, g, b, a, 1.0f, yMin, yMax, d10, d11, d8, d9, 1.0f, 0.0f, d14, d15
         )
-        renderBeamSide(//? if >= 26.1 {
+        renderBeamSide(//? if >= 1.21.11 {
             pose, buffer, //?}
             r, g, b, a, 1.0f, yMin, yMax, d6, d7, d10, d11, 1.0f, 0.0f, d14, d15
         )
-        renderBeamSide(//? if >= 26.1 {
+        renderBeamSide(//? if >= 1.21.11 {
             pose, buffer, //?}
             r, g, b, a, 1.0f, yMin, yMax, d8, d9, d4, d5, 1.0f, 0.0f, d14, d15
         )
@@ -445,19 +462,19 @@ object WaypointRenderer {
         val innerTopA = 0.25f * a
         val innerBotA = 0.25f
 
-        renderBeamSide(//? if >= 26.1 {
+        renderBeamSide(//? if >= 1.21.11 {
             pose, buffer, //?}
             r, g, b, innerTopA, innerBotA, yMin, yMax, 0.2f, 0.2f, 0.8f, 0.2f, 1.0f, 0.0f, d12, d13
         )
-        renderBeamSide(//? if >= 26.1 {
+        renderBeamSide(//? if >= 1.21.11 {
             pose, buffer, //?}
             r, g, b, innerTopA, innerBotA, yMin, yMax, 0.8f, 0.8f, 0.2f, 0.8f, 1.0f, 0.0f, d12, d13
         )
-        renderBeamSide(//? if >= 26.1 {
+        renderBeamSide(//? if >= 1.21.11 {
             pose, buffer, //?}
             r, g, b, innerTopA, innerBotA, yMin, yMax, 0.8f, 0.2f, 0.8f, 0.8f, 1.0f, 0.0f, d12, d13
         )
-        renderBeamSide(//? if >= 26.1 {
+        renderBeamSide(//? if >= 1.21.11 {
             pose, buffer, //?}
             r, g, b, innerTopA, innerBotA, yMin, yMax, 0.2f, 0.8f, 0.2f, 0.2f, 1.0f, 0.0f, d12, d13
         )
@@ -474,7 +491,7 @@ object WaypointRenderer {
     }
 
     private fun renderBeamSide(
-        //? if >= 26.1 {
+        //? if >= 1.21.11 {
         pose: PoseStack.Pose,
         buffer: VertexConsumer,
         //?}
@@ -517,7 +534,7 @@ object WaypointRenderer {
     }
 
     private fun renderWaypointText(
-        //? if >= 26.1 {
+        //? if >= 1.21.11 {
         matrices: PoseStack,
         //? if >= 26.2 {
         /*collector: OrderedSubmitNodeCollector,
@@ -578,7 +595,7 @@ object WaypointRenderer {
         if (renderOwner && owner.isNotEmpty()) {
             drawNametag(
                 owner, ownerArgb, lineOffset, scaleMultiplier,
-                //? if >= 26.1 {
+                //? if >= 1.21.11 {
                 matrices,
                 //? if >= 26.2 {
                 /*collector
@@ -602,7 +619,7 @@ object WaypointRenderer {
         if (renderText && str.isNotEmpty()) {
             drawNametag(
                 str, textArgb, lineOffset, scaleMultiplier,
-                //? if >= 26.1 {
+                //? if >= 1.21.11 {
                 matrices,
                 //? if >= 26.2 {
                 /*collector
@@ -626,7 +643,7 @@ object WaypointRenderer {
         if (renderDistance) {
             drawNametag(
                 distText, distArgb, lineOffset, scaleMultiplier,
-                //? if >= 26.1 {
+                //? if >= 1.21.11 {
                 matrices,
                 //? if >= 26.2 {
                 /*collector
@@ -647,7 +664,7 @@ object WaypointRenderer {
 
     private fun drawNametag(
         text: String, colorArgb: Int, line: Int, scaleMultiplier: Float,
-        //? if >= 26.1 {
+        //? if >= 1.21.11 {
         matrices: PoseStack,
         //? if >= 26.2 {
         /*collector: OrderedSubmitNodeCollector
