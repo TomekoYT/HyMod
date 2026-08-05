@@ -52,15 +52,25 @@ object CoordsWaypoints {
             //?}
         )
 
-        val match = Regex(
-            """^(?:<|\[[^]]+]\s*)*(\w+)[>:]\s*x:\s*(-?\d+),\s*y:\s*(-?\d+),\s*z:\s*(-?\d+)(?:\s*(?:\|\s*)?(.*))?$"""
-        ).find(message) ?: return
+        val regex = Regex(
+            "^(?:\\w+\\s*>\\s*)?" +
+                    "(?:\\[[^]]+]\\s*)*" +
+                    "(?:<(?<owner1>\\w+)>|(?<owner2>\\w+):)\\s*" +
+                    "x:\\s*(?<x>-?\\d+),\\s*" +
+                    "y:\\s*(?<y>-?\\d+),\\s*" +
+                    "z:\\s*(?<z>-?\\d+)" +
+                    "(?:\\s*(?:\\|\\s*)?(?<text>.*))?$"
+        )
 
-        val owner = match.groupValues[1]
-        val x = match.groupValues[2].toInt()
-        val y = match.groupValues[3].toInt()
-        val z = match.groupValues[4].toInt()
-        val text: String = match.groupValues[5].takeIf { it.isNotBlank() } ?: ""
+        val match = regex.matchEntire(message) ?: return
+
+        val owner = match.groups["owner1"]?.value
+            ?: match.groups["owner2"]!!.value
+
+        val x = match.groups["x"]!!.value.toInt()
+        val y = match.groups["y"]!!.value.toInt()
+        val z = match.groups["z"]!!.value.toInt()
+        val text = match.groups["text"]?.value.orEmpty()
 
         WaypointRenderer.waypoints.add(
             Waypoint(
