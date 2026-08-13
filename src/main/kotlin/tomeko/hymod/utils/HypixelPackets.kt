@@ -10,23 +10,28 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 *///?} else {
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
+
 //?}
 
 object HypixelPackets {
-    @JvmField
     var onHypixel = false
+        private set
     var onRBW = false
+        private set
 
     var currentServerName: String? = null
+        private set
 
-    @JvmField
-    var inSkyblock = false
-    @JvmField
-    var inRavengard = false
+    var inLobby = false
+        private set
+
     var inBedwars = false
+        private set
     var inArcade = false
+        private set
 
     var inFarmHunt = false
+        private set
 
     fun register() {
         //? if = 1.8.9 {
@@ -95,7 +100,8 @@ object HypixelPackets {
 
         val serverTypeName = packet.serverType.get().name
 
-        inSkyblock = serverTypeName == "SkyBlock"
+        inLobby = packet.lobbyName.isPresent
+
         inBedwars = serverTypeName == "Bed Wars"
         inArcade = serverTypeName == "Arcade"
 
@@ -107,24 +113,21 @@ object HypixelPackets {
         val modeName = packet.mode.get()
 
         inFarmHunt = inArcade && modeName == "FARM_HUNT"
-
-        inRavengard = modeName.startsWith("RAVENGARD")
     }
 
     private fun disableAll() {
         currentServerName = null
+        inLobby = false
         disableServerTypes()
         disableModes()
     }
 
     private fun disableServerTypes() {
-        inSkyblock = false
         inBedwars = false
         inArcade = false
     }
 
     private fun disableModes() {
         inFarmHunt = false
-        inRavengard = false
     }
 }

@@ -18,7 +18,7 @@ import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.ContainerInput;
 //?} else {
 /*import net.minecraft.world.inventory.ClickType;
-*///?}
+ *///?}
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.TooltipFlag;
@@ -29,8 +29,6 @@ import tomeko.hymod.config.HyModConfig;
 import tomeko.hymod.utils.HypixelPackets;
 
 import java.util.List;
-
-import static tomeko.hymod.utils.HypixelPackets.inRavengard;
 
 //? if = 1.8.9 {
 /*@Mixin(GuiContainer.class)
@@ -59,9 +57,9 @@ public abstract class MiddleClickGUIItemsMixin {
                     target =
                             //? if >= 26.1 {
                             "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;slotClicked(Lnet/minecraft/world/inventory/Slot;IILnet/minecraft/world/inventory/ContainerInput;)V"
-                            //?} else {
-                            /*"Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;slotClicked(Lnet/minecraft/world/inventory/Slot;IILnet/minecraft/world/inventory/ClickType;)V"
-                    *///?}
+                    //?} else {
+                    /*"Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;slotClicked(Lnet/minecraft/world/inventory/Slot;IILnet/minecraft/world/inventory/ClickType;)V"
+            *///?}
             )
     )
             //?}
@@ -79,9 +77,9 @@ public abstract class MiddleClickGUIItemsMixin {
              *///?} else {
             //? if >= 26.1 {
             ContainerInput
-            //?} else {
-            /*ClickType
-                    *///?}
+                    //?} else {
+                    /*ClickType
+                     *///?}
                     clickType,
             //?}
             //? if >= 1.21.11 {
@@ -109,7 +107,7 @@ public abstract class MiddleClickGUIItemsMixin {
                 ContainerInput.CLONE
                 //?} else {
                 /*ClickType.CLONE
-                *///?}
+                 *///?}
         );
         //?}
     }
@@ -128,9 +126,9 @@ public abstract class MiddleClickGUIItemsMixin {
              *///?} else {
             //? if >= 26.1 {
             ContainerInput
-            //?} else {
-            /*ClickType
-                    *///?}
+                    //?} else {
+                    /*ClickType
+                     *///?}
                     clickType
             //?}
     ) {
@@ -144,31 +142,20 @@ public abstract class MiddleClickGUIItemsMixin {
                         ContainerInput.PICKUP
                         //?} else {
                         /*ClickType.PICKUP
-                        *///?}
+                         *///?}
                         //?}
-                        || !HyModConfig.middleClickGUIItemsEnabled
                         //? if = 1.8.9 {
                         /*|| !(instance instanceof GuiChest)
                          *///?} else {
                         || !(instance.getMenu() instanceof ChestMenu)
                         //?}
-                        || !HypixelPackets.onHypixel
-                        || HypixelPackets.inSkyblock
+                        || !HypixelPackets.INSTANCE.getOnHypixel()
                         || slotIn == null
-                        //? if = 1.8.9 {
+            //? if = 1.8.9 {
                         /*|| !slotIn.getHasStack()
                         || !(instance.inventorySlots instanceof ContainerChest)
                         *///?}
-                        //? if = 1.8.9 {
-                        /*|| ((ContainerChest) instance.inventorySlots).getLowerChestInventory().getDisplayName().getUnformattedText()
-                         *///?} else {
-                        || instance.getTitle().getString()
-                        //?}
-                        .contains("Chest")
-
         ) return true;
-
-        if (inRavengard) return true;
 
         //? if = 1.8.9 {
         /*List<String> tooltip = slotIn.getStack().getTooltip(Minecraft.getMinecraft().thePlayer, Minecraft.getMinecraft().gameSettings.advancedItemTooltips);
@@ -191,7 +178,33 @@ public abstract class MiddleClickGUIItemsMixin {
             )) return true;
         }
 
-        return false;
+        if (HyModConfig.INSTANCE.getMiddleClickInLobby() && HypixelPackets.INSTANCE.getInLobby())
+            return false;
+
+        String containerTitle =
+                //? if = 1.8.9 {
+                /*((ContainerChest) instance.inventorySlots).getLowerChestInventory().getDisplayName().getUnformattedText();
+                 *///?} else {
+                instance.getTitle().getString();
+        //?}
+
+
+        if (HyModConfig.INSTANCE.getMiddleClickInBedwarsShop()
+                && HypixelPackets.INSTANCE.getInBedwars()
+                && !HypixelPackets.INSTANCE.getInLobby()
+                && (containerTitle.equals("Quick Buy")
+                || containerTitle.equals("Blocks")
+                || containerTitle.equals("Melee")
+                || containerTitle.equals("Armor")
+                || containerTitle.equals("Tools")
+                || containerTitle.equals("Ranged")
+                || containerTitle.equals("Potions")
+                || containerTitle.equals("Utility")
+                || containerTitle.equals("Rotating Items")
+                || containerTitle.equals("Upgrades & Traps")
+        )) return false;
+
+        return true;
     }
 
     private static boolean hymod$moreThanOneButton(String text) {

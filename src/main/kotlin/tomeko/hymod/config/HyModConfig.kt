@@ -64,12 +64,31 @@ object HyModConfig : Config(
     //? if = 1.8.9 {
     /*@Exclude
     *///?}
-    const val CATEGORY_BEDWARS = "Bedwars"
+    private const val CATEGORY_BEDWARS = "Bedwars"
+
+    //? if = 1.8.9 {
+    //@Exclude
+    //?}
+    private const val SUBCATEGORY_SHOP = "Shop"
+
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Use Middle Click in Shop",
+        description = "Replace middle click with left click in bedwars item shop",
+        category = CATEGORY_BEDWARS,
+        subcategory = SUBCATEGORY_SHOP
+    )
+    var middleClickInBedwarsShop = true
+
 
     //? if = 1.8.9 {
     /*@Exclude
     *///?}
-    const val SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY = "Bedwars Resource Display"
+    private const val SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY = "Resource Display"
 
     //? if = 1.8.9 {
     /*@HUD(
@@ -79,7 +98,7 @@ object HyModConfig : Config(
     var bedwarsResourceDisplay = BedwarsResourceDisplay()
     *///?} else {
     @Info(
-        title = "Bedwars Resource Display can be edited by clicking Edit HUD in the top left corner",
+        title = "Resource Display can be edited by clicking Edit HUD in the top left corner",
         category = CATEGORY_BEDWARS,
         subcategory = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY
     )
@@ -89,12 +108,12 @@ object HyModConfig : Config(
     //? if = 1.8.9 {
     /*@Exclude
     *///?}
-    const val CATEGORY_ARCADE = "Arcade"
+    private const val CATEGORY_ARCADE = "Arcade"
 
     //? if = 1.8.9 {
     /*@Exclude
     *///?}
-    const val SUBCATEGORY_FARM_HUNT = "Farm Hunt"
+    private const val SUBCATEGORY_FARM_HUNT = "Farm Hunt"
 
     @Switch(
         //? if = 1.8.9 {
@@ -113,12 +132,12 @@ object HyModConfig : Config(
     //? if = 1.8.9 {
     /*@Exclude
     *///?}
-    const val CATEGORY_CHAT = "Chat"
+    private const val CATEGORY_CHAT = "Chat"
 
     //? if = 1.8.9 {
     /*@Exclude
     *///?}
-    const val SUBCATEGORY_WHITE_CHAT_MESSAGES = "White Chat Messages"
+    private const val SUBCATEGORY_WHITE_CHAT_MESSAGES = "White Chat Messages"
 
     @Switch(
         //? if = 1.8.9 {
@@ -149,7 +168,7 @@ object HyModConfig : Config(
     //? if = 1.8.9 {
     /*@Exclude
     *///?}
-    const val SUBCATEGORY_HIDE_GUILD_MOTD = "Hide Guild MOTD"
+    private const val SUBCATEGORY_HIDE_GUILD_MOTD = "Hide Guild MOTD"
 
     @Switch(
         //? if = 1.8.9 {
@@ -167,7 +186,7 @@ object HyModConfig : Config(
     //? if = 1.8.9 {
     /*@Exclude
     *///?}
-    const val SUBCATEGORY_MVP_EMOJIS = "MVP++ Emojis"
+    private const val SUBCATEGORY_MVP_EMOJIS = "MVP++ Emojis"
 
     @Switch(
         //? if = 1.8.9 {
@@ -185,14 +204,14 @@ object HyModConfig : Config(
     //? if = 1.8.9 {
     /*@Exclude
     *///?}
-    const val SUBCATEGORY_SENDCOORDS_COMMAND = "/sendcoords Command"
+    private const val SUBCATEGORY_SENDCOORDS_COMMAND = "/sendcoords Command"
 
     @Dropdown(
         //? if = 1.8.9 {
         /*name
             *///?} else {
-            title
-                //?}
+        title
+            //?}
         = "Default Mode",
         description = "Set default /sendcoords command mode",
         options = [
@@ -208,7 +227,7 @@ object HyModConfig : Config(
     //? if = 1.8.9 {
     /*@Exclude
     *///?}
-    const val SUBCATEGORY_COORDS_WAYPOINTS = "Coords Waypoints"
+    private const val SUBCATEGORY_COORDS_WAYPOINTS = "Coords Waypoints"
 
     @Switch(
         //? if = 1.8.9 {
@@ -399,14 +418,13 @@ object HyModConfig : Config(
     //? if = 1.8.9 {
     /*@Exclude
     *///?}
-    const val CATEGORY_GUI = "GUI"
+    private const val CATEGORY_LOBBY = "Lobby"
 
     //? if = 1.8.9 {
     /*@Exclude
     *///?}
-    const val SUBCATEGORY_MIDDLE_CLICK_GUI_ITEMS = "Middle Click GUI Items"
+    private const val SUBCATEGORY_MIDDLE_CLICK_GUI_ITEMS = "Middle Click GUI Items"
 
-    @JvmField
     @Switch(
         //? if = 1.8.9 {
         /*name
@@ -414,23 +432,23 @@ object HyModConfig : Config(
         title
             //?}
         = "Middle Click GUI Items",
-        description = "Replace left click with middle click in GUIs while on Hypixel",
-        category = CATEGORY_GUI,
+        description = "Replace left click with middle click in GUIs in Hypixel lobbies",
+        category = CATEGORY_LOBBY,
         subcategory = SUBCATEGORY_MIDDLE_CLICK_GUI_ITEMS
     )
-    var middleClickGUIItemsEnabled = true
+    var middleClickInLobby = true
 
     //? if = 1.8.9 {
     /*@Exclude
     *///?}
-    const val CATEGORY_DEBUG = "Debug"
+    private const val CATEGORY_DEBUG = "Debug"
 
     @Info(
         //? if = 1.8.9 {
         /*text
             *///?} else {
-            title
-                //?}
+        title
+            //?}
         = "Probably should stay disabled",
         //? if = 1.8.9 {
         /*type = InfoType.WARNING,
