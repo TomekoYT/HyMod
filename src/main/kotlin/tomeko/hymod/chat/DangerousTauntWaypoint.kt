@@ -22,9 +22,9 @@ import org.polyfrost.compose.render.PolyColor
 
 import tomeko.hymod.config.HyModConfig
 import tomeko.hymod.utils.HypixelPackets
-import tomeko.hymod.utils.StringFormatting
 import tomeko.hymod.utils.Waypoint
 import tomeko.hymod.utils.WaypointRenderer
+import tomeko.hymod.utils.removeFormatting
 
 object DangerousTauntWaypoint {
     private val AIR: Block =
@@ -65,13 +65,13 @@ object DangerousTauntWaypoint {
 
         if (!HyModConfig.debugModeEnabled && (!HyModConfig.dangerousTauntWaypointEnabled || !HypixelPackets.inFarmHunt)) return
 
-        val message = StringFormatting.removeFormatting(
-            //? if = 1.8.9 {
-            /*event.message.unformattedText
-            *///?} else {
+        val message =
+        //? if = 1.8.9 {
+                /*event.message.unformattedText
+                *///?} else {
             component.string
-            //?}
-        )
+                //?}
+                .removeFormatting()
 
         val words = message.split(" ")
         if (words.size != 12

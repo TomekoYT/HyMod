@@ -12,7 +12,7 @@ import net.minecraft.network.chat.Component
 //?}
 
 import tomeko.hymod.config.HyModConfig
-import tomeko.hymod.utils.StringFormatting
+import tomeko.hymod.utils.removeFormatting
 
 object HideGuildMOTD {
     private var guildMOTD = false
@@ -22,7 +22,7 @@ object HideGuildMOTD {
         /*MinecraftForge.EVENT_BUS.register(this)
         *///?} else {
         ClientReceiveMessageEvents.ALLOW_GAME.register(HideGuildMOTD::onChatReceive)
-         //?}
+        //?}
     }
 
     //? if = 1.8.9 {
@@ -33,11 +33,11 @@ object HideGuildMOTD {
         /*event: ClientChatReceivedEvent
         *///?} else {
         message: Component, fromActionBar: Boolean
-         //?}
+        //?}
     )
 //? if >= 1.21.11 {
             : Boolean
-             //?}
+    //?}
     {
         //? if = 1.8.9 {
         /*if (event.type.toInt() == 2 || event.message == null) return
@@ -49,13 +49,13 @@ object HideGuildMOTD {
         if (fromActionBar) return true
 
         return !shouldCancel(message.string)
-         //?}
+        //?}
     }
 
     private fun shouldCancel(message: String): Boolean {
         if (!HyModConfig.hideGuildMOTDEnabled) return false
 
-        val cleanMessage = StringFormatting.removeFormatting(message)
+        val cleanMessage = message.removeFormatting()
 
         if (cleanMessage.startsWith("--------------  Guild: Message Of The Day  --------------")) {
             guildMOTD = true

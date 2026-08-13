@@ -11,9 +11,9 @@ import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 //?}
 import tomeko.hymod.config.HyModConfig
-import tomeko.hymod.utils.StringFormatting
 import tomeko.hymod.utils.Waypoint
 import tomeko.hymod.utils.WaypointRenderer
+import tomeko.hymod.utils.removeFormatting
 
 object CoordsWaypoints {
     fun register() {
@@ -44,13 +44,13 @@ object CoordsWaypoints {
 
         if (!HyModConfig.coordsWaypointsEnabled) return
 
-        val message = StringFormatting.removeFormatting(
-            //? if = 1.8.9 {
-            /*event.message.unformattedText
-            *///?} else {
+        val message =
+        //? if = 1.8.9 {
+                /*event.message.unformattedText
+                *///?} else {
             component.string
-            //?}
-        )
+                //?}
+                .removeFormatting()
 
         val regex = Regex(
             "^(?:\\w+\\s*>\\s*)?" +
