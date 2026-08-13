@@ -11,50 +11,60 @@
 </a>
 
 # HyMod
-Multiversion mod for Hypixel and Ranked Bedwars adding features for bedwars (resource display), arcade, chat waypoints and more!
+
+Multiversion mod for Hypixel and Ranked Bedwars adding features for bedwars (resource display), arcade, chat waypoints
+and more!
 
 ## Features
 
-
 ### Bedwars
 
-#### Bedwars Resource Display
+#### Shop
+
+- Use Middle Click in Shop
+
+#### Resource Display
+
 - Show Iron, Gold, Diamond, Emerald
 - Show Inventory, Ender Chest, Total
 - Works with Hypixel Ender Chest punching feature
 - Works on Ranked Bedwars Server: rbw.gg
 
-
 ### Arcade
 
 #### Farm Hunt
-- Show waypoint on dangerous taunt message
 
+- Show waypoint on dangerous taunt message
 
 ### Chat
 
 #### White Chat Messages
+
 - White private messages
 - White no rank messages
 
 #### Hide Guild MOTD
+
 - Hide guild message of the day
 
 #### MVP++ Emojis
+
 - Replace emojis like "<3" with "❤"
 
 #### /sendcoords Command
+
 - Usage: /sendcoords <all/party/guild>
 - Send your coords to <all/party/guild> chat
 
 #### Coords Waypoints
+
 - Show waypoint on coords sent by you / other players
 - Customizable color, beam opacity, box opacity and time to disappear
 - Render player nametag, optional text and distance to waypoint
 
-
-### GUI
+### Lobby
 
 #### Middle Click GUI Items
+
 - Replace left click with middle click in GUIs
-- Intended for overall Hypixel Network usage, for Hypixel Skyblock use [Legacy Skyblock](https://modrinth.com/mod/legacyskyblock) instead
+- For Hypixel Skyblock use [Legacy Skyblock](https://modrinth.com/mod/legacyskyblock) instead
