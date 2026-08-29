@@ -13,6 +13,8 @@ import tomeko.hymod.chat.*
 import tomeko.hymod.commands.*
 import tomeko.hymod.config.*
 import tomeko.hymod.bedwars.*
+import tomeko.hymod.hypixel.HypixelPackets
+import tomeko.hymod.render.*
 import tomeko.hymod.utils.*
 
 //? if = 1.8.9 {
@@ -59,6 +61,8 @@ class HyMod
         //? if >= 1.21.11 {
         BedwarsResourceDisplay.register()
         //?}
+
+        NametagStats.register()
 
         HypixelPackets.register()
         ItemTracker.register()
