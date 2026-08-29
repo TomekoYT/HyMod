@@ -1,4 +1,4 @@
-package tomeko.hymod.hypixel
+package tomeko.hymod.stats
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
@@ -14,7 +14,7 @@ object HypixelStatsFetcher {
         "https://api.mojang.com/users/profiles/minecraft/"
 
     private const val ABYSS_PLAYER_ENDPOINT =
-        "http://api.abyssoverlay.com/player?uuid="
+        "https://api.abyssoverlay.com/player?uuid="
 
     private const val ABYSS_USER_AGENT = "node-ao/2.0.3"
 
@@ -29,12 +29,6 @@ object HypixelStatsFetcher {
 
     private val statsCache = ConcurrentHashMap<String, CachedRaw>()
 
-    /**
-     * Requests currently in progress.
-     *
-     * This prevents multiple stat methods called at the same time
-     * from creating multiple HTTP requests for the same UUID.
-     */
     private val pendingRequests =
         ConcurrentHashMap<String, CompletableFuture<JsonObject?>>()
 

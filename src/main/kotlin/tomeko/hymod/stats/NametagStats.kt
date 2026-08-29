@@ -1,4 +1,4 @@
-package tomeko.hymod.render
+package tomeko.hymod.stats
 
 import com.mojang.math.Axis
 //? if >= 26.1 {
@@ -11,7 +11,6 @@ import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents as Le
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font
 import net.minecraft.network.chat.Component
-import tomeko.hymod.hypixel.HypixelStatsFetcher
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.sqrt
 
