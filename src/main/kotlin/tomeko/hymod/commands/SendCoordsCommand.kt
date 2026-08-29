@@ -20,7 +20,7 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal
 *///?}
 //?}
 import tomeko.hymod.config.HyModConfig
-import tomeko.hymod.hypixel.HypixelPackets
+import tomeko.hymod.utils.HypixelPackets
 
 object SendCoordsCommand
 //? if = 1.8.9 {
