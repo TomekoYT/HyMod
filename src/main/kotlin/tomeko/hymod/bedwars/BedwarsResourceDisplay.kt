@@ -28,7 +28,7 @@ import org.polyfrost.oneconfig.api.hud.v1.LegacyHud
 //?}
 import tomeko.hymod.config.HyModConfig
 import tomeko.hymod.utils.Constants
-import tomeko.hymod.utils.HypixelPackets
+import tomeko.hymod.hypixel.HypixelPackets
 import tomeko.hymod.utils.ItemTracker
 
 class BedwarsResourceDisplay

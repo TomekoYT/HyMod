@@ -15,7 +15,7 @@ import net.minecraft.network.chat.MutableComponent
 //?}
 
 import tomeko.hymod.config.HyModConfig
-import tomeko.hymod.utils.HypixelPackets
+import tomeko.hymod.hypixel.HypixelPackets
 import tomeko.hymod.utils.removeFormatting
 
 object WhiteChatMessages {

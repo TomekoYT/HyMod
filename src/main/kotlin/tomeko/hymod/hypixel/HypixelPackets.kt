@@ -1,4 +1,4 @@
-package tomeko.hymod.utils
+package tomeko.hymod.hypixel
 
 import net.hypixel.modapi.HypixelModAPI
 import net.hypixel.modapi.packet.impl.clientbound.event.ClientboundLocationPacket

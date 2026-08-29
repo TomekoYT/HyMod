@@ -215,8 +215,8 @@ object WaypointRenderer {
             /*context.matrices(),
             *///?}
             //? if >= 26.2 {
-            //context.submitNodeCollector().order(1),
-            //?} else if >= 26.1 {
+            /*context.submitNodeCollector().order(1),
+            *///?} else if >= 26.1 {
             context.bufferSource(),
             //?} else {
             /*context.consumers(),
@@ -247,8 +247,8 @@ object WaypointRenderer {
             /*context.matrices(),
             *///?}
             //? if >= 26.2 {
-            //context.submitNodeCollector().order(1),
-            //?} else if >= 26.1 {
+            /*context.submitNodeCollector().order(1),
+            *///?} else if >= 26.1 {
             context.bufferSource(),
             //?} else {
             /*context.consumers(),
