@@ -20,11 +20,9 @@ object NametagStats {
     private const val BASE_SCALE = 0.025f
     private const val MIN_DISTANCE = 1.0
 
-    private val linesCache =
-        ConcurrentHashMap<String, List<Component>>()
-
-    private val pending =
-        ConcurrentHashMap.newKeySet<String>()
+    private val linesCache = ConcurrentHashMap<String, MutableList<Component>>()
+    private val pendingLevel = ConcurrentHashMap.newKeySet<String>()
+    private val pendingBedwars = ConcurrentHashMap.newKeySet<String>()
 
     fun register() {
         //? if >= 26.1 {
@@ -50,54 +48,21 @@ object NametagStats {
                 continue
             }
 
-            val tickDelta =
-                mc.deltaTracker.getGameTimeDeltaPartialTick(false)
+            val tickDelta = mc.deltaTracker.getGameTimeDeltaPartialTick(false)
 
-            val x =
-                player.xo +
-                        (player.x - player.xo) * tickDelta -
-                        camera.pos.x
+            val x = player.xo + (player.x - player.xo) * tickDelta - camera.pos.x
+            val relativeY = player.yo + (player.y - player.yo) * tickDelta - camera.pos.y
+            val z = player.zo + (player.z - player.zo) * tickDelta - camera.pos.z
 
-            val relativeY =
-                player.yo +
-                        (player.y - player.yo) * tickDelta -
-                        camera.pos.y
-
-            val z =
-                player.zo +
-                        (player.z - player.zo) * tickDelta -
-                        camera.pos.z
-
-            val distanceSquared =
-                x * x +
-                        relativeY * relativeY +
-                        z * z
-
-            if (distanceSquared > MAX_DISTANCE * MAX_DISTANCE) {
-                continue
-            }
+            val distanceSquared = x * x + relativeY * relativeY + z * z
+            if (distanceSquared > MAX_DISTANCE * MAX_DISTANCE) continue
 
             val distance = sqrt(distanceSquared)
 
-            val y =
-                relativeY +
-                        player.bbHeight +
-                        HEIGHT_OFFSET
-
-            val distanceFactor =
-                1.0 -
-                        1.0.coerceAtMost(
-                            0.0.coerceAtLeast(
-                                (distance - MIN_DISTANCE) /
-                                        (MAX_DISTANCE - MIN_DISTANCE)
-                            )
-                        )
+            val y = relativeY + player.bbHeight + HEIGHT_OFFSET
 
             val scale =
-                (
-                        BASE_SCALE *
-                                (0.75 + 0.25 * distanceFactor)
-                        ).toFloat()
+                (BASE_SCALE * (0.75 + 0.25 * (1.0 - 1.0.coerceAtMost(0.0.coerceAtLeast((distance - MIN_DISTANCE) / (MAX_DISTANCE - MIN_DISTANCE)))))).toFloat()
 
             val matrices =
                 //? if >= 26.1 {
@@ -118,34 +83,35 @@ object NametagStats {
             requestStats(uuid)
 
             val lines = linesCache[uuid]
-                ?: listOf(Component.literal("§7Loading..."))
 
-            val submitNodeCollector =
-                //? if >= 26.1 {
-                context.submitNodeCollector()
-            //?} else {
-            /*context.commandQueue()
-            *///?}
+            if (lines != null) {
+                val submitNodeCollector =
+                    //? if >= 26.1 {
+                    context.submitNodeCollector()
+                //?} else {
+                /*context.commandQueue()
+                *///?}
 
-            var offset = 0
+                var offset = 0
 
-            for (text in lines) {
-                val width = mc.font.width(text)
+                for (text in lines) {
+                    val width = mc.font.width(text)
 
-                submitNodeCollector.submitText(
-                    matrices,
-                    -width / 2.0f,
-                    -15f + offset,
-                    text.visualOrderText,
-                    true,
-                    Font.DisplayMode.SEE_THROUGH,
-                    0xF000F0,
-                    -0x1,
-                    0x50000000,
-                    0
-                )
+                    submitNodeCollector.submitText(
+                        matrices,
+                        -width / 2.0f,
+                        -15f + offset,
+                        text.visualOrderText,
+                        true,
+                        Font.DisplayMode.SEE_THROUGH,
+                        0xF000F0,
+                        -0x1,
+                        0x50000000,
+                        0
+                    )
 
-                offset -= 10
+                    offset -= 10
+                }
             }
 
             matrices.popPose()
@@ -153,41 +119,54 @@ object NametagStats {
     }
 
     private fun requestStats(uuid: String) {
-        if (linesCache.containsKey(uuid)) {
-            return
-        }
-
-        if (!pending.add(uuid)) {
-            return
-        }
-
-        val levelFuture =
+        if (pendingLevel.add(uuid)) {
             HypixelStatsFetcher.getHypixelLevel(uuid)
+                .thenAccept { level ->
+                    if (level != null) {
+                        linesCache
+                            .computeIfAbsent(uuid) {
+                                mutableListOf()
+                            }
+                            .apply {
+                                removeIf {
+                                    it.toString().contains("§bLevel§f:")
+                                }
 
-        val bedwarsFuture =
+                                add(Component.literal("§bLevel§f: §e$level"))
+                            }
+                    }
+                }
+                .whenComplete { _, _ ->
+                    pendingLevel.remove(uuid)
+                }
+        }
+
+        if (pendingBedwars.add(uuid)) {
             HypixelStatsFetcher.getBedwarsStars(uuid)
+                .thenAccept { bedwars ->
+                    if (bedwars != null) {
+                        linesCache
+                            .computeIfAbsent(uuid) {
+                                mutableListOf()
+                            }
+                            .apply {
+                                removeIf {
+                                    it.toString().contains("§fBed§cWars§f:")
+                                }
 
-        levelFuture
-            .thenCombine(bedwarsFuture) { level, bedwars ->
-                listOf(
-                    Component.literal(
-                        "§bLevel§f: §e${level ?: "N/A"}"
-                    ),
-                    Component.literal(
-                        "§fBed§cWars§f: §4${bedwars ?: 0}"
-                    )
-                )
-            }
-            .thenAccept { lines ->
-                linesCache[uuid] = lines
-            }
-            .whenComplete { _, _ ->
-                pending.remove(uuid)
-            }
+                                add(Component.literal("§fBed§cWars§f: §4$bedwars"))
+                            }
+                    }
+                }
+                .whenComplete { _, _ ->
+                    pendingBedwars.remove(uuid)
+                }
+        }
     }
 
     fun clearCache() {
         linesCache.clear()
-        pending.clear()
+        pendingLevel.clear()
+        pendingBedwars.clear()
     }
 }
