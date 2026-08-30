@@ -10,7 +10,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 *///?} else {
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
-
 //?}
 
 object HypixelPackets {
@@ -26,6 +25,10 @@ object HypixelPackets {
         private set
 
     var inBedwars = false
+        private set
+    var inSkywars = false
+        private set
+    var inDuels = false
         private set
     var inArcade = false
         private set
@@ -103,6 +106,8 @@ object HypixelPackets {
         inLobby = packet.lobbyName.isPresent
 
         inBedwars = serverTypeName == "Bed Wars"
+        inSkywars = serverTypeName == "SkyWars"
+        inDuels = serverTypeName == "Duels"
         inArcade = serverTypeName == "Arcade"
 
         if (!packet.mode.isPresent) {
@@ -124,6 +129,7 @@ object HypixelPackets {
 
     private fun disableServerTypes() {
         inBedwars = false
+        inDuels = false
         inArcade = false
     }
 
