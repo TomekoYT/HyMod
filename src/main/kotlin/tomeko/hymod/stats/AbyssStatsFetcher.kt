@@ -9,7 +9,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.sqrt
 
-object HypixelStatsFetcher {
+object AbyssStatsFetcher {
     private const val MOJANG_UUID_ENDPOINT = "https://api.mojang.com/users/profiles/minecraft/"
     private const val ABYSS_PLAYER_ENDPOINT = "http://api.abyssoverlay.com/player?uuid="
     private const val ABYSS_USER_AGENT = "node-ao/2.0.3"

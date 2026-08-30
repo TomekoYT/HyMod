@@ -26,7 +26,7 @@ import net.minecraft.world.item.TooltipFlag;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import tomeko.hymod.config.HyModConfig;
-import tomeko.hymod.utils.HypixelPackets;
+import tomeko.hymod.location.HypixelPackets;
 
 import java.util.List;
 

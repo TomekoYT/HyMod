@@ -11,6 +11,8 @@ import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents as Le
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font
 import net.minecraft.network.chat.Component
+import tomeko.hymod.config.HyModConfig
+import tomeko.hymod.location.HypixelPackets
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.sqrt
 
@@ -80,7 +82,53 @@ object NametagStats {
 
             val uuid = player.stringUUID
 
-            requestStats(uuid)
+            val shouldCheckHypixelLevel = (HypixelPackets.inBedwars && HyModConfig.showBedwarsStarsAboveNametag)
+                    || (HypixelPackets.inSkywars && HyModConfig.showSkywarsStarsAboveNametag)
+                    || (HypixelPackets.inDuels && HyModConfig.showDuelsStarsAboveNametag)
+
+            if (HypixelPackets.inBedwars && pendingBedwars.add(uuid)) {
+                AbyssStatsFetcher.getBedwarsStars(uuid)
+                    .thenAccept { bedwars ->
+                        if (bedwars != null) {
+                            linesCache
+                                .computeIfAbsent(uuid) {
+                                    mutableListOf()
+                                }
+                                .apply {
+                                    removeIf {
+                                        it.toString().contains("§fBed§cWars§f:")
+                                    }
+
+                                    add(Component.literal("§fBed§cWars§f: §4$bedwars"))
+                                }
+                        }
+                    }
+                    .whenComplete { _, _ ->
+                        pendingBedwars.remove(uuid)
+                    }
+            }
+
+            if (HypixelPackets.onHypixel && pendingLevel.add(uuid)) {
+                AbyssStatsFetcher.getHypixelLevel(uuid)
+                    .thenAccept { level ->
+                        if (level != null) {
+                            linesCache
+                                .computeIfAbsent(uuid) {
+                                    mutableListOf()
+                                }
+                                .apply {
+                                    removeIf {
+                                        it.toString().contains("§bLevel§f:")
+                                    }
+
+                                    add(Component.literal("§bLevel§f: §e$level"))
+                                }
+                        }
+                    }
+                    .whenComplete { _, _ ->
+                        pendingLevel.remove(uuid)
+                    }
+            }
 
             val lines = linesCache[uuid]
 
@@ -115,52 +163,6 @@ object NametagStats {
             }
 
             matrices.popPose()
-        }
-    }
-
-    private fun requestStats(uuid: String) {
-        if (pendingLevel.add(uuid)) {
-            HypixelStatsFetcher.getHypixelLevel(uuid)
-                .thenAccept { level ->
-                    if (level != null) {
-                        linesCache
-                            .computeIfAbsent(uuid) {
-                                mutableListOf()
-                            }
-                            .apply {
-                                removeIf {
-                                    it.toString().contains("§bLevel§f:")
-                                }
-
-                                add(Component.literal("§bLevel§f: §e$level"))
-                            }
-                    }
-                }
-                .whenComplete { _, _ ->
-                    pendingLevel.remove(uuid)
-                }
-        }
-
-        if (pendingBedwars.add(uuid)) {
-            HypixelStatsFetcher.getBedwarsStars(uuid)
-                .thenAccept { bedwars ->
-                    if (bedwars != null) {
-                        linesCache
-                            .computeIfAbsent(uuid) {
-                                mutableListOf()
-                            }
-                            .apply {
-                                removeIf {
-                                    it.toString().contains("§fBed§cWars§f:")
-                                }
-
-                                add(Component.literal("§fBed§cWars§f: §4$bedwars"))
-                            }
-                    }
-                }
-                .whenComplete { _, _ ->
-                    pendingBedwars.remove(uuid)
-                }
         }
     }
 

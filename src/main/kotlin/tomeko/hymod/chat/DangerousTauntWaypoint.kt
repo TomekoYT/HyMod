@@ -21,7 +21,7 @@ import org.polyfrost.compose.render.PolyColor
 //?}
 
 import tomeko.hymod.config.HyModConfig
-import tomeko.hymod.utils.HypixelPackets
+import tomeko.hymod.location.HypixelPackets
 import tomeko.hymod.utils.Waypoint
 import tomeko.hymod.utils.WaypointRenderer
 import tomeko.hymod.utils.removeFormatting

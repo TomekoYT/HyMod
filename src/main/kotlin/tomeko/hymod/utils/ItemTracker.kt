@@ -30,6 +30,7 @@ import net.minecraft.world.phys.BlockHitResult
 
 import tomeko.hymod.config.HyModConfig
 import tomeko.hymod.hud.BedwarsResourceDisplay
+import tomeko.hymod.location.HypixelPackets
 import java.util.regex.Pattern
 
 object ItemTracker {

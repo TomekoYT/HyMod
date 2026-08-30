@@ -1,4 +1,4 @@
-package tomeko.hymod.utils
+package tomeko.hymod.location
 
 import net.hypixel.modapi.HypixelModAPI
 import net.hypixel.modapi.packet.impl.clientbound.event.ClientboundLocationPacket
@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 *///?} else {
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
+import tomeko.hymod.utils.Debug
 //?}
 
 object HypixelPackets {
@@ -34,6 +35,8 @@ object HypixelPackets {
         private set
 
     var inFarmHunt = false
+        private set
+    var duelsMode: DuelsModes? = null
         private set
 
     fun register() {
@@ -118,6 +121,7 @@ object HypixelPackets {
         val modeName = packet.mode.get()
 
         inFarmHunt = inArcade && modeName == "FARM_HUNT"
+        duelsMode = if (inDuels) DuelsModes.fromId(modeName) else null
     }
 
     private fun disableAll() {
@@ -135,5 +139,6 @@ object HypixelPackets {
 
     private fun disableModes() {
         inFarmHunt = false
+        duelsMode = null
     }
 }
