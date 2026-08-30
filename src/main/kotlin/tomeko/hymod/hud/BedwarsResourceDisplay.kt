@@ -1,4 +1,4 @@
-package tomeko.hymod.bedwars
+package tomeko.hymod.hud
 
 import net.minecraft.client.Minecraft
 //? if = 1.8.9 {
@@ -35,7 +35,7 @@ class BedwarsResourceDisplay
 //? if = 1.8.9 {
 /*: BasicHud(true)
 *///?} else {
-    : LegacyHud("${Constants.MOD_ID}_bedwars_resource_display.json", "Bedwars Resource Display", Category.COMBAT)
+    : LegacyHud("${Constants.MOD_ID}_bedwars_resource_display.json", "BedWars Resource Display", Category.COMBAT)
 //?}
 {
     //? if = 1.8.9 {

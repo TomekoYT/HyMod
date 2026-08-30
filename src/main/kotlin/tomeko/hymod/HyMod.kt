@@ -12,7 +12,7 @@ import net.fabricmc.api.ClientModInitializer
 import tomeko.hymod.chat.*
 import tomeko.hymod.commands.*
 import tomeko.hymod.config.*
-import tomeko.hymod.bedwars.*
+import tomeko.hymod.hud.*
 import tomeko.hymod.utils.HypixelPackets
 import tomeko.hymod.stats.*
 import tomeko.hymod.utils.*

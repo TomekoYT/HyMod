@@ -29,7 +29,7 @@ import net.minecraft.world.phys.BlockHitResult
 //?}
 
 import tomeko.hymod.config.HyModConfig
-import tomeko.hymod.bedwars.BedwarsResourceDisplay
+import tomeko.hymod.hud.BedwarsResourceDisplay
 import java.util.regex.Pattern
 
 object ItemTracker {

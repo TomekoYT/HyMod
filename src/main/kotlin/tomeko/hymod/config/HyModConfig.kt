@@ -13,7 +13,7 @@ import org.polyfrost.oneconfig.api.config.v1.Config
 import org.polyfrost.oneconfig.api.config.v1.annotations.*
 //?}
 //? if = 1.8.9 {
-//import tomeko.hymod.bedwars.BedwarsResourceDisplay
+//import tomeko.hymod.hud.BedwarsResourceDisplay
 //?}
 import tomeko.hymod.utils.Constants
 
@@ -64,7 +64,7 @@ object HyModConfig : Config(
     //? if = 1.8.9 {
     /*@Exclude
     *///?}
-    private const val CATEGORY_BEDWARS = "Bedwars"
+    private const val CATEGORY_BEDWARS = "BedWars"
 
     //? if = 1.8.9 {
     //@Exclude
@@ -78,11 +78,29 @@ object HyModConfig : Config(
         title
             //?}
         = "Use Middle Click in Shop",
-        description = "Replace middle click with left click in bedwars item shop",
+        description = "Replace middle click with left click in BedWars item shop",
         category = CATEGORY_BEDWARS,
         subcategory = SUBCATEGORY_SHOP
     )
     var middleClickInBedwarsShop = true
+
+
+    //? if = 1.8.9 {
+    //@Exclude
+    //?}
+    private const val SUBCATEGORY_BEDWARS_STATS = "Stats"
+
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Show BedWars Stars Above Nametag",
+        category = CATEGORY_BEDWARS,
+        subcategory = SUBCATEGORY_BEDWARS_STATS,
+    )
+    var showBedwarsStarsAboveNametag = true
 
 
     //? if = 1.8.9 {
@@ -104,6 +122,53 @@ object HyModConfig : Config(
     )
     var bedwarsResourceDisplayInfo: Nothing? = null
     //?}
+
+
+    //? if = 1.8.9 {
+    //@Exclude
+    //?}
+    private const val CATEGORY_SKYWARS = "SkyWars"
+
+    //? if = 1.8.9 {
+    //@Exclude
+    //?}
+    private const val SUBCATEGORY_SKYWARS_STATS = "Stats"
+
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Show SkyWars Stars Above Nametag",
+        category = CATEGORY_SKYWARS,
+        subcategory = SUBCATEGORY_SKYWARS_STATS,
+    )
+    var showSkywarsStarsAboveNametag = true
+
+
+    //? if = 1.8.9 {
+    //@Exclude
+    //?}
+    private const val CATEGORY_DUELS = "Duels"
+
+    //? if = 1.8.9 {
+    //@Exclude
+    //?}
+    private const val SUBCATEGORY_DUELS_STATS = "Stats"
+
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Show Duels Stars Above Nametag",
+        category = CATEGORY_DUELS,
+        subcategory = SUBCATEGORY_DUELS_STATS,
+    )
+    var showDuelsStarsAboveNametag = true
+
 
     //? if = 1.8.9 {
     /*@Exclude
@@ -127,6 +192,57 @@ object HyModConfig : Config(
         subcategory = SUBCATEGORY_FARM_HUNT
     )
     var dangerousTauntWaypointEnabled = true
+
+
+    //? if = 1.8.9 {
+    /*@Exclude
+    *///?}
+    private const val CATEGORY_NETWORK = "Network"
+
+    private const val SUBCATEGORY_NETWORK_STATS = "Stats"
+
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Show Network Level Above Nametag",
+        category = CATEGORY_NETWORK,
+        subcategory = SUBCATEGORY_NETWORK_STATS
+    )
+    var showNetworkLevelAboveNametag = true
+
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+        //?}
+        = "Show with Other Nametag Stats",
+        category = CATEGORY_NETWORK,
+        subcategory = SUBCATEGORY_NETWORK_STATS
+    )
+    var showNetworkLevelWithOtherNametagStats = true
+
+
+    //? if = 1.8.9 {
+    /*@Exclude
+    *///?}
+    private const val SUBCATEGORY_MIDDLE_CLICK_GUI_ITEMS = "Middle Click GUI Items in Lobby"
+
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Middle Click GUI Items",
+        description = "Replace left click with middle click in GUIs in Hypixel lobbies",
+        category = CATEGORY_NETWORK,
+        subcategory = SUBCATEGORY_MIDDLE_CLICK_GUI_ITEMS
+    )
+    var middleClickInLobby = true
 
 
     //? if = 1.8.9 {
@@ -414,29 +530,6 @@ object HyModConfig : Config(
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS
     )
     var coordsWaypointsTime = 60
-
-    //? if = 1.8.9 {
-    /*@Exclude
-    *///?}
-    private const val CATEGORY_LOBBY = "Lobby"
-
-    //? if = 1.8.9 {
-    /*@Exclude
-    *///?}
-    private const val SUBCATEGORY_MIDDLE_CLICK_GUI_ITEMS = "Middle Click GUI Items"
-
-    @Switch(
-        //? if = 1.8.9 {
-        /*name
-            *///?} else {
-        title
-            //?}
-        = "Middle Click GUI Items",
-        description = "Replace left click with middle click in GUIs in Hypixel lobbies",
-        category = CATEGORY_LOBBY,
-        subcategory = SUBCATEGORY_MIDDLE_CLICK_GUI_ITEMS
-    )
-    var middleClickInLobby = true
 
     //? if = 1.8.9 {
     /*@Exclude
