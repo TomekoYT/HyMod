@@ -62,9 +62,11 @@ class HyMod
         BedwarsResourceDisplay.register()
         //?}
 
+        HypixelPackets.register()
+
+        AbyssStatsFetcher.register()
         NametagStats.register()
 
-        HypixelPackets.register()
         ItemTracker.register()
         WaypointRenderer.register()
 

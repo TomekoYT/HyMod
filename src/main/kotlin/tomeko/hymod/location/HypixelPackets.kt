@@ -43,17 +43,10 @@ object HypixelPackets {
         //? if = 1.8.9 {
         /*MinecraftForge.EVENT_BUS.register(this)
         *///?} else {
-        ClientTickEvents.END_CLIENT_TICK.register(HypixelPackets::onTick)
+        ClientTickEvents.END_CLIENT_TICK.register(this::onTick)
         //?}
-
-        HypixelModAPI.getInstance()
-            .createHandler(
-                ClientboundLocationPacket::class.java,
-                HypixelPackets::onLocationPacket
-            )
-
-        HypixelModAPI.getInstance()
-            .subscribeToEventPacket(ClientboundLocationPacket::class.java)
+        HypixelModAPI.getInstance().createHandler(ClientboundLocationPacket::class.java, this::onLocationPacket)
+        HypixelModAPI.getInstance().subscribeToEventPacket(ClientboundLocationPacket::class.java)
     }
 
     //? if = 1.8.9 {

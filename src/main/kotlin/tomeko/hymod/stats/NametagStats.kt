@@ -1,6 +1,7 @@
 package tomeko.hymod.stats
 
 import com.mojang.math.Axis
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 //? if >= 26.1 {
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents
@@ -8,6 +9,8 @@ import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents
 /*import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext as LevelRenderContext
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents as LevelRenderEvents
 *///?}
+import net.hypixel.modapi.HypixelModAPI
+import net.hypixel.modapi.packet.impl.clientbound.event.ClientboundLocationPacket
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font
 import net.minecraft.network.chat.Component
@@ -17,22 +20,55 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.sqrt
 
 object NametagStats {
-    private const val MAX_DISTANCE = 32.0
-    private const val HEIGHT_OFFSET = 0.35
-    private const val BASE_SCALE = 0.025f
-    private const val MIN_DISTANCE = 1.0
-
-    private val linesCache = ConcurrentHashMap<String, MutableList<Component>>()
-    private val pendingLevel = ConcurrentHashMap.newKeySet<String>()
-    private val pendingBedwars = ConcurrentHashMap.newKeySet<String>()
+    private var lastHypixelState = false
 
     fun register() {
+        //? if = 1.8.9 {
+        /*MinecraftForge.EVENT_BUS.register(this)
+        *///?} else {
+        ClientTickEvents.END_CLIENT_TICK.register(this::onTick)
+        //?}
+        HypixelModAPI.getInstance().createHandler(ClientboundLocationPacket::class.java, this::onLocationPacket)
+        HypixelModAPI.getInstance().subscribeToEventPacket(ClientboundLocationPacket::class.java)
+
         //? if >= 26.1 {
         LevelRenderEvents.COLLECT_SUBMITS.register(::render)
         //?} else {
         /*LevelRenderEvents.AFTER_ENTITIES.register(::render)
         *///?}
     }
+
+    //? if = 1.8.9 {
+    /*@SubscribeEvent
+    *///?}
+    fun onTick(
+        //? if = 1.8.9 {
+        /*event: TickEvent.ClientTickEvent
+        *///?} else {
+        mc: Minecraft
+        //?}
+    ) {
+        //? if = 1.8.9 {
+        /*if (event.phase != TickEvent.Phase.END) return
+        *///?}
+
+        if (lastHypixelState != HypixelPackets.onHypixel) {
+            lastHypixelState = HypixelPackets.onHypixel
+            clearCache()
+        }
+    }
+
+    private fun onLocationPacket(packet: ClientboundLocationPacket) {
+        clearCache()
+    }
+
+
+    private const val MAX_DISTANCE = 32.0
+    private const val HEIGHT_OFFSET = 0.35
+    private const val BASE_SCALE = 0.025f
+    private const val MIN_DISTANCE = 1.0
+
+    private val linesCache = ConcurrentHashMap<String, MutableList<Component>>()
 
     private fun render(context: LevelRenderContext) {
         val mc = Minecraft.getInstance()
@@ -86,7 +122,7 @@ object NametagStats {
                     || (HypixelPackets.inSkywars && HyModConfig.showSkywarsStarsAboveNametag)
                     || (HypixelPackets.inDuels && HyModConfig.showDuelsStarsAboveNametag)
 
-            if (HypixelPackets.inBedwars && pendingBedwars.add(uuid)) {
+            if (HypixelPackets.inBedwars && AbyssStatsFetcher.pendingBedwars.add(uuid)) {
                 AbyssStatsFetcher.getBedwarsStars(uuid)
                     .thenAccept { bedwars ->
                         if (bedwars != null) {
@@ -104,11 +140,11 @@ object NametagStats {
                         }
                     }
                     .whenComplete { _, _ ->
-                        pendingBedwars.remove(uuid)
+                        AbyssStatsFetcher.pendingBedwars.remove(uuid)
                     }
             }
 
-            if (HypixelPackets.onHypixel && pendingLevel.add(uuid)) {
+            if (HypixelPackets.onHypixel && AbyssStatsFetcher.pendingLevel.add(uuid)) {
                 AbyssStatsFetcher.getHypixelLevel(uuid)
                     .thenAccept { level ->
                         if (level != null) {
@@ -126,7 +162,7 @@ object NametagStats {
                         }
                     }
                     .whenComplete { _, _ ->
-                        pendingLevel.remove(uuid)
+                        AbyssStatsFetcher.pendingLevel.remove(uuid)
                     }
             }
 
@@ -168,7 +204,5 @@ object NametagStats {
 
     fun clearCache() {
         linesCache.clear()
-        pendingLevel.clear()
-        pendingBedwars.clear()
     }
 }

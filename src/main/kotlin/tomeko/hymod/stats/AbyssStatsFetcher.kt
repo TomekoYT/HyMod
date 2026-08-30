@@ -2,7 +2,12 @@ package tomeko.hymod.stats
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
+import net.hypixel.modapi.HypixelModAPI
+import net.hypixel.modapi.packet.impl.clientbound.event.ClientboundLocationPacket
+import net.minecraft.client.Minecraft
 import net.minecraft.util.Util
+import tomeko.hymod.location.HypixelPackets
 import java.net.HttpURLConnection
 import java.net.URI
 import java.util.concurrent.CompletableFuture
@@ -10,20 +15,61 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.sqrt
 
 object AbyssStatsFetcher {
+    private var lastHypixelState = false
+
+    fun register() {
+        //? if = 1.8.9 {
+        /*MinecraftForge.EVENT_BUS.register(this)
+        *///?} else {
+        ClientTickEvents.END_CLIENT_TICK.register(this::onTick)
+        //?}
+        HypixelModAPI.getInstance().createHandler(ClientboundLocationPacket::class.java, this::onLocationPacket)
+        HypixelModAPI.getInstance().subscribeToEventPacket(ClientboundLocationPacket::class.java)
+    }
+
+    //? if = 1.8.9 {
+    /*@SubscribeEvent
+    *///?}
+    fun onTick(
+        //? if = 1.8.9 {
+        /*event: TickEvent.ClientTickEvent
+        *///?} else {
+        mc: Minecraft
+        //?}
+    ) {
+        //? if = 1.8.9 {
+        /*if (event.phase != TickEvent.Phase.END) return
+        *///?}
+
+        if (lastHypixelState != HypixelPackets.onHypixel) {
+            lastHypixelState = HypixelPackets.onHypixel
+            clearCache()
+        }
+    }
+
+    private fun onLocationPacket(packet: ClientboundLocationPacket) {
+        clearCache()
+    }
+
+
     private const val MOJANG_UUID_ENDPOINT = "https://api.mojang.com/users/profiles/minecraft/"
     private const val ABYSS_PLAYER_ENDPOINT = "http://api.abyssoverlay.com/player?uuid="
     private const val ABYSS_USER_AGENT = "node-ao/2.0.3"
     private const val CACHE_TTL_MS = 120_000L
-
-    private val uuidCache = ConcurrentHashMap<String, String>()
 
     private data class CachedRaw(
         val fetchedAt: Long,
         val json: JsonObject
     )
 
+    private val uuidCache = ConcurrentHashMap<String, String>()
     private val statsCache = ConcurrentHashMap<String, CachedRaw>()
     private val pendingRequests = ConcurrentHashMap<String, CompletableFuture<JsonObject?>>()
+
+    val pendingLevel: ConcurrentHashMap.KeySetView<String?, Boolean?> = ConcurrentHashMap.newKeySet<String>()
+    val pendingBedwars: ConcurrentHashMap.KeySetView<String?, Boolean?> = ConcurrentHashMap.newKeySet<String>()
+    val pendingSkywars: ConcurrentHashMap.KeySetView<String?, Boolean?> = ConcurrentHashMap.newKeySet<String>()
+    val pendingDuels: ConcurrentHashMap.KeySetView<String?, Boolean?> = ConcurrentHashMap.newKeySet<String>()
 
     data class DuelsDivisions(
         val overall: String,
@@ -147,14 +193,7 @@ object AbyssStatsFetcher {
     fun getDuelsDivisions(uuid: String): CompletableFuture<DuelsDivisions?> {
         return getRawPlayerData(uuid).thenApply { player ->
             val duels = player?.getAsJsonObject("stats")?.getAsJsonObject("Duels")
-                ?: return@thenApply DuelsDivisions(
-                    overall = "Rookie",
-                    uhc = "Rookie",
-                    sw = "Rookie",
-                    bridge = "Rookie",
-                    sumo = "Rookie",
-                    bow = "Rookie"
-                )
+                ?: return@thenApply null
 
             fun divisionFor(wins: Int): String = when {
                 wins >= 2500 -> "Grandmaster"
@@ -207,9 +246,14 @@ object AbyssStatsFetcher {
         return 1
     }
 
-    fun clearCache() {
+    private fun clearCache() {
         uuidCache.clear()
         statsCache.clear()
         pendingRequests.clear()
+
+        pendingLevel.clear()
+        pendingBedwars.clear()
+        pendingSkywars.clear()
+        pendingDuels.clear()
     }
 }
