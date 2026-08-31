@@ -146,39 +146,21 @@ object NametagStats {
             }
 
             if (HypixelPackets.inDuels && HyModConfig.showDuelsStarsAboveNametag && AbyssStatsFetcher.pendingDuels.add(uuid)) {
-                AbyssStatsFetcher.getDuelsDivisions(uuid)
-                    .thenAccept { divisions ->
-                        if (divisions != null) {
+                AbyssStatsFetcher.getDuelsDivision(uuid, HypixelPackets.duelsMode)
+                    .thenAccept { division ->
+                        if (division != null) {
                             linesCache
                                 .computeIfAbsent(uuid) {
                                     mutableListOf()
                                 }
                                 .apply {
                                     removeIf {
-                                        it.toString().contains("§eDuels§f:")
+                                        it.toString().contains("§3Duels§f:")
                                     }
 
                                     add(
                                         Component.literal(
-                                            HypixelPackets.duelsMode.modeName + " §2Duels§f: " + when (HypixelPackets.duelsMode) {
-                                                DuelsMode.SKYWARS -> divisions.skywars
-                                                DuelsMode.THE_BRIDGE -> divisions.theBridge
-                                                DuelsMode.BEDWARS -> divisions.bedwars
-                                                DuelsMode.CLASSIC -> divisions.classic
-                                                DuelsMode.UHC -> divisions.uhc
-                                                DuelsMode.SUMO -> divisions.sumo
-                                                DuelsMode.BOW -> divisions.bow
-                                                DuelsMode.MEGA_WALLS -> divisions.megaWalls
-                                                DuelsMode.PARKOUR -> divisions.parkour
-                                                DuelsMode.QUAKECRAFT -> divisions.quakecraft
-                                                DuelsMode.SPLEEF -> divisions.spleef
-                                                DuelsMode.OP -> divisions.op
-                                                DuelsMode.BLITZ -> divisions.blitz
-                                                DuelsMode.COMBO -> divisions.combo
-                                                DuelsMode.BOXING -> divisions.boxing
-                                                DuelsMode.NO_DEBUFF -> divisions.noDebuff
-                                                else -> divisions.overall
-                                            }
+                                            HypixelPackets.duelsMode.modeName + " §3Duels§f: " + division
                                         )
                                     )
                                 }

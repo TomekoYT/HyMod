@@ -6,15 +6,21 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.hypixel.modapi.HypixelModAPI
 import net.hypixel.modapi.packet.impl.clientbound.event.ClientboundLocationPacket
 import net.minecraft.client.Minecraft
-import net.minecraft.util.Util
 import tomeko.hymod.location.DuelsMode
 import tomeko.hymod.location.DuelsModeType
 import tomeko.hymod.location.HypixelPackets
+import tomeko.hymod.utils.Constants
 import tomeko.hymod.utils.toRoman
 import java.net.HttpURLConnection
 import java.net.URI
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.Executors
+import java.util.concurrent.LinkedBlockingQueue
+import java.util.concurrent.ThreadFactory
+import java.util.concurrent.ThreadPoolExecutor
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.String
 import kotlin.math.sqrt
 
@@ -61,6 +67,24 @@ object AbyssStatsFetcher {
     private const val ABYSS_USER_AGENT = "node-ao/2.0.3"
     private const val CACHE_TTL_MS = 120_000L
 
+    private const val NETWORK_POOL_SIZE = 6
+    private val networkThreadCounter = AtomicInteger(0)
+    private val networkThreadFactory = ThreadFactory { runnable ->
+        Thread(runnable, "${Constants.MOD_ID}-stats-fetch-${networkThreadCounter.incrementAndGet()}").apply {
+            isDaemon = true
+        }
+    }
+    private val networkExecutor = ThreadPoolExecutor(
+        NETWORK_POOL_SIZE,
+        NETWORK_POOL_SIZE,
+        30L, TimeUnit.SECONDS,
+        LinkedBlockingQueue(),
+        networkThreadFactory
+    ).apply { allowCoreThreadTimeOut(true) }
+
+    private const val CONNECT_TIMEOUT_MS = 3000
+    private const val READ_TIMEOUT_MS = 3000
+
     private data class CachedRaw(
         val fetchedAt: Long,
         val json: JsonObject
@@ -74,26 +98,6 @@ object AbyssStatsFetcher {
     val pendingBedwars: ConcurrentHashMap.KeySetView<String?, Boolean?> = ConcurrentHashMap.newKeySet<String>()
     val pendingSkywars: ConcurrentHashMap.KeySetView<String?, Boolean?> = ConcurrentHashMap.newKeySet<String>()
     val pendingDuels: ConcurrentHashMap.KeySetView<String?, Boolean?> = ConcurrentHashMap.newKeySet<String>()
-
-    data class DuelsDivisions(
-        val overall: String,
-        val skywars: String,
-        val theBridge: String,
-        val bedwars: String,
-        val classic: String,
-        val uhc: String,
-        val sumo: String,
-        val bow: String,
-        val megaWalls: String,
-        val parkour: String,
-        val quakecraft: String,
-        val spleef: String,
-        val op: String,
-        val blitz: String,
-        val combo: String,
-        val boxing: String,
-        val noDebuff: String
-    )
 
     fun getUuid(playerName: String): CompletableFuture<String?> {
         val key = playerName.lowercase()
@@ -113,8 +117,8 @@ object AbyssStatsFetcher {
 
                 try {
                     connection.requestMethod = "GET"
-                    connection.connectTimeout = 5000
-                    connection.readTimeout = 5000
+                    connection.connectTimeout = CONNECT_TIMEOUT_MS
+                    connection.readTimeout = READ_TIMEOUT_MS
 
                     if (connection.responseCode != HttpURLConnection.HTTP_OK) {
                         return@supplyAsync null
@@ -135,7 +139,7 @@ object AbyssStatsFetcher {
             } catch (_: Exception) {
                 null
             }
-        }, Util.ioPool())
+        }, networkExecutor)
     }
 
     fun getRawPlayerData(uuid: String): CompletableFuture<JsonObject?> {
@@ -154,8 +158,8 @@ object AbyssStatsFetcher {
 
                     try {
                         connection.requestMethod = "GET"
-                        connection.connectTimeout = 5000
-                        connection.readTimeout = 5000
+                        connection.connectTimeout = CONNECT_TIMEOUT_MS
+                        connection.readTimeout = READ_TIMEOUT_MS
                         connection.setRequestProperty("User-Agent", ABYSS_USER_AGENT)
                         connection.setRequestProperty("Accept", "application/json")
 
@@ -176,7 +180,7 @@ object AbyssStatsFetcher {
                 } catch (_: Exception) {
                     null
                 }
-            }, Util.ioPool()).whenComplete { _, _ ->
+            }, networkExecutor).whenComplete { _, _ ->
                 pendingRequests.remove(uuid)
             }
         }
@@ -233,7 +237,7 @@ object AbyssStatsFetcher {
         }
     }
 
-    fun getDuelsDivisions(uuid: String): CompletableFuture<DuelsDivisions?> {
+    fun getDuelsDivision(uuid: String, duelsMode: DuelsMode): CompletableFuture<String?> {
         return getRawPlayerData(uuid).thenApply { player ->
             val duels = player?.getAsJsonObject("stats")?.getAsJsonObject("Duels")
                 ?: return@thenApply null
@@ -289,24 +293,26 @@ object AbyssStatsFetcher {
                 }
             }
 
-            DuelsDivisions(
-                overall = division(DuelsMode.OVERALL, wins("wins")),
-                skywars = division(DuelsMode.SKYWARS, wins("sw_duel_wins") + wins("sw_doubles_wins")),
-                theBridge = division(DuelsMode.THE_BRIDGE, wins("bridgeMapWins")),
-                bedwars = division(DuelsMode.BEDWARS, wins("bedwars_two_one_duels_wins") + wins("bedwars_two_one_duels_rush_wins")),
-                classic = division(DuelsMode.CLASSIC, wins("classic_duel_wins") + wins("classic_doubles_wins")),
-                uhc = division(DuelsMode.UHC, wins("uhc_duel_wins") + wins("uhc_doubles_wins") + wins("uhc_threes_wins") + wins("uhc_four_wins")),
-                sumo = division(DuelsMode.SUMO, wins("sumo_duel_wins")),
-                bow = division(DuelsMode.BOW, wins("bow_duel_wins")),
-                megaWalls = division(DuelsMode.MEGA_WALLS, wins("mw_duel_wins")),
-                parkour = division(DuelsMode.PARKOUR, wins("parkour_eight_wins")),
-                quakecraft = division(DuelsMode.QUAKECRAFT, wins("quake_duel_wins")),
-                spleef = division(DuelsMode.SPLEEF, wins("spleef_duel_wins") + wins("bowspleef_duel_wins")),
-                op = division(DuelsMode.OP, wins("op_duel_wins") + wins("op_doubles_wins")),
-                blitz = division(DuelsMode.BLITZ, wins("blitz_duel_wins")),
-                combo = division(DuelsMode.COMBO, wins("combo_duel_wins")),
-                boxing = division(DuelsMode.BOXING, wins("boxing_duel_wins")),
-                noDebuff = division(DuelsMode.NO_DEBUFF, wins("potion_duel_wins")),
+            division(
+                duelsMode, when (duelsMode) {
+                    DuelsMode.SKYWARS -> wins("sw_duel_wins") + wins("sw_doubles_wins")
+                    DuelsMode.THE_BRIDGE -> wins("bridgeMapWins")
+                    DuelsMode.BEDWARS -> wins("bedwars_two_one_duels_wins") + wins("bedwars_two_one_duels_rush_wins")
+                    DuelsMode.CLASSIC -> wins("classic_duel_wins") + wins("classic_doubles_wins")
+                    DuelsMode.UHC -> wins("uhc_duel_wins") + wins("uhc_doubles_wins") + wins("uhc_threes_wins") + wins("uhc_four_wins")
+                    DuelsMode.SUMO -> wins("sumo_duel_wins")
+                    DuelsMode.BOW -> wins("bow_duel_wins")
+                    DuelsMode.MEGA_WALLS -> wins("mw_duel_wins")
+                    DuelsMode.PARKOUR -> wins("parkour_eight_wins")
+                    DuelsMode.QUAKECRAFT -> wins("quake_duel_wins")
+                    DuelsMode.SPLEEF -> wins("spleef_duel_wins") + wins("bowspleef_duel_wins")
+                    DuelsMode.OP -> wins("op_duel_wins") + wins("op_doubles_wins")
+                    DuelsMode.BLITZ -> wins("blitz_duel_wins")
+                    DuelsMode.COMBO -> wins("combo_duel_wins")
+                    DuelsMode.BOXING -> wins("boxing_duel_wins")
+                    DuelsMode.NO_DEBUFF -> wins("potion_duel_wins")
+                    else -> wins("wins")
+                }
             )
         }
     }
