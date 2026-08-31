@@ -7,11 +7,15 @@ import net.hypixel.modapi.HypixelModAPI
 import net.hypixel.modapi.packet.impl.clientbound.event.ClientboundLocationPacket
 import net.minecraft.client.Minecraft
 import net.minecraft.util.Util
+import tomeko.hymod.location.DuelsMode
+import tomeko.hymod.location.DuelsModeType
 import tomeko.hymod.location.HypixelPackets
+import tomeko.hymod.utils.toRoman
 import java.net.HttpURLConnection
 import java.net.URI
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.String
 import kotlin.math.sqrt
 
 object AbyssStatsFetcher {
@@ -73,11 +77,22 @@ object AbyssStatsFetcher {
 
     data class DuelsDivisions(
         val overall: String,
+        val skywars: String,
+        val theBridge: String,
+        val bedwars: String,
+        val classic: String,
         val uhc: String,
-        val sw: String,
-        val bridge: String,
         val sumo: String,
-        val bow: String
+        val bow: String,
+        val megaWalls: String,
+        val parkour: String,
+        val quakecraft: String,
+        val spleef: String,
+        val op: String,
+        val blitz: String,
+        val combo: String,
+        val boxing: String,
+        val noDebuff: String
     )
 
     fun getUuid(playerName: String): CompletableFuture<String?> {
@@ -186,6 +201,34 @@ object AbyssStatsFetcher {
             val exp = player?.getAsJsonObject("stats")?.getAsJsonObject("SkyWars")?.get("skywars_experience")?.asLong
                 ?: return@thenApply null
 
+            fun skywarsExpToLevel(exp: Long): Int {
+                val xpTable = longArrayOf(
+                    0,
+                    20,
+                    70,
+                    150,
+                    250,
+                    500,
+                    1000,
+                    2000,
+                    3500,
+                    6000,
+                    10000
+                )
+
+                if (exp >= 15000) {
+                    return ((exp - 15000) / 10000 + 12).toInt()
+                }
+
+                for (i in xpTable.indices.reversed()) {
+                    if (exp >= xpTable[i]) {
+                        return i + 1
+                    }
+                }
+
+                return 1
+            }
+
             skywarsExpToLevel(exp)
         }
     }
@@ -195,55 +238,77 @@ object AbyssStatsFetcher {
             val duels = player?.getAsJsonObject("stats")?.getAsJsonObject("Duels")
                 ?: return@thenApply null
 
-            fun divisionFor(wins: Int): String = when {
-                wins >= 2500 -> "Grandmaster"
-                wins >= 1000 -> "Master"
-                wins >= 500 -> "Diamond"
-                wins >= 250 -> "Gold"
-                wins >= 100 -> "Silver"
-                wins >= 50 -> "Iron"
-                else -> "Rookie"
-            }
+            fun wins(field: String): Int = duels.get(field)?.asInt ?: 0
 
-            fun winsFor(field: String): Int = duels.get(field)?.asInt ?: 0
+            fun division(duelsMode: DuelsMode, wins: Int): String {
+                return when (duelsMode.modeType) {
+                    DuelsModeType.SHORT -> when {
+                        wins >= 100_000 -> "§cAscended " + ((wins - 100_000) / 10_000 + 1).toRoman()
+                        wins >= 50_000 -> "§dDivine " + ((wins - 50_000) / 10_000 + 1).toRoman()
+                        wins >= 25_000 -> "§9Celestial " + ((wins - 25_000) / 5_000 + 1).toRoman()
+                        wins >= 10_000 -> "§5Godlike " + ((wins - 10_000) / 3_000 + 1).toRoman()
+                        wins >= 5_000 -> "§cGrandmaster " + ((wins - 5_000) / 1_000 + 1).toRoman()
+                        wins >= 2_000 -> "§4Legend " + ((wins - 2_000) / 600 + 1).toRoman()
+                        wins >= 1_000 -> "§2Master " + ((wins - 1_000) / 200 + 1).toRoman()
+                        wins >= 500 -> "§bDiamond " + ((wins - 500) / 100 + 1).toRoman()
+                        wins >= 250 -> "§6Gold " + ((wins - 250) / 50 + 1).toRoman()
+                        wins >= 100 -> "§fIron " + ((wins - 100) / 30 + 1).toRoman()
+                        wins >= 50 -> "§7Rookie " + ((wins - 50) / 10 + 1).toRoman()
+                        else -> "§8Unranked"
+                    }
+
+                    DuelsModeType.LONG -> when {
+                        wins >= 50_000 -> "§cAscended " + ((wins - 50_000) / 5_000 + 1).toRoman()
+                        wins >= 25_000 -> "§dDivine " + ((wins - 25_000) / 5_000 + 1).toRoman()
+                        wins >= 12_500 -> "§9Celestial " + ((wins - 12_500) / 2_500 + 1).toRoman()
+                        wins >= 5_000 -> "§5Godlike " + ((wins - 5_000) / 1_500 + 1).toRoman()
+                        wins >= 2_500 -> "§cGrandmaster " + ((wins - 2_500) / 500 + 1).toRoman()
+                        wins >= 1_000 -> "§4Legend " + ((wins - 1_000) / 300 + 1).toRoman()
+                        wins >= 500 -> "§2Master " + ((wins - 500) / 100 + 1).toRoman()
+                        wins >= 250 -> "§bDiamond " + ((wins - 250) / 50 + 1).toRoman()
+                        wins >= 125 -> "§6Gold " + ((wins - 125) / 25 + 1).toRoman()
+                        wins >= 50 -> "§fIron " + ((wins - 50) / 15 + 1).toRoman()
+                        wins >= 25 -> "§7Rookie " + ((wins - 25) / 5 + 1).toRoman()
+                        else -> "§8Unranked"
+                    }
+
+                    else -> when {
+                        wins >= 200_000 -> "§cAscended " + ((wins - 200_000) / 20_000 + 1).toRoman()
+                        wins >= 100_000 -> "§dDivine " + ((wins - 100_000) / 20_000 + 1).toRoman()
+                        wins >= 50_000 -> "§9Celestial " + ((wins - 50_000) / 10_000 + 1).toRoman()
+                        wins >= 20_000 -> "§5Godlike " + ((wins - 20_000) / 6_000 + 1).toRoman()
+                        wins >= 10_000 -> "§cGrandmaster " + ((wins - 10_000) / 2_000 + 1).toRoman()
+                        wins >= 4_000 -> "§4Legend " + ((wins - 4_000) / 1_200 + 1).toRoman()
+                        wins >= 2_000 -> "§2Master " + ((wins - 2_000) / 400 + 1).toRoman()
+                        wins >= 1_000 -> "§bDiamond " + ((wins - 1_000) / 200 + 1).toRoman()
+                        wins >= 500 -> "§6Gold " + ((wins - 500) / 100 + 1).toRoman()
+                        wins >= 200 -> "§fIron " + ((wins - 200) / 60 + 1).toRoman()
+                        wins >= 100 -> "§7Rookie " + ((wins - 100) / 20 + 1).toRoman()
+                        else -> "§8Unranked"
+                    }
+                }
+            }
 
             DuelsDivisions(
-                overall = divisionFor(winsFor("wins")),
-                uhc = divisionFor(winsFor("uhc_wins")),
-                sw = divisionFor(winsFor("sw_wins")),
-                bridge = divisionFor(winsFor("bridge_wins")),
-                sumo = divisionFor(winsFor("sumo_wins")),
-                bow = divisionFor(winsFor("bow_wins"))
+                overall = division(DuelsMode.OVERALL, wins("wins")),
+                skywars = division(DuelsMode.SKYWARS, wins("sw_duel_wins") + wins("sw_doubles_wins")),
+                theBridge = division(DuelsMode.THE_BRIDGE, wins("bridgeMapWins")),
+                bedwars = division(DuelsMode.BEDWARS, wins("bedwars_two_one_duels_wins") + wins("bedwars_two_one_duels_rush_wins")),
+                classic = division(DuelsMode.CLASSIC, wins("classic_duel_wins") + wins("classic_doubles_wins")),
+                uhc = division(DuelsMode.UHC, wins("uhc_duel_wins") + wins("uhc_doubles_wins") + wins("uhc_threes_wins") + wins("uhc_four_wins")),
+                sumo = division(DuelsMode.SUMO, wins("sumo_duel_wins")),
+                bow = division(DuelsMode.BOW, wins("bow_duel_wins")),
+                megaWalls = division(DuelsMode.MEGA_WALLS, wins("mw_duel_wins")),
+                parkour = division(DuelsMode.PARKOUR, wins("parkour_eight_wins")),
+                quakecraft = division(DuelsMode.QUAKECRAFT, wins("quake_duel_wins")),
+                spleef = division(DuelsMode.SPLEEF, wins("spleef_duel_wins") + wins("bowspleef_duel_wins")),
+                op = division(DuelsMode.OP, wins("op_duel_wins") + wins("op_doubles_wins")),
+                blitz = division(DuelsMode.BLITZ, wins("blitz_duel_wins")),
+                combo = division(DuelsMode.COMBO, wins("combo_duel_wins")),
+                boxing = division(DuelsMode.BOXING, wins("boxing_duel_wins")),
+                noDebuff = division(DuelsMode.NO_DEBUFF, wins("potion_duel_wins")),
             )
         }
-    }
-
-    private fun skywarsExpToLevel(exp: Long): Int {
-        val xpTable = longArrayOf(
-            0,
-            20,
-            70,
-            150,
-            250,
-            500,
-            1000,
-            2000,
-            3500,
-            6000,
-            10000
-        )
-
-        if (exp >= 15000) {
-            return ((exp - 15000) / 10000 + 12).toInt()
-        }
-
-        for (i in xpTable.indices.reversed()) {
-            if (exp >= xpTable[i]) {
-                return i + 1
-            }
-        }
-
-        return 1
     }
 
     private fun clearCache() {

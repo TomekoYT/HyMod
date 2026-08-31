@@ -15,6 +15,7 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font
 import net.minecraft.network.chat.Component
 import tomeko.hymod.config.HyModConfig
+import tomeko.hymod.location.DuelsMode
 import tomeko.hymod.location.HypixelPackets
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.sqrt
@@ -122,7 +123,7 @@ object NametagStats {
                     || (HypixelPackets.inSkywars && HyModConfig.showSkywarsStarsAboveNametag)
                     || (HypixelPackets.inDuels && HyModConfig.showDuelsStarsAboveNametag)
 
-            if (HypixelPackets.inBedwars && AbyssStatsFetcher.pendingBedwars.add(uuid)) {
+            if (HypixelPackets.inBedwars && HyModConfig.showBedwarsStarsAboveNametag && AbyssStatsFetcher.pendingBedwars.add(uuid)) {
                 AbyssStatsFetcher.getBedwarsStars(uuid)
                     .thenAccept { bedwars ->
                         if (bedwars != null) {
@@ -141,6 +142,50 @@ object NametagStats {
                     }
                     .whenComplete { _, _ ->
                         AbyssStatsFetcher.pendingBedwars.remove(uuid)
+                    }
+            }
+
+            if (HypixelPackets.inDuels && HyModConfig.showDuelsStarsAboveNametag && AbyssStatsFetcher.pendingDuels.add(uuid)) {
+                AbyssStatsFetcher.getDuelsDivisions(uuid)
+                    .thenAccept { divisions ->
+                        if (divisions != null) {
+                            linesCache
+                                .computeIfAbsent(uuid) {
+                                    mutableListOf()
+                                }
+                                .apply {
+                                    removeIf {
+                                        it.toString().contains("§eDuels§f:")
+                                    }
+
+                                    add(
+                                        Component.literal(
+                                            HypixelPackets.duelsMode.modeName + " §2Duels§f: " + when (HypixelPackets.duelsMode) {
+                                                DuelsMode.SKYWARS -> divisions.skywars
+                                                DuelsMode.THE_BRIDGE -> divisions.theBridge
+                                                DuelsMode.BEDWARS -> divisions.bedwars
+                                                DuelsMode.CLASSIC -> divisions.classic
+                                                DuelsMode.UHC -> divisions.uhc
+                                                DuelsMode.SUMO -> divisions.sumo
+                                                DuelsMode.BOW -> divisions.bow
+                                                DuelsMode.MEGA_WALLS -> divisions.megaWalls
+                                                DuelsMode.PARKOUR -> divisions.parkour
+                                                DuelsMode.QUAKECRAFT -> divisions.quakecraft
+                                                DuelsMode.SPLEEF -> divisions.spleef
+                                                DuelsMode.OP -> divisions.op
+                                                DuelsMode.BLITZ -> divisions.blitz
+                                                DuelsMode.COMBO -> divisions.combo
+                                                DuelsMode.BOXING -> divisions.boxing
+                                                DuelsMode.NO_DEBUFF -> divisions.noDebuff
+                                                else -> divisions.overall
+                                            }
+                                        )
+                                    )
+                                }
+                        }
+                    }
+                    .whenComplete { _, _ ->
+                        AbyssStatsFetcher.pendingDuels.remove(uuid)
                     }
             }
 

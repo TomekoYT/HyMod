@@ -10,7 +10,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.fml.common.gameevent.TickEvent
 *///?} else {
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
-import tomeko.hymod.utils.Debug
 //?}
 
 object HypixelPackets {
@@ -36,7 +35,7 @@ object HypixelPackets {
 
     var inFarmHunt = false
         private set
-    var duelsMode: DuelsModes? = null
+    var duelsMode: DuelsMode = DuelsMode.OVERALL
         private set
 
     fun register() {
@@ -114,7 +113,7 @@ object HypixelPackets {
         val modeName = packet.mode.get()
 
         inFarmHunt = inArcade && modeName == "FARM_HUNT"
-        duelsMode = if (inDuels) DuelsModes.fromId(modeName) else null
+        duelsMode = if (inDuels) DuelsMode.fromId(modeName) else DuelsMode.OVERALL
     }
 
     private fun disableAll() {
@@ -132,6 +131,6 @@ object HypixelPackets {
 
     private fun disableModes() {
         inFarmHunt = false
-        duelsMode = null
+        duelsMode = DuelsMode.OVERALL
     }
 }
