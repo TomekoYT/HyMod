@@ -9,28 +9,15 @@ import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents
 /*import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext as LevelRenderContext
 import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents as LevelRenderEvents
 *///?}
-import net.hypixel.modapi.HypixelModAPI
-import net.hypixel.modapi.packet.impl.clientbound.event.ClientboundLocationPacket
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font
 import net.minecraft.network.chat.Component
 import tomeko.hymod.config.HyModConfig
 import tomeko.hymod.location.HypixelPackets
-import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.sqrt
 
 object NametagStats {
-    private var lastHypixelState = false
-
     fun register() {
-        //? if = 1.8.9 {
-        /*MinecraftForge.EVENT_BUS.register(this)
-        *///?} else {
-        ClientTickEvents.END_CLIENT_TICK.register(this::onTick)
-        //?}
-        HypixelModAPI.getInstance().createHandler(ClientboundLocationPacket::class.java, this::onLocationPacket)
-        HypixelModAPI.getInstance().subscribeToEventPacket(ClientboundLocationPacket::class.java)
-
         //? if >= 26.1 {
         LevelRenderEvents.COLLECT_SUBMITS.register(::render)
         //?} else {
@@ -38,42 +25,10 @@ object NametagStats {
         *///?}
     }
 
-    //? if = 1.8.9 {
-    /*@SubscribeEvent
-    *///?}
-    fun onTick(
-        //? if = 1.8.9 {
-        /*event: TickEvent.ClientTickEvent
-        *///?} else {
-        mc: Minecraft
-        //?}
-    ) {
-        //? if = 1.8.9 {
-        /*if (event.phase != TickEvent.Phase.END) return
-        *///?}
-
-        if (lastHypixelState != HypixelPackets.onHypixel) {
-            lastHypixelState = HypixelPackets.onHypixel
-            clearCache()
-        }
-    }
-
-    private fun onLocationPacket(packet: ClientboundLocationPacket) {
-        clearCache()
-    }
-
-
     private const val MAX_DISTANCE = 32.0
     private const val HEIGHT_OFFSET = 0.35
     private const val BASE_SCALE = 0.025f
     private const val MIN_DISTANCE = 1.0
-
-    private val linesCache = ConcurrentHashMap<String, MutableList<Component>>()
-
-    private val pendingLevel: ConcurrentHashMap.KeySetView<String?, Boolean?> = ConcurrentHashMap.newKeySet<String>()
-    private val pendingBedwars: ConcurrentHashMap.KeySetView<String?, Boolean?> = ConcurrentHashMap.newKeySet<String>()
-    private val pendingSkywars: ConcurrentHashMap.KeySetView<String?, Boolean?> = ConcurrentHashMap.newKeySet<String>()
-    private val pendingDuels: ConcurrentHashMap.KeySetView<String?, Boolean?> = ConcurrentHashMap.newKeySet<String>()
 
     private fun render(context: LevelRenderContext) {
         val mc = Minecraft.getInstance()
@@ -123,104 +78,38 @@ object NametagStats {
             matrices.mulPose(Axis.YP.rotationDegrees(180.0f))
             matrices.scale(-scale, -scale, scale)
 
-            val shouldCheckNetworkLevel = (HypixelPackets.inBedwars && HyModConfig.showBedwarsStarsAboveNametag)
-                    || (HypixelPackets.inSkywars && HyModConfig.showSkywarsStarsAboveNametag)
-                    || (HypixelPackets.inDuels && HyModConfig.showDuelsDivisionAboveNametag)
+            val cached = AbyssStatsFetcher.getCachedStats(uuid)
+            val lines = mutableListOf<Component>()
 
-            if (HypixelPackets.inBedwars && HyModConfig.showBedwarsStarsAboveNametag && pendingBedwars.add(uuid)) {
-                AbyssStatsFetcher.getBedwarsStars(uuid)
-                    .thenAccept { bedwars ->
-                        if (bedwars != null) {
-                            linesCache
-                                .computeIfAbsent(uuid) {
-                                    mutableListOf()
-                                }
-                                .apply {
-                                    removeIf {
-                                        it.toString().contains("§fBed§cWars§f:")
-                                    }
-
-                                    add(Component.literal("§fBed§cWars§f: ").append(bedwars))
-                                }
-                        }
-                    }
-                    .whenComplete { _, _ ->
-                        pendingBedwars.remove(uuid)
-                    }
+            if (HypixelPackets.inBedwars && HyModConfig.showBedwarsStarsAboveNametag) {
+                cached.bedwars?.let { bedwars ->
+                    lines.add(Component.literal("§fBed§cWars§f: ").append(bedwars))
+                }
             }
 
-            if (HypixelPackets.inSkywars && HyModConfig.showSkywarsStarsAboveNametag && pendingSkywars.add(uuid)) {
-                AbyssStatsFetcher.getSkywarsStars(uuid)
-                    .thenAccept { skywars ->
-                        if (skywars != null) {
-                            linesCache
-                                .computeIfAbsent(uuid) {
-                                    mutableListOf()
-                                }
-                                .apply {
-                                    removeIf {
-                                        it.toString().contains("§bSky§aWars§f:")
-                                    }
-
-                                    add(Component.literal("§bSky§aWars§f: ").append(skywars))
-                                }
-                        }
-                    }
-                    .whenComplete { _, _ ->
-                        pendingSkywars.remove(uuid)
-                    }
+            if (HypixelPackets.inSkywars && HyModConfig.showSkywarsStarsAboveNametag) {
+                cached.skywars?.let { skywars ->
+                    lines.add(Component.literal("§bSky§aWars§f: ").append(skywars))
+                }
             }
 
-            if (HypixelPackets.inDuels && HyModConfig.showDuelsDivisionAboveNametag && pendingDuels.add(uuid)) {
-                AbyssStatsFetcher.getDuelsDivision(uuid, HypixelPackets.duelsMode)
-                    .thenAccept { division ->
-                        if (division != null) {
-                            linesCache
-                                .computeIfAbsent(uuid) {
-                                    mutableListOf()
-                                }
-                                .apply {
-                                    removeIf {
-                                        it.toString().contains("§3Duels§f:")
-                                    }
-
-                                    add(
-                                        Component.literal(
-                                            HypixelPackets.duelsMode.modeName + " §3Duels§f: " + division
-                                        )
-                                    )
-                                }
-                        }
-                    }
-                    .whenComplete { _, _ ->
-                        pendingDuels.remove(uuid)
-                    }
+            if (HypixelPackets.inDuels && HyModConfig.showDuelsDivisionAboveNametag) {
+                cached.duels?.let { division ->
+                    lines.add(
+                        Component.literal(HypixelPackets.duelsMode.modeName + " §3Duels§f: ").append(division)
+                    )
+                }
             }
+
+            val shouldCheckNetworkLevel = lines.isNotEmpty()
 
             if (HypixelPackets.onHypixel
                 && HyModConfig.showNetworkLevelAboveNametag
                 && (!shouldCheckNetworkLevel || HyModConfig.showNetworkLevelWithOtherNametagStats)
-                && pendingLevel.add(uuid)
             ) {
-                AbyssStatsFetcher.getHypixelLevel(uuid)
-                    .thenAccept { level ->
-                        if (level != null) {
-                            linesCache
-                                .computeIfAbsent(uuid) {
-                                    mutableListOf()
-                                }
-                                .apply {
-                                    removeIf {
-                                        it.toString().contains("§9Level§f:")
-                                    }
-
-                                    add(Component.literal("§9Level§f: §e$level"))
-                                }
-                        }
-                    }
-                    .whenComplete { _, _ ->
-                        pendingLevel.remove(uuid)
-                    }
+                cached.level?.let { networkLevel ->
+                    lines.add(Component.literal("§9Level§f: ").append(networkLevel))
+                }
             }
 
             val submitNodeCollector =
@@ -230,37 +119,25 @@ object NametagStats {
             /*context.commandQueue()
             *///?}
 
-            val lines = linesCache[uuid]
-            if (lines != null) {
-                var offset = 0
+            var offset = 0
 
-                for (text in lines) {
-                    submitNodeCollector.submitText(
-                        matrices,
-                        -mc.font.width(text) / 2.0f,
-                        -15f + offset,
-                        text.visualOrderText,
-                        true,
-                        Font.DisplayMode.SEE_THROUGH,
-                        0xF000F0,
-                        -0x1,
-                        0x50000000,
-                        0
-                    )
-                    offset -= 10
-                }
+            for (text in lines) {
+                submitNodeCollector.submitText(
+                    matrices,
+                    -mc.font.width(text) / 2.0f,
+                    -15f + offset,
+                    text.visualOrderText,
+                    true,
+                    Font.DisplayMode.SEE_THROUGH,
+                    0xF000F0,
+                    -0x1,
+                    0x50000000,
+                    0
+                )
+                offset -= 10
             }
 
             matrices.popPose()
         }
-    }
-
-    private fun clearCache() {
-        linesCache.clear()
-
-        pendingLevel.clear()
-        pendingBedwars.clear()
-        pendingSkywars.clear()
-        pendingDuels.clear()
     }
 }

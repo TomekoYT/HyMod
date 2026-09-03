@@ -7,6 +7,7 @@ import net.minecraft.ChatFormatting
 import net.minecraft.ChatFormatting.*
 import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
+import tomeko.hymod.config.HyModConfig
 import tomeko.hymod.location.DuelsMode
 import tomeko.hymod.location.DuelsModeType
 import tomeko.hymod.location.HypixelPackets
@@ -87,7 +88,7 @@ object AbyssStatsFetcher {
     private val statsCache = ConcurrentHashMap<String, CachedRaw>()
     private val pendingRequests = ConcurrentHashMap<String, CompletableFuture<JsonObject?>>()
 
-    fun getRawPlayerData(uuid: String): CompletableFuture<JsonObject?> {
+    private fun getRawPlayerData(uuid: String): CompletableFuture<JsonObject?> {
         val cached = statsCache[uuid]
 
         if (cached != null) {
@@ -129,15 +130,88 @@ object AbyssStatsFetcher {
         }
     }
 
-    fun getHypixelLevel(uuid: String): CompletableFuture<Int?> {
-        return getRawPlayerData(uuid).thenApply { player ->
-            val exp = player?.get("networkExp")?.asDouble ?: return@thenApply null
+    data class CachedStats(
+        val level: Component? = null,
+        val bedwars: Component? = null,
+        val skywars: Component? = null,
+        val duels: Component? = null
+    )
 
-            ((sqrt(exp + 15312.5) - 88.38834764831844) / 35.35533905932738).toInt()
+    private val displayCache = ConcurrentHashMap<String, CachedStats>()
+
+    private val pendingLevel: ConcurrentHashMap.KeySetView<String, Boolean> = ConcurrentHashMap.newKeySet()
+    private val pendingBedwars: ConcurrentHashMap.KeySetView<String, Boolean> = ConcurrentHashMap.newKeySet()
+    private val pendingSkywars: ConcurrentHashMap.KeySetView<String, Boolean> = ConcurrentHashMap.newKeySet()
+    private val pendingDuels: ConcurrentHashMap.KeySetView<String, Boolean> = ConcurrentHashMap.newKeySet()
+
+    fun getCachedStats(uuid: String): CachedStats = displayCache[uuid] ?: CachedStats()
+
+    fun requestStats(uuid: String) {
+        if (!HypixelPackets.onHypixel) return
+
+        val wantsBedwars = HypixelPackets.inBedwars &&
+                (HyModConfig.showBedwarsStarsAboveNametag || HyModConfig.showBedwarsStarsInTablist)
+        val wantsSkywars = HypixelPackets.inSkywars &&
+                (HyModConfig.showSkywarsStarsAboveNametag || HyModConfig.showSkywarsStarsInTablist)
+        val wantsDuels = HypixelPackets.inDuels &&
+                (HyModConfig.showDuelsDivisionAboveNametag || HyModConfig.showDuelsDivisionInTablist)
+
+        val shouldCheckNetworkLevel = wantsBedwars || wantsSkywars || wantsDuels
+        val wantsLevel = HyModConfig.showNetworkLevelAboveNametag &&
+                (!shouldCheckNetworkLevel || HyModConfig.showNetworkLevelWithOtherNametagStats)
+
+        if (wantsBedwars && pendingBedwars.add(uuid)) {
+            getBedwarsStars(uuid)
+                .thenAccept { component ->
+                    if (component != null) {
+                        displayCache.compute(uuid) { _, old -> (old ?: CachedStats()).copy(bedwars = component) }
+                    }
+                }
+                .whenComplete { _, _ -> pendingBedwars.remove(uuid) }
+        }
+
+        if (wantsSkywars && pendingSkywars.add(uuid)) {
+            getSkywarsStars(uuid)
+                .thenAccept { component ->
+                    if (component != null) {
+                        displayCache.compute(uuid) { _, old -> (old ?: CachedStats()).copy(skywars = component) }
+                    }
+                }
+                .whenComplete { _, _ -> pendingSkywars.remove(uuid) }
+        }
+
+        if (wantsDuels && pendingDuels.add(uuid)) {
+            val duelsMode = HypixelPackets.duelsMode
+            getDuelsDivision(uuid, duelsMode)
+                .thenAccept { component ->
+                    if (component != null) {
+                        displayCache.compute(uuid) { _, old -> (old ?: CachedStats()).copy(duels = component) }
+                    }
+                }
+                .whenComplete { _, _ -> pendingDuels.remove(uuid) }
+        }
+
+        if (wantsLevel && pendingLevel.add(uuid)) {
+            getHypixelLevel(uuid)
+                .thenAccept { component ->
+                    if (component != null) {
+                        displayCache.compute(uuid) { _, old -> (old ?: CachedStats()).copy(level = component) }
+                    }
+                }
+                .whenComplete { _, _ -> pendingLevel.remove(uuid) }
         }
     }
 
-    fun getBedwarsStars(uuid: String): CompletableFuture<Component?> {
+    private fun getHypixelLevel(uuid: String): CompletableFuture<Component?> {
+        return getRawPlayerData(uuid).thenApply { player ->
+            val exp = player?.get("networkExp")?.asDouble ?: return@thenApply null
+
+            val level = ((sqrt(exp + 15312.5) - 88.38834764831844) / 35.35533905932738).toInt()
+            Component.literal("§e$level")
+        }
+    }
+
+    private fun getBedwarsStars(uuid: String): CompletableFuture<Component?> {
         return getRawPlayerData(uuid).thenApply { player ->
             val stars = player?.getAsJsonObject("achievements")?.get("bedwars_level")?.asInt ?: return@thenApply null
 
@@ -506,7 +580,7 @@ object AbyssStatsFetcher {
         }
     }
 
-    fun getSkywarsStars(uuid: String): CompletableFuture<Component?> {
+    private fun getSkywarsStars(uuid: String): CompletableFuture<Component?> {
         return getRawPlayerData(uuid).thenApply { player ->
             val exp = player?.getAsJsonObject("stats")?.getAsJsonObject("SkyWars")?.get("skywars_experience")?.asLong
                 ?: return@thenApply null
@@ -608,7 +682,7 @@ object AbyssStatsFetcher {
         }
     }
 
-    fun getDuelsDivision(uuid: String, duelsMode: DuelsMode): CompletableFuture<String?> {
+    private fun getDuelsDivision(uuid: String, duelsMode: DuelsMode): CompletableFuture<Component?> {
         return getRawPlayerData(uuid).thenApply { player ->
             val duels = player?.getAsJsonObject("stats")?.getAsJsonObject("Duels")
                 ?: return@thenApply null
@@ -664,7 +738,7 @@ object AbyssStatsFetcher {
                 }
             }
 
-            division(
+            val divisionText = division(
                 duelsMode, when (duelsMode) {
                     DuelsMode.SKYWARS -> wins("sw_duel_wins") + wins("sw_doubles_wins")
                     DuelsMode.THE_BRIDGE -> wins("bridgeMapWins")
@@ -685,6 +759,8 @@ object AbyssStatsFetcher {
                     else -> wins("wins")
                 }
             )
+
+            Component.literal(divisionText)
         }
     }
 
@@ -713,5 +789,11 @@ object AbyssStatsFetcher {
     private fun clearCache() {
         statsCache.clear()
         pendingRequests.clear()
+
+        displayCache.clear()
+        pendingLevel.clear()
+        pendingBedwars.clear()
+        pendingSkywars.clear()
+        pendingDuels.clear()
     }
 }
