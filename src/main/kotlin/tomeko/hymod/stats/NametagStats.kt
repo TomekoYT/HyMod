@@ -145,6 +145,28 @@ object NametagStats {
                     }
             }
 
+            if (HypixelPackets.inSkywars && HyModConfig.showSkywarsStarsAboveNametag && AbyssStatsFetcher.pendingSkywars.add(uuid)) {
+                AbyssStatsFetcher.getSkywarsStars(uuid)
+                    .thenAccept { skywars ->
+                        if (skywars != null) {
+                            linesCache
+                                .computeIfAbsent(uuid) {
+                                    mutableListOf()
+                                }
+                                .apply {
+                                    removeIf {
+                                        it.toString().contains("§bSky§aWars§f:")
+                                    }
+
+                                    add(Component.literal("§bSky§aWars§f: ").append(skywars))
+                                }
+                        }
+                    }
+                    .whenComplete { _, _ ->
+                        AbyssStatsFetcher.pendingSkywars.remove(uuid)
+                    }
+            }
+
             if (HypixelPackets.inDuels && HyModConfig.showDuelsStarsAboveNametag && AbyssStatsFetcher.pendingDuels.add(uuid)) {
                 AbyssStatsFetcher.getDuelsDivision(uuid, HypixelPackets.duelsMode)
                     .thenAccept { division ->
