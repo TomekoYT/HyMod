@@ -157,8 +157,8 @@ object AbyssStatsFetcher {
                 (HyModConfig.showDuelsDivisionAboveNametag || HyModConfig.showDuelsDivisionInTablist)
 
         val shouldCheckNetworkLevel = wantsBedwars || wantsSkywars || wantsDuels
-        val wantsLevel = HyModConfig.showNetworkLevelAboveNametag &&
-                (!shouldCheckNetworkLevel || HyModConfig.showNetworkLevelWithOtherNametagStats)
+        val wantsLevel =
+            HyModConfig.showNetworkLevelAboveNametag && (!shouldCheckNetworkLevel || HyModConfig.showNetworkLevelWithOtherNametagStats)
 
         if (wantsBedwars && pendingBedwars.add(uuid)) {
             getBedwarsStars(uuid)

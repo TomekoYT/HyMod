@@ -22,10 +22,11 @@ public abstract class TablistStatsMixin {
             PlayerInfo info,
             CallbackInfoReturnable<Component> cir
     ) {
+        if (!HypixelPackets.INSTANCE.getOnHypixel()) return;
+
         Component original = cir.getReturnValue();
         String uuid = info.getProfile().id().toString();
 
-        AbyssStatsFetcher.INSTANCE.requestStats(uuid);
         AbyssStatsFetcher.CachedStats stats = AbyssStatsFetcher.INSTANCE.getCachedStats(uuid);
 
         Component prefix = null;
