@@ -136,7 +136,7 @@ object NametagStats {
                                         it.toString().contains("§fBed§cWars§f:")
                                     }
 
-                                    add(Component.literal("§fBed§cWars§f: §4$bedwars"))
+                                    add(Component.literal("§fBed§cWars§f: ").append(bedwars))
                                 }
                         }
                     }

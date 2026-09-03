@@ -5,7 +5,10 @@ import com.google.gson.JsonParser
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.hypixel.modapi.HypixelModAPI
 import net.hypixel.modapi.packet.impl.clientbound.event.ClientboundLocationPacket
+import net.minecraft.ChatFormatting
+import net.minecraft.ChatFormatting.*
 import net.minecraft.client.Minecraft
+import net.minecraft.network.chat.Component
 import tomeko.hymod.location.DuelsMode
 import tomeko.hymod.location.DuelsModeType
 import tomeko.hymod.location.HypixelPackets
@@ -15,7 +18,6 @@ import java.net.HttpURLConnection
 import java.net.URI
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.Executors
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadFactory
 import java.util.concurrent.ThreadPoolExecutor
@@ -194,9 +196,132 @@ object AbyssStatsFetcher {
         }
     }
 
-    fun getBedwarsStars(uuid: String): CompletableFuture<Int?> {
+    fun getBedwarsStars(uuid: String): CompletableFuture<Component?> {
         return getRawPlayerData(uuid).thenApply { player ->
-            player?.getAsJsonObject("achievements")?.get("bedwars_level")?.asInt
+            val stars = player?.getAsJsonObject("achievements")?.get("bedwars_level")?.asInt ?: return@thenApply null
+
+            fun format(text: String, vararg colors: ChatFormatting): Component {
+                val result = Component.empty()
+                text.forEachIndexed { i, char ->
+                    val color = if (i < colors.size) colors[i] else colors.last()
+                    result.append(Component.literal(char.toString()).withStyle(color))
+                }
+                return result
+            }
+
+            when {
+                stars >= 10000 -> format("[$stars✥]", BLUE, AQUA, WHITE, WHITE, WHITE, WHITE, RED, DARK_RED)
+                stars >= 9900 -> format("[$stars✥]", DARK_GRAY, GRAY, WHITE, WHITE, WHITE, YELLOW, WHITE)
+                stars >= 9800 -> format("[$stars✥]", BLACK, DARK_GRAY, DARK_GRAY, DARK_GRAY, DARK_GRAY, DARK_GRAY, BLACK)
+                stars >= 9700 -> format("[$stars✥]", LIGHT_PURPLE, LIGHT_PURPLE, YELLOW, YELLOW, AQUA, YELLOW)
+                stars >= 9600 -> format("[$stars✥]", YELLOW, YELLOW, YELLOW, BLACK, BLACK, YELLOW, BLACK)
+                stars >= 9500 -> format("[$stars✥]", BLACK, BLACK, DARK_GRAY, DARK_GRAY, GRAY, GRAY, WHITE)
+                stars >= 9400 -> format("[$stars✥]", YELLOW, GOLD, DARK_RED, DARK_GRAY, DARK_GRAY, DARK_GRAY, DARK_GRAY)
+                stars >= 9300 -> format("[$stars✥]", WHITE, DARK_GRAY, DARK_GRAY, DARK_GRAY, DARK_GRAY, WHITE, WHITE)
+                stars >= 9200 -> format("[$stars✥]", DARK_GREEN, LIGHT_PURPLE, LIGHT_PURPLE, LIGHT_PURPLE, LIGHT_PURPLE, GREEN, DARK_GREEN)
+                stars >= 9100 -> format("[$stars✥]", BLACK, RED, GOLD, GOLD, RED, RED, DARK_RED)
+
+                stars >= 9000 -> format("[$stars✥]", LIGHT_PURPLE, LIGHT_PURPLE, LIGHT_PURPLE, LIGHT_PURPLE, LIGHT_PURPLE, DARK_PURPLE, DARK_GRAY)
+                stars >= 8900 -> format("[$stars✥]", BLUE, AQUA, AQUA, AQUA, DARK_AQUA, DARK_AQUA, BLUE)
+                stars >= 8800 -> format("[$stars✥]", DARK_RED, DARK_RED, DARK_RED, RED, RED, WHITE, WHITE)
+                stars >= 8700 -> format("[$stars✥]", DARK_GRAY, GOLD, GOLD, GOLD, GOLD, GOLD, DARK_GRAY)
+                stars >= 8600 -> format("[$stars✥]", LIGHT_PURPLE, WHITE, WHITE, WHITE, WHITE, YELLOW, LIGHT_PURPLE)
+                stars >= 8500 -> format("[$stars✥]", DARK_AQUA, GOLD, GOLD, GOLD, GOLD, YELLOW, DARK_AQUA)
+                stars >= 8400 -> format("[$stars✥]", WHITE, LIGHT_PURPLE, LIGHT_PURPLE, LIGHT_PURPLE, GREEN, GREEN, WHITE)
+                stars >= 8300 -> format("[$stars✥]", DARK_GRAY, DARK_GRAY, DARK_RED, DARK_RED, RED, RED, DARK_GRAY)
+                stars >= 8200 -> format("[$stars✥]", WHITE, WHITE, WHITE, WHITE, WHITE, GREEN, WHITE)
+                stars >= 8100 -> format("[$stars✥]", DARK_GRAY, GRAY, WHITE, AQUA, DARK_AQUA, BLUE, DARK_BLUE)
+
+                stars >= 8000 -> format("[$stars✥]", DARK_GREEN, GREEN, GREEN, GREEN, RED, DARK_RED, DARK_GREEN)
+                stars >= 7900 -> format("[$stars✥]", GOLD, WHITE, DARK_GREEN, GOLD, DARK_GREEN, WHITE, GOLD)
+                stars >= 7800 -> format("[$stars✥]", DARK_GRAY, GRAY, WHITE, WHITE, WHITE, YELLOW, DARK_GRAY)
+                stars >= 7700 -> format("[$stars✥]", LIGHT_PURPLE, RED, RED, RED, RED, GOLD, LIGHT_PURPLE)
+                stars >= 7600 -> format("[$stars✥]", WHITE, WHITE, WHITE, GRAY, GRAY, RED, DARK_GRAY)
+                stars >= 7500 -> format("[$stars✥]", GOLD, GOLD, DARK_GREEN, DARK_GREEN, WHITE, WHITE, WHITE)
+                stars >= 7400 -> format("[$stars✥]", DARK_GRAY, DARK_GRAY, DARK_GRAY, DARK_GRAY, DARK_GRAY, LIGHT_PURPLE, DARK_GRAY)
+                stars >= 7300 -> format("[$stars✥]", DARK_GREEN, DARK_AQUA, DARK_AQUA, AQUA, AQUA, GREEN, DARK_GREEN)
+                stars >= 7200 -> format("[$stars✥]", DARK_GREEN, GREEN, WHITE, DARK_GREEN, GREEN, WHITE, DARK_GRAY)
+                stars >= 7100 -> format("[$stars✥]", DARK_RED, RED, GOLD, YELLOW, RED, GOLD, YELLOW)
+
+                stars >= 7000 -> format("[$stars✥]", DARK_AQUA, AQUA, AQUA, AQUA, AQUA, WHITE, DARK_AQUA)
+                stars >= 6900 -> format("[$stars✥]", GREEN, GREEN, GREEN, GREEN, DARK_GREEN, DARK_GREEN, DARK_GRAY)
+                stars >= 6800 -> format("[$stars✥]", BLACK, GOLD, GOLD, YELLOW, YELLOW, WHITE, WHITE)
+                stars >= 6700 -> format("[$stars✥]", DARK_PURPLE, LIGHT_PURPLE, LIGHT_PURPLE, LIGHT_PURPLE, LIGHT_PURPLE, WHITE, DARK_PURPLE)
+                stars >= 6600 -> format("[$stars✥]", BLUE, LIGHT_PURPLE, LIGHT_PURPLE, LIGHT_PURPLE, LIGHT_PURPLE, AQUA, BLUE)
+                stars >= 6500 -> format("[$stars✥]", DARK_AQUA, DARK_AQUA, GREEN, GREEN, WHITE, GREEN, DARK_AQUA)
+                stars >= 6400 -> format("[$stars✥]", AQUA, AQUA, RED, RED, RED, GREEN, GREEN)
+                stars >= 6300 -> format("[$stars✥]", GREEN, YELLOW, YELLOW, YELLOW, YELLOW, GREEN, DARK_GREEN)
+                stars >= 6200 -> format("[$stars✥]", YELLOW, WHITE, YELLOW, GOLD, GOLD, WHITE, YELLOW)
+                stars >= 6100 -> format("[$stars✥]", GOLD, YELLOW, WHITE, WHITE, WHITE, AQUA, DARK_AQUA)
+
+                stars >= 6000 -> format("[$stars✥]", RED, WHITE, WHITE, WHITE, WHITE, RED, WHITE)
+                stars >= 5900 -> format("[$stars✥]", GRAY, BLACK, DARK_GRAY, GRAY, WHITE, WHITE, GRAY)
+                stars >= 5800 -> format("[$stars✥]", DARK_PURPLE, RED, GOLD, WHITE, AQUA, DARK_AQUA, BLUE)
+                stars >= 5700 -> format("[$stars✥]", DARK_RED, GOLD, DARK_GREEN, DARK_AQUA, BLUE, DARK_PURPLE, DARK_GRAY)
+                stars >= 5600 -> format("[$stars✥]", DARK_RED, RED, YELLOW, WHITE, YELLOW, RED, DARK_RED)
+                stars >= 5500 -> format("[$stars✥]", DARK_GREEN, GREEN, YELLOW, WHITE, AQUA, LIGHT_PURPLE, DARK_PURPLE)
+                stars >= 5400 -> format("[$stars✥]", DARK_AQUA, GREEN, DARK_GREEN, DARK_GRAY, DARK_GREEN, GREEN, DARK_AQUA)
+                stars >= 5300 -> format("[$stars✥]", DARK_PURPLE, LIGHT_PURPLE, YELLOW, WHITE, YELLOW, LIGHT_PURPLE, DARK_PURPLE)
+                stars >= 5200 -> format("[$stars✥]", DARK_BLUE, BLUE, DARK_AQUA, AQUA, WHITE, YELLOW, DARK_BLUE)
+                stars >= 5100 -> format("[$stars✥]", DARK_RED, RED, RED, GOLD, YELLOW, WHITE, DARK_RED)
+
+                stars >= 5000 -> format("[$stars✥]", DARK_RED, DARK_RED, DARK_PURPLE, BLUE, BLUE, DARK_BLUE, BLACK)
+                stars >= 4900 -> format("[$stars✥]", DARK_GREEN, GREEN, WHITE, WHITE, WHITE, GREEN, DARK_GREEN)
+                stars >= 4800 -> format("[$stars✥]", DARK_PURPLE, DARK_PURPLE, RED, GOLD, GOLD, AQUA, DARK_AQUA)
+                stars >= 4700 -> format("[$stars✥]", WHITE, DARK_RED, RED, RED, BLUE, DARK_BLUE, BLUE)
+                stars >= 4600 -> format("[$stars✥]", DARK_AQUA, AQUA, YELLOW, YELLOW, GOLD, LIGHT_PURPLE, DARK_PURPLE)
+                stars >= 4500 -> format("[$stars✥]", WHITE, WHITE, AQUA, AQUA, DARK_AQUA, DARK_AQUA, DARK_AQUA)
+                stars >= 4400 -> format("[$stars✥]", DARK_GREEN, DARK_GREEN, GREEN, YELLOW, GOLD, DARK_PURPLE, LIGHT_PURPLE)
+                stars >= 4300 -> format("[$stars✥]", BLACK, DARK_PURPLE, DARK_GRAY, DARK_GRAY, DARK_PURPLE, DARK_PURPLE, BLACK)
+                stars >= 4200 -> format("[$stars✥]", DARK_BLUE, BLUE, DARK_AQUA, AQUA, WHITE, GRAY, GRAY)
+                stars >= 4100 -> format("[$stars✥]", YELLOW, YELLOW, GOLD, RED, LIGHT_PURPLE, LIGHT_PURPLE, DARK_PURPLE)
+
+                stars >= 4000 -> format("[$stars✥]", DARK_PURPLE, DARK_PURPLE, RED, RED, GOLD, GOLD, YELLOW)
+                stars >= 3900 -> format("[$stars✥]", RED, RED, GREEN, GREEN, DARK_AQUA, BLUE, BLUE)
+                stars >= 3800 -> format("[$stars✥]", DARK_BLUE, DARK_BLUE, BLUE, DARK_PURPLE, DARK_PURPLE, LIGHT_PURPLE, DARK_BLUE)
+                stars >= 3700 -> format("[$stars✥]", DARK_RED, DARK_RED, RED, RED, AQUA, DARK_AQUA, DARK_AQUA)
+                stars >= 3600 -> format("[$stars✥]", GREEN, GREEN, GREEN, AQUA, BLUE, BLUE, DARK_BLUE)
+                stars >= 3500 -> format("[$stars✥]", RED, RED, DARK_RED, DARK_RED, DARK_GREEN, GREEN, GREEN)
+                stars >= 3400 -> format("[$stars✥]", DARK_GREEN, GREEN, LIGHT_PURPLE, LIGHT_PURPLE, DARK_PURPLE, DARK_PURPLE, DARK_GREEN)
+                stars >= 3300 -> format("[$stars✥]", BLUE, BLUE, BLUE, LIGHT_PURPLE, RED, RED, DARK_RED)
+                stars >= 3200 -> format("[$stars✥]", RED, DARK_RED, GRAY, GRAY, DARK_RED, RED, RED)
+                stars >= 3100 -> format("[$stars✥]", BLUE, BLUE, DARK_AQUA, DARK_AQUA, GOLD, GOLD, YELLOW)
+
+                stars >= 3000 -> format("[$stars⚝]", YELLOW, YELLOW, GOLD, GOLD, RED, RED, DARK_RED)
+                stars >= 2900 -> format("[$stars⚝]", AQUA, AQUA, DARK_AQUA, DARK_AQUA, BLUE, BLUE, DARK_BLUE)
+                stars >= 2800 -> format("[$stars⚝]", GREEN, GREEN, DARK_GREEN, DARK_GREEN, GOLD, GOLD, YELLOW)
+                stars >= 2700 -> format("[$stars⚝]", YELLOW, YELLOW, WHITE, WHITE, DARK_GRAY, DARK_GRAY, DARK_GRAY)
+                stars >= 2600 -> format("[$stars⚝]", DARK_RED, DARK_RED, RED, RED, LIGHT_PURPLE, LIGHT_PURPLE, DARK_PURPLE)
+                stars >= 2500 -> format("[$stars⚝]", GRAY, GRAY, GREEN, GREEN, DARK_GREEN, DARK_GREEN, DARK_GREEN)
+                stars >= 2400 -> format("[$stars⚝]", AQUA, AQUA, WHITE, WHITE, GRAY, GRAY, DARK_GRAY)
+                stars >= 2300 -> format("[$stars⚝]", DARK_PURPLE, DARK_PURPLE, LIGHT_PURPLE, LIGHT_PURPLE, GOLD, YELLOW, YELLOW)
+                stars >= 2200 -> format("[$stars⚝]", GOLD, GOLD, WHITE, WHITE, AQUA, DARK_AQUA, DARK_AQUA)
+                stars >= 2100 -> format("[$stars⚝]", GRAY, GRAY, YELLOW, YELLOW, GOLD, GOLD, GOLD)
+
+                stars >= 2000 -> format("[$stars✪]", DARK_GRAY, GRAY, WHITE, WHITE, GRAY, GRAY, DARK_GRAY)
+                stars >= 1900 -> format("[$stars✪]", GRAY, DARK_PURPLE, DARK_PURPLE, DARK_PURPLE, DARK_PURPLE, DARK_GRAY, GRAY)
+                stars >= 1800 -> format("[$stars✪]", GRAY, BLUE, BLUE, BLUE, BLUE, DARK_BLUE, GRAY)
+                stars >= 1700 -> format("[$stars✪]", GRAY, LIGHT_PURPLE, LIGHT_PURPLE, LIGHT_PURPLE, LIGHT_PURPLE, DARK_PURPLE, GRAY)
+                stars >= 1600 -> format("[$stars✪]", GRAY, RED, RED, RED, RED, DARK_RED, GRAY)
+                stars >= 1500 -> format("[$stars✪]", GRAY, DARK_AQUA, DARK_AQUA, DARK_AQUA, DARK_AQUA, BLUE, GRAY)
+                stars >= 1400 -> format("[$stars✪]", GRAY, GREEN, GREEN, GREEN, GREEN, DARK_GREEN, GRAY)
+                stars >= 1300 -> format("[$stars✪]", GRAY, AQUA, AQUA, AQUA, AQUA, DARK_AQUA, GRAY)
+                stars >= 1200 -> format("[$stars✪]", GRAY, YELLOW, YELLOW, YELLOW, YELLOW, GOLD, GRAY)
+                stars >= 1100 -> format("[$stars✪]", GRAY, WHITE, WHITE, WHITE, WHITE, GRAY, GRAY)
+
+                stars >= 1000 -> format("[$stars✫]", RED, GOLD, YELLOW, GREEN, AQUA, LIGHT_PURPLE, DARK_PURPLE)
+                stars >= 900 -> format("[$stars✫]", DARK_PURPLE)
+                stars >= 800 -> format("[$stars✫]", BLUE)
+                stars >= 700 -> format("[$stars✫]", LIGHT_PURPLE)
+                stars >= 600 -> format("[$stars✫]", DARK_RED)
+                stars >= 500 -> format("[$stars✫]", DARK_AQUA)
+                stars >= 400 -> format("[$stars✫]", DARK_GREEN)
+                stars >= 300 -> format("[$stars✫]", AQUA)
+                stars >= 200 -> format("[$stars✫]", GOLD)
+                stars >= 100 -> format("[$stars✫]", WHITE)
+
+                else -> format("[$stars✫]", GRAY)
+            }
         }
     }
 
