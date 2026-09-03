@@ -1,5 +1,11 @@
 package tomeko.hymod.location
 
+enum class DuelsModeType {
+    OVERALL,
+    SHORT,
+    LONG
+}
+
 enum class DuelsMode(
     val modeId: String,
     val modeName: String,
