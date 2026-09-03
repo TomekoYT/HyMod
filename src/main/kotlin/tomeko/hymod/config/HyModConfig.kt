@@ -44,6 +44,9 @@ object HyModConfig : Config(
             "coordsWaypointsRenderDistance",
             "coordsWaypointsDistanceTextColor",
             "coordsWaypointsTime"
+        ),
+        "showNetworkLevelAboveNametag" to listOf(
+            "showNetworkLevelWithOtherNametagStats"
         )
     )
     //?}

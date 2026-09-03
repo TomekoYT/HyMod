@@ -3,8 +3,6 @@ package tomeko.hymod.stats
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
-import net.hypixel.modapi.HypixelModAPI
-import net.hypixel.modapi.packet.impl.clientbound.event.ClientboundLocationPacket
 import net.minecraft.ChatFormatting
 import net.minecraft.ChatFormatting.*
 import net.minecraft.client.Minecraft
@@ -35,8 +33,6 @@ object AbyssStatsFetcher {
         *///?} else {
         ClientTickEvents.END_CLIENT_TICK.register(this::onTick)
         //?}
-        HypixelModAPI.getInstance().createHandler(ClientboundLocationPacket::class.java, this::onLocationPacket)
-        HypixelModAPI.getInstance().subscribeToEventPacket(ClientboundLocationPacket::class.java)
     }
 
     //? if = 1.8.9 {
@@ -59,17 +55,21 @@ object AbyssStatsFetcher {
         }
     }
 
-    private fun onLocationPacket(packet: ClientboundLocationPacket) {
-        clearCache()
-    }
+    private data class CachedRaw(
+        val fetchedAt: Long,
+        val json: JsonObject?
+    )
 
-
-    private const val MOJANG_UUID_ENDPOINT = "https://api.mojang.com/users/profiles/minecraft/"
     private const val ABYSS_PLAYER_ENDPOINT = "http://api.abyssoverlay.com/player?uuid="
     private const val ABYSS_USER_AGENT = "node-ao/2.0.3"
-    private const val CACHE_TTL_MS = 120_000L
 
-    private const val NETWORK_POOL_SIZE = 6
+    private const val CACHE_TTL_MS = 120_000L
+    private const val FAILURE_TTL_MS = 15_000L
+
+    private const val CONNECT_TIMEOUT_MS = 3000
+    private const val READ_TIMEOUT_MS = 3000
+
+    private const val NETWORK_POOL_SIZE = 16
     private val networkThreadCounter = AtomicInteger(0)
     private val networkThreadFactory = ThreadFactory { runnable ->
         Thread(runnable, "${Constants.MOD_ID}-stats-fetch-${networkThreadCounter.incrementAndGet()}").apply {
@@ -84,25 +84,18 @@ object AbyssStatsFetcher {
         networkThreadFactory
     ).apply { allowCoreThreadTimeOut(true) }
 
-    private const val CONNECT_TIMEOUT_MS = 3000
-    private const val READ_TIMEOUT_MS = 3000
-
-    private data class CachedRaw(
-        val fetchedAt: Long,
-        val json: JsonObject
-    )
-
-    private val uuidCache = ConcurrentHashMap<String, String>()
     private val statsCache = ConcurrentHashMap<String, CachedRaw>()
     private val pendingRequests = ConcurrentHashMap<String, CompletableFuture<JsonObject?>>()
 
     fun getRawPlayerData(uuid: String): CompletableFuture<JsonObject?> {
         val cached = statsCache[uuid]
 
-        if (cached != null && System.currentTimeMillis() - cached.fetchedAt < CACHE_TTL_MS) {
-            return CompletableFuture.completedFuture(cached.json)
+        if (cached != null) {
+            val ttl = if (cached.json == null) FAILURE_TTL_MS else CACHE_TTL_MS
+            if (System.currentTimeMillis() - cached.fetchedAt < ttl) {
+                return CompletableFuture.completedFuture(cached.json)
+            }
         }
-
 
         return pendingRequests.computeIfAbsent(uuid) {
             CompletableFuture.supplyAsync({
@@ -110,28 +103,24 @@ object AbyssStatsFetcher {
                     val connection =
                         URI.create(ABYSS_PLAYER_ENDPOINT + uuid).toURL().openConnection() as HttpURLConnection
 
-                    try {
-                        connection.requestMethod = "GET"
-                        connection.connectTimeout = CONNECT_TIMEOUT_MS
-                        connection.readTimeout = READ_TIMEOUT_MS
-                        connection.setRequestProperty("User-Agent", ABYSS_USER_AGENT)
-                        connection.setRequestProperty("Accept", "application/json")
+                    connection.requestMethod = "GET"
+                    connection.connectTimeout = CONNECT_TIMEOUT_MS
+                    connection.readTimeout = READ_TIMEOUT_MS
+                    connection.setRequestProperty("User-Agent", ABYSS_USER_AGENT)
+                    connection.setRequestProperty("Accept", "application/json")
 
-                        if (connection.responseCode != HttpURLConnection.HTTP_OK) {
-                            return@supplyAsync null
-                        }
-
+                    val result = if (connection.responseCode != HttpURLConnection.HTTP_OK) {
+                        null
+                    } else {
                         val body = connection.inputStream.bufferedReader().use { it.readText() }
                         val root = JsonParser.parseString(body).asJsonObject
-                        val playerObj = root.getAsJsonObject("player") ?: return@supplyAsync null
-
-                        statsCache[uuid] = CachedRaw(fetchedAt = System.currentTimeMillis(), json = playerObj)
-
-                        playerObj
-                    } finally {
-                        connection.disconnect()
+                        root.getAsJsonObject("player")
                     }
+
+                    statsCache[uuid] = CachedRaw(System.currentTimeMillis(), result)
+                    result
                 } catch (_: Exception) {
+                    statsCache[uuid] = CachedRaw(System.currentTimeMillis(), null)
                     null
                 }
             }, networkExecutor).whenComplete { _, _ ->
@@ -722,7 +711,6 @@ object AbyssStatsFetcher {
     }
 
     private fun clearCache() {
-        uuidCache.clear()
         statsCache.clear()
         pendingRequests.clear()
     }

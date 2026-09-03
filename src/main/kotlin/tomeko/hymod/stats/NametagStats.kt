@@ -87,6 +87,8 @@ object NametagStats {
         *///?}
 
         for (player in level.players()) {
+            val uuid = player.stringUUID
+
             if (!player.isAlive || player.isInvisible) {
                 continue
             }
@@ -121,9 +123,7 @@ object NametagStats {
             matrices.mulPose(Axis.YP.rotationDegrees(180.0f))
             matrices.scale(-scale, -scale, scale)
 
-            val uuid = player.stringUUID
-
-            val shouldCheckHypixelLevel = (HypixelPackets.inBedwars && HyModConfig.showBedwarsStarsAboveNametag)
+            val shouldCheckNetworkLevel = (HypixelPackets.inBedwars && HyModConfig.showBedwarsStarsAboveNametag)
                     || (HypixelPackets.inSkywars && HyModConfig.showSkywarsStarsAboveNametag)
                     || (HypixelPackets.inDuels && HyModConfig.showDuelsDivisionAboveNametag)
 
@@ -197,7 +197,11 @@ object NametagStats {
                     }
             }
 
-            if (HypixelPackets.onHypixel && pendingLevel.add(uuid)) {
+            if (HypixelPackets.onHypixel
+                && HyModConfig.showNetworkLevelAboveNametag
+                && (!shouldCheckNetworkLevel || HyModConfig.showNetworkLevelWithOtherNametagStats)
+                && pendingLevel.add(uuid)
+            ) {
                 AbyssStatsFetcher.getHypixelLevel(uuid)
                     .thenAccept { level ->
                         if (level != null) {
@@ -219,24 +223,21 @@ object NametagStats {
                     }
             }
 
+            val submitNodeCollector =
+                //? if >= 26.1 {
+                context.submitNodeCollector()
+            //?} else {
+            /*context.commandQueue()
+            *///?}
+
             val lines = linesCache[uuid]
-
             if (lines != null) {
-                val submitNodeCollector =
-                    //? if >= 26.1 {
-                    context.submitNodeCollector()
-                //?} else {
-                /*context.commandQueue()
-                *///?}
-
                 var offset = 0
 
                 for (text in lines) {
-                    val width = mc.font.width(text)
-
                     submitNodeCollector.submitText(
                         matrices,
-                        -width / 2.0f,
+                        -mc.font.width(text) / 2.0f,
                         -15f + offset,
                         text.visualOrderText,
                         true,
@@ -246,7 +247,6 @@ object NametagStats {
                         0x50000000,
                         0
                     )
-
                     offset -= 10
                 }
             }
