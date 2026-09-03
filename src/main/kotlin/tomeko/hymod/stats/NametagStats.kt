@@ -15,7 +15,6 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font
 import net.minecraft.network.chat.Component
 import tomeko.hymod.config.HyModConfig
-import tomeko.hymod.location.DuelsMode
 import tomeko.hymod.location.HypixelPackets
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.sqrt
@@ -71,6 +70,11 @@ object NametagStats {
 
     private val linesCache = ConcurrentHashMap<String, MutableList<Component>>()
 
+    private val pendingLevel: ConcurrentHashMap.KeySetView<String?, Boolean?> = ConcurrentHashMap.newKeySet<String>()
+    private val pendingBedwars: ConcurrentHashMap.KeySetView<String?, Boolean?> = ConcurrentHashMap.newKeySet<String>()
+    private val pendingSkywars: ConcurrentHashMap.KeySetView<String?, Boolean?> = ConcurrentHashMap.newKeySet<String>()
+    private val pendingDuels: ConcurrentHashMap.KeySetView<String?, Boolean?> = ConcurrentHashMap.newKeySet<String>()
+
     private fun render(context: LevelRenderContext) {
         val mc = Minecraft.getInstance()
         val level = mc.level ?: return
@@ -121,9 +125,9 @@ object NametagStats {
 
             val shouldCheckHypixelLevel = (HypixelPackets.inBedwars && HyModConfig.showBedwarsStarsAboveNametag)
                     || (HypixelPackets.inSkywars && HyModConfig.showSkywarsStarsAboveNametag)
-                    || (HypixelPackets.inDuels && HyModConfig.showDuelsStarsAboveNametag)
+                    || (HypixelPackets.inDuels && HyModConfig.showDuelsDivisionAboveNametag)
 
-            if (HypixelPackets.inBedwars && HyModConfig.showBedwarsStarsAboveNametag && AbyssStatsFetcher.pendingBedwars.add(uuid)) {
+            if (HypixelPackets.inBedwars && HyModConfig.showBedwarsStarsAboveNametag && pendingBedwars.add(uuid)) {
                 AbyssStatsFetcher.getBedwarsStars(uuid)
                     .thenAccept { bedwars ->
                         if (bedwars != null) {
@@ -141,11 +145,11 @@ object NametagStats {
                         }
                     }
                     .whenComplete { _, _ ->
-                        AbyssStatsFetcher.pendingBedwars.remove(uuid)
+                        pendingBedwars.remove(uuid)
                     }
             }
 
-            if (HypixelPackets.inSkywars && HyModConfig.showSkywarsStarsAboveNametag && AbyssStatsFetcher.pendingSkywars.add(uuid)) {
+            if (HypixelPackets.inSkywars && HyModConfig.showSkywarsStarsAboveNametag && pendingSkywars.add(uuid)) {
                 AbyssStatsFetcher.getSkywarsStars(uuid)
                     .thenAccept { skywars ->
                         if (skywars != null) {
@@ -163,11 +167,11 @@ object NametagStats {
                         }
                     }
                     .whenComplete { _, _ ->
-                        AbyssStatsFetcher.pendingSkywars.remove(uuid)
+                        pendingSkywars.remove(uuid)
                     }
             }
 
-            if (HypixelPackets.inDuels && HyModConfig.showDuelsStarsAboveNametag && AbyssStatsFetcher.pendingDuels.add(uuid)) {
+            if (HypixelPackets.inDuels && HyModConfig.showDuelsDivisionAboveNametag && pendingDuels.add(uuid)) {
                 AbyssStatsFetcher.getDuelsDivision(uuid, HypixelPackets.duelsMode)
                     .thenAccept { division ->
                         if (division != null) {
@@ -189,11 +193,11 @@ object NametagStats {
                         }
                     }
                     .whenComplete { _, _ ->
-                        AbyssStatsFetcher.pendingDuels.remove(uuid)
+                        pendingDuels.remove(uuid)
                     }
             }
 
-            if (HypixelPackets.onHypixel && AbyssStatsFetcher.pendingLevel.add(uuid)) {
+            if (HypixelPackets.onHypixel && pendingLevel.add(uuid)) {
                 AbyssStatsFetcher.getHypixelLevel(uuid)
                     .thenAccept { level ->
                         if (level != null) {
@@ -203,15 +207,15 @@ object NametagStats {
                                 }
                                 .apply {
                                     removeIf {
-                                        it.toString().contains("§bLevel§f:")
+                                        it.toString().contains("§9Level§f:")
                                     }
 
-                                    add(Component.literal("§bLevel§f: §e$level"))
+                                    add(Component.literal("§9Level§f: §e$level"))
                                 }
                         }
                     }
                     .whenComplete { _, _ ->
-                        AbyssStatsFetcher.pendingLevel.remove(uuid)
+                        pendingLevel.remove(uuid)
                     }
             }
 
@@ -251,7 +255,12 @@ object NametagStats {
         }
     }
 
-    fun clearCache() {
+    private fun clearCache() {
         linesCache.clear()
+
+        pendingLevel.clear()
+        pendingBedwars.clear()
+        pendingSkywars.clear()
+        pendingDuels.clear()
     }
 }

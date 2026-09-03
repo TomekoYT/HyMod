@@ -96,54 +96,6 @@ object AbyssStatsFetcher {
     private val statsCache = ConcurrentHashMap<String, CachedRaw>()
     private val pendingRequests = ConcurrentHashMap<String, CompletableFuture<JsonObject?>>()
 
-    val pendingLevel: ConcurrentHashMap.KeySetView<String?, Boolean?> = ConcurrentHashMap.newKeySet<String>()
-    val pendingBedwars: ConcurrentHashMap.KeySetView<String?, Boolean?> = ConcurrentHashMap.newKeySet<String>()
-    val pendingSkywars: ConcurrentHashMap.KeySetView<String?, Boolean?> = ConcurrentHashMap.newKeySet<String>()
-    val pendingDuels: ConcurrentHashMap.KeySetView<String?, Boolean?> = ConcurrentHashMap.newKeySet<String>()
-
-    fun getUuid(playerName: String): CompletableFuture<String?> {
-        val key = playerName.lowercase()
-
-        uuidCache[key]?.let {
-            return CompletableFuture.completedFuture(it)
-        }
-
-        return CompletableFuture.supplyAsync({
-            uuidCache[key]?.let {
-                return@supplyAsync it
-            }
-
-            try {
-                val connection =
-                    URI.create(MOJANG_UUID_ENDPOINT + playerName).toURL().openConnection() as HttpURLConnection
-
-                try {
-                    connection.requestMethod = "GET"
-                    connection.connectTimeout = CONNECT_TIMEOUT_MS
-                    connection.readTimeout = READ_TIMEOUT_MS
-
-                    if (connection.responseCode != HttpURLConnection.HTTP_OK) {
-                        return@supplyAsync null
-                    }
-
-                    val body = connection.inputStream.bufferedReader().use { it.readText() }
-
-                    val uuid = JsonParser.parseString(body).asJsonObject.get("id")?.asString
-
-                    if (uuid != null) {
-                        uuidCache[key] = uuid
-                    }
-
-                    uuid
-                } finally {
-                    connection.disconnect()
-                }
-            } catch (_: Exception) {
-                null
-            }
-        }, networkExecutor)
-    }
-
     fun getRawPlayerData(uuid: String): CompletableFuture<JsonObject?> {
         val cached = statsCache[uuid]
 
@@ -773,10 +725,5 @@ object AbyssStatsFetcher {
         uuidCache.clear()
         statsCache.clear()
         pendingRequests.clear()
-
-        pendingLevel.clear()
-        pendingBedwars.clear()
-        pendingSkywars.clear()
-        pendingDuels.clear()
     }
 }

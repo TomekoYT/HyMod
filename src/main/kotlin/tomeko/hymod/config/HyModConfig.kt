@@ -102,6 +102,18 @@ object HyModConfig : Config(
     )
     var showBedwarsStarsAboveNametag = true
 
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Show BedWars Stars In Tablist",
+        category = CATEGORY_BEDWARS,
+        subcategory = SUBCATEGORY_BEDWARS_STATS,
+    )
+    var showBedwarsStarsInTablist = true
+
 
     //? if = 1.8.9 {
     /*@Exclude
@@ -146,6 +158,18 @@ object HyModConfig : Config(
     )
     var showSkywarsStarsAboveNametag = true
 
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Show SkyWars Stars In TabList",
+        category = CATEGORY_SKYWARS,
+        subcategory = SUBCATEGORY_SKYWARS_STATS,
+    )
+    var showSkywarsStarsInTablist = true
+
 
     //? if = 1.8.9 {
     //@Exclude
@@ -163,11 +187,23 @@ object HyModConfig : Config(
             *///?} else {
         title
             //?}
-        = "Show Duels Stars Above Nametag",
+        = "Show Duels Division Above Nametag",
         category = CATEGORY_DUELS,
         subcategory = SUBCATEGORY_DUELS_STATS,
     )
-    var showDuelsStarsAboveNametag = true
+    var showDuelsDivisionAboveNametag = true
+
+    @Switch(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Show Duels Division In Tablist",
+        category = CATEGORY_DUELS,
+        subcategory = SUBCATEGORY_DUELS_STATS,
+    )
+    var showDuelsDivisionInTablist = true
 
 
     //? if = 1.8.9 {
@@ -218,7 +254,7 @@ object HyModConfig : Config(
         /*name
             *///?} else {
         title
-        //?}
+            //?}
         = "Show with Other Nametag Stats",
         category = CATEGORY_NETWORK,
         subcategory = SUBCATEGORY_NETWORK_STATS

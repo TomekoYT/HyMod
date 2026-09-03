@@ -66,6 +66,7 @@ class HyMod
 
         AbyssStatsFetcher.register()
         NametagStats.register()
+        TablistStats.register()
 
         ItemTracker.register()
         WaypointRenderer.register()
