@@ -2,6 +2,7 @@ package tomeko.hymod.stats
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.minecraft.client.Minecraft
+import tomeko.hymod.config.HyModConfig
 import tomeko.hymod.location.HypixelPackets
 
 object TablistStats {
@@ -27,7 +28,12 @@ object TablistStats {
         /*if (event.phase != TickEvent.Phase.END) return
         *///?}
 
-        if (!HypixelPackets.onHypixel) return
+        if (!((HypixelPackets.onHypixel && HyModConfig.showNetworkLevelAboveNametag)
+                    || (HypixelPackets.inBedwars && (HyModConfig.showBedwarsStarsInTablist || HyModConfig.showBedwarsStarsAboveNametag))
+                    || (HypixelPackets.inSkywars && (HyModConfig.showSkywarsStarsInTablist || HyModConfig.showSkywarsStarsAboveNametag))
+                    || (HypixelPackets.inDuels && (HyModConfig.showDuelsDivisionInTablist || HyModConfig.showDuelsDivisionAboveNametag))
+                    )
+        ) return
 
         val connection = Minecraft.getInstance().connection ?: return
 

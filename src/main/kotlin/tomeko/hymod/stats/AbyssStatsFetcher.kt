@@ -131,7 +131,7 @@ object AbyssStatsFetcher {
     }
 
     data class CachedStats(
-        val level: Component? = null,
+        val level: String? = null,
         val bedwars: Component? = null,
         val skywars: Component? = null,
         val duels: Component? = null
@@ -193,21 +193,20 @@ object AbyssStatsFetcher {
 
         if (wantsLevel && pendingLevel.add(uuid)) {
             getHypixelLevel(uuid)
-                .thenAccept { component ->
-                    if (component != null) {
-                        displayCache.compute(uuid) { _, old -> (old ?: CachedStats()).copy(level = component) }
+                .thenAccept { string ->
+                    if (string != null) {
+                        displayCache.compute(uuid) { _, old -> (old ?: CachedStats()).copy(level = string) }
                     }
                 }
                 .whenComplete { _, _ -> pendingLevel.remove(uuid) }
         }
     }
 
-    private fun getHypixelLevel(uuid: String): CompletableFuture<Component?> {
+    private fun getHypixelLevel(uuid: String): CompletableFuture<String?> {
         return getRawPlayerData(uuid).thenApply { player ->
             val exp = player?.get("networkExp")?.asDouble ?: return@thenApply null
 
-            val level = ((sqrt(exp + 15312.5) - 88.38834764831844) / 35.35533905932738).toInt()
-            Component.literal("§e$level")
+            ((sqrt(exp + 15312.5) - 88.38834764831844) / 35.35533905932738).toInt().toString()
         }
     }
 

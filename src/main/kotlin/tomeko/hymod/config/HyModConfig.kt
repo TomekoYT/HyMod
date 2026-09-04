@@ -99,11 +99,11 @@ object HyModConfig : Config(
             *///?} else {
         title
             //?}
-        = "Show BedWars Stars Above Nametag",
+        = "Show BedWars Stars In Tablist",
         category = CATEGORY_BEDWARS,
         subcategory = SUBCATEGORY_BEDWARS_STATS,
     )
-    var showBedwarsStarsAboveNametag = true
+    var showBedwarsStarsInTablist = true
 
     @Switch(
         //? if = 1.8.9 {
@@ -111,11 +111,23 @@ object HyModConfig : Config(
             *///?} else {
         title
             //?}
-        = "Show BedWars Stars In Tablist",
+        = "Show BedWars Stars Above Nametag",
         category = CATEGORY_BEDWARS,
         subcategory = SUBCATEGORY_BEDWARS_STATS,
     )
-    var showBedwarsStarsInTablist = true
+    var showBedwarsStarsAboveNametag = true
+
+    @Text(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "BedWars Text Above Nametag",
+        category = CATEGORY_BEDWARS,
+        subcategory = SUBCATEGORY_BEDWARS_STATS,
+    )
+    var bedwarsTextAboveNametag = "§fBed§cWars§f: "
 
 
     //? if = 1.8.9 {
@@ -155,11 +167,11 @@ object HyModConfig : Config(
             *///?} else {
         title
             //?}
-        = "Show SkyWars Stars Above Nametag",
+        = "Show SkyWars Stars In TabList",
         category = CATEGORY_SKYWARS,
         subcategory = SUBCATEGORY_SKYWARS_STATS,
     )
-    var showSkywarsStarsAboveNametag = true
+    var showSkywarsStarsInTablist = true
 
     @Switch(
         //? if = 1.8.9 {
@@ -167,11 +179,23 @@ object HyModConfig : Config(
             *///?} else {
         title
             //?}
-        = "Show SkyWars Stars In TabList",
+        = "Show SkyWars Stars Above Nametag",
         category = CATEGORY_SKYWARS,
         subcategory = SUBCATEGORY_SKYWARS_STATS,
     )
-    var showSkywarsStarsInTablist = true
+    var showSkywarsStarsAboveNametag = true
+
+    @Text(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "SkyWars Text Above Nametag",
+        category = CATEGORY_SKYWARS,
+        subcategory = SUBCATEGORY_SKYWARS_STATS,
+    )
+    var skywarsTextAboveNametag = "§bSky§aWars§f: "
 
 
     //? if = 1.8.9 {
@@ -190,11 +214,11 @@ object HyModConfig : Config(
             *///?} else {
         title
             //?}
-        = "Show Duels Division Above Nametag",
+        = "Show Duels Division In Tablist",
         category = CATEGORY_DUELS,
         subcategory = SUBCATEGORY_DUELS_STATS,
     )
-    var showDuelsDivisionAboveNametag = true
+    var showDuelsDivisionInTablist = true
 
     @Switch(
         //? if = 1.8.9 {
@@ -202,11 +226,227 @@ object HyModConfig : Config(
             *///?} else {
         title
             //?}
-        = "Show Duels Division In Tablist",
+        = "Show Duels Division Above Nametag",
         category = CATEGORY_DUELS,
         subcategory = SUBCATEGORY_DUELS_STATS,
     )
-    var showDuelsDivisionInTablist = true
+    var showDuelsDivisionAboveNametag = true
+
+    @Text(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Duels Text Above Nametag",
+        category = CATEGORY_DUELS,
+        subcategory = SUBCATEGORY_DUELS_STATS,
+    )
+    var duelsTextAboveNametag = " §3Duels§f: "
+
+    @Text(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Overall Duels Text Above Nametag",
+        category = CATEGORY_DUELS,
+        subcategory = SUBCATEGORY_DUELS_STATS,
+    )
+    var overallDuelsTextAboveNametag = "§eOverall"
+
+    @Text(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "SkyWars Duels Text Above Nametag",
+        category = CATEGORY_DUELS,
+        subcategory = SUBCATEGORY_DUELS_STATS,
+    )
+    var skywarsDuelsTextAboveNametag = "§bSky§aWars"
+
+    @Text(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "The Bridge Duels Text Above Nametag",
+        category = CATEGORY_DUELS,
+        subcategory = SUBCATEGORY_DUELS_STATS,
+    )
+    var theBridgeDuelsTextAboveNametag = "§5The Bridge"
+
+    @Text(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "BedWars Duels Text Above Nametag",
+        category = CATEGORY_DUELS,
+        subcategory = SUBCATEGORY_DUELS_STATS,
+    )
+    var bedwarsDuelsTextAboveNametag = "§fBed§cWars"
+
+    @Text(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Classic Duels Text Above Nametag",
+        category = CATEGORY_DUELS,
+        subcategory = SUBCATEGORY_DUELS_STATS,
+    )
+    var classicDuelsTextAboveNametag = "§fClassic"
+
+    @Text(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "UHC Duels Text Above Nametag",
+        category = CATEGORY_DUELS,
+        subcategory = SUBCATEGORY_DUELS_STATS,
+    )
+    var uhcDuelsTextAboveNametag = "§6UHC"
+
+    @Text(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Sumo Duels Text Above Nametag",
+        category = CATEGORY_DUELS,
+        subcategory = SUBCATEGORY_DUELS_STATS,
+    )
+    var sumoDuelsTextAboveNametag = "§bSumo"
+
+    @Text(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Bow Duels Text Above Nametag",
+        category = CATEGORY_DUELS,
+        subcategory = SUBCATEGORY_DUELS_STATS,
+    )
+    var bowDuelsTextAboveNametag = "§6Bow"
+
+    @Text(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Mega Walls Duels Text Above Nametag",
+        category = CATEGORY_DUELS,
+        subcategory = SUBCATEGORY_DUELS_STATS,
+    )
+    var megaWallsDuelsTextAboveNametag = "§8Mega Walls"
+
+    @Text(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Parkour Duels Text Above Nametag",
+        category = CATEGORY_DUELS,
+        subcategory = SUBCATEGORY_DUELS_STATS,
+    )
+    var parkourDuelsTextAboveNametag = "§eParkour"
+
+    @Text(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Quakecraft Duels Text Above Nametag",
+        category = CATEGORY_DUELS,
+        subcategory = SUBCATEGORY_DUELS_STATS,
+    )
+    var quakecraftDuelsTextAboveNametag = "§7Quakecraft"
+
+    @Text(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Spleef Duels Text Above Nametag",
+        category = CATEGORY_DUELS,
+        subcategory = SUBCATEGORY_DUELS_STATS,
+    )
+    var spleefDuelsTextAboveNametag = "§9Spleef"
+
+    @Text(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "OP Duels Text Above Nametag",
+        category = CATEGORY_DUELS,
+        subcategory = SUBCATEGORY_DUELS_STATS,
+    )
+    var opDuelsTextAboveNametag = "§5OP"
+
+    @Text(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Blitz Duels Text Above Nametag",
+        category = CATEGORY_DUELS,
+        subcategory = SUBCATEGORY_DUELS_STATS,
+    )
+    var blitzDuelsTextAboveNametag = "§6Blitz"
+
+    @Text(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Combo Duels Text Above Nametag",
+        category = CATEGORY_DUELS,
+        subcategory = SUBCATEGORY_DUELS_STATS,
+    )
+    var comboDuelsTextAboveNametag = "§cCombo"
+
+    @Text(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Boxing Duels Text Above Nametag",
+        category = CATEGORY_DUELS,
+        subcategory = SUBCATEGORY_DUELS_STATS,
+    )
+    var boxingDuelsTextAboveNametag = "§4Boxing"
+
+    @Text(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "NoDebuff Duels Text Above Nametag",
+        category = CATEGORY_DUELS,
+        subcategory = SUBCATEGORY_DUELS_STATS,
+    )
+    var noDebuffDuelsTextAboveNametag = "§dNoDebuff"
 
 
     //? if = 1.8.9 {
@@ -263,6 +503,18 @@ object HyModConfig : Config(
         subcategory = SUBCATEGORY_NETWORK_STATS
     )
     var showNetworkLevelWithOtherNametagStats = true
+
+    @Text(
+        //? if = 1.8.9 {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Network Level Text Above Nametag",
+        category = CATEGORY_NETWORK,
+        subcategory = SUBCATEGORY_NETWORK_STATS
+    )
+    var networkLevelTextAboveNametag = "§9Level§f: §e"
 
 
     //? if = 1.8.9 {

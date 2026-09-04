@@ -83,20 +83,21 @@ object NametagStats {
 
             if (HypixelPackets.inBedwars && HyModConfig.showBedwarsStarsAboveNametag) {
                 cached.bedwars?.let { bedwars ->
-                    lines.add(Component.literal("§fBed§cWars§f: ").append(bedwars))
+                    lines.add(Component.literal(HyModConfig.bedwarsTextAboveNametag).append(bedwars))
                 }
             }
 
             if (HypixelPackets.inSkywars && HyModConfig.showSkywarsStarsAboveNametag) {
                 cached.skywars?.let { skywars ->
-                    lines.add(Component.literal("§bSky§aWars§f: ").append(skywars))
+                    lines.add(Component.literal(HyModConfig.skywarsTextAboveNametag).append(skywars))
                 }
             }
 
             if (HypixelPackets.inDuels && HyModConfig.showDuelsDivisionAboveNametag) {
                 cached.duels?.let { division ->
                     lines.add(
-                        Component.literal(HypixelPackets.duelsMode.modeName + " §3Duels§f: ").append(division)
+                        Component.literal(HypixelPackets.duelsMode.modeName + HyModConfig.duelsTextAboveNametag)
+                            .append(division)
                     )
                 }
             }
@@ -108,7 +109,7 @@ object NametagStats {
                 && (!shouldCheckNetworkLevel || HyModConfig.showNetworkLevelWithOtherNametagStats)
             ) {
                 cached.level?.let { networkLevel ->
-                    lines.add(Component.literal("§9Level§f: ").append(networkLevel))
+                    lines.add(Component.literal(HyModConfig.networkLevelTextAboveNametag + networkLevel))
                 }
             }
 
