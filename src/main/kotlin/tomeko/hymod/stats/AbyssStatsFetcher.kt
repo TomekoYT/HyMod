@@ -27,36 +27,6 @@ import kotlin.String
 import kotlin.math.sqrt
 
 object AbyssStatsFetcher {
-    private var lastHypixelState = false
-
-    fun register() {
-        //? if = 1.8.9 {
-        /*MinecraftForge.EVENT_BUS.register(this)
-        *///?} else {
-        ClientTickEvents.END_CLIENT_TICK.register(this::onTick)
-        //?}
-    }
-
-    //? if = 1.8.9 {
-    /*@SubscribeEvent
-    *///?}
-    fun onTick(
-        //? if = 1.8.9 {
-        /*event: TickEvent.ClientTickEvent
-        *///?} else {
-        mc: Minecraft
-        //?}
-    ) {
-        //? if = 1.8.9 {
-        /*if (event.phase != TickEvent.Phase.END) return
-        *///?}
-
-        if (lastHypixelState != HypixelPackets.onHypixel) {
-            lastHypixelState = HypixelPackets.onHypixel
-            clearCache()
-        }
-    }
-
     private data class CachedRaw(
         val fetchedAt: Long,
         val json: JsonObject?
@@ -65,13 +35,10 @@ object AbyssStatsFetcher {
     private const val ABYSS_PLAYER_ENDPOINT = "http://api.abyssoverlay.com/player?uuid="
     private const val ABYSS_USER_AGENT = "node-ao/2.0.3"
 
-    private const val CACHE_TTL_MS = 120_000L
-    private const val FAILURE_TTL_MS = 15_000L
-
     private const val CONNECT_TIMEOUT_MS = 3000
     private const val READ_TIMEOUT_MS = 3000
 
-    private const val NETWORK_POOL_SIZE = 16
+    private const val NETWORK_POOL_SIZE = 4
     private val networkThreadCounter = AtomicInteger(0)
     private val networkThreadFactory = ThreadFactory { runnable ->
         Thread(runnable, "${Constants.MOD_ID}-stats-fetch-${networkThreadCounter.incrementAndGet()}").apply {
@@ -88,15 +55,35 @@ object AbyssStatsFetcher {
 
     private val statsCache = ConcurrentHashMap<String, CachedRaw>()
     private val pendingRequests = ConcurrentHashMap<String, CompletableFuture<JsonObject?>>()
+    private val rateLimitedUntil = ConcurrentHashMap<String, Long>()
+
+    private const val CACHE_TTL_MS = 120_000L
+    private const val FAILURE_TTL_MS = 15_000L
 
     private fun getRawPlayerData(uuid: String): CompletableFuture<JsonObject?> {
+        val now = System.currentTimeMillis()
+
         val cached = statsCache[uuid]
 
         if (cached != null) {
-            val ttl = if (cached.json == null) FAILURE_TTL_MS else CACHE_TTL_MS
-            if (System.currentTimeMillis() - cached.fetchedAt < ttl) {
+            val ttl = if (cached.json != null) CACHE_TTL_MS else FAILURE_TTL_MS
+
+            if (now - cached.fetchedAt < ttl) {
+                Debug.log("Abyss cache hit for $uuid")
                 return CompletableFuture.completedFuture(cached.json)
             }
+
+            Debug.log("Abyss cache expired for $uuid")
+            statsCache.remove(uuid, cached)
+        }
+
+        val limitedUntil = rateLimitedUntil[uuid]
+        if (limitedUntil != null) {
+            if (now < limitedUntil) {
+                return CompletableFuture.completedFuture(null)
+            }
+
+            rateLimitedUntil.remove(uuid, limitedUntil)
         }
 
         return pendingRequests.computeIfAbsent(uuid) {
@@ -117,8 +104,12 @@ object AbyssStatsFetcher {
 
                     if (responseCode == 429) {
                         val retryAfter = connection.getHeaderField("Retry-After")
+                        val retrySeconds = retryAfter?.toLongOrNull() ?: 60L
+                        val retryUntil = System.currentTimeMillis() + retrySeconds * 1000L
 
-                        Debug.log("Abyss API rate limited request for $uuid (HTTP 429)" + if (retryAfter != null) ", Retry-After: $retryAfter" else "")
+                        rateLimitedUntil[uuid] = retryUntil
+
+                        Debug.log("Abyss API rate limited request for $uuid (HTTP 429), retrying after ${retrySeconds}s")
                         null
                     } else if (responseCode != HttpURLConnection.HTTP_OK) {
                         Debug.log("Abyss API request failed for $uuid (HTTP $responseCode)")
@@ -127,15 +118,16 @@ object AbyssStatsFetcher {
                         val body = connection.inputStream.bufferedReader().use { it.readText() }
                         val root = JsonParser.parseString(body).asJsonObject
                         val result = root.getAsJsonObject("player")
-                        Debug.log("Abyss API request succeeded for $uuid")
 
+                        Debug.log("Abyss API request succeeded for $uuid")
                         result
                     }
                 } catch (e: Exception) {
                     Debug.log("Abyss API request failed for $uuid: ${e::class.simpleName}: ${e.message}")
                     null
                 }
-            }, networkExecutor).whenComplete { _, _ ->
+            }, networkExecutor).whenComplete { result, _ ->
+                statsCache[uuid] = CachedRaw(System.currentTimeMillis(), result)
                 pendingRequests.remove(uuid)
             }
         }
@@ -145,7 +137,8 @@ object AbyssStatsFetcher {
         val level: String? = null,
         val bedwars: Component? = null,
         val skywars: Component? = null,
-        val duels: Component? = null
+        val duels: Component? = null,
+        val duelsMode: DuelsMode? = null
     )
 
     private val displayCache = ConcurrentHashMap<String, CachedStats>()
@@ -153,9 +146,16 @@ object AbyssStatsFetcher {
     private val pendingLevel: ConcurrentHashMap.KeySetView<String, Boolean> = ConcurrentHashMap.newKeySet()
     private val pendingBedwars: ConcurrentHashMap.KeySetView<String, Boolean> = ConcurrentHashMap.newKeySet()
     private val pendingSkywars: ConcurrentHashMap.KeySetView<String, Boolean> = ConcurrentHashMap.newKeySet()
-    private val pendingDuels: ConcurrentHashMap.KeySetView<String, Boolean> = ConcurrentHashMap.newKeySet()
+    private val pendingDuels = ConcurrentHashMap.newKeySet<String>()
 
-    fun getCachedStats(uuid: String): CachedStats = displayCache[uuid] ?: CachedStats()
+    fun getCachedStats(uuid: String): CachedStats {
+        val cached = displayCache[uuid] ?: return CachedStats()
+
+        if (cached.duelsMode != null && HypixelPackets.inDuels && cached.duelsMode != HypixelPackets.duelsMode)
+            return cached.copy(duels = null, duelsMode = null)
+
+        return cached
+    }
 
     fun requestStats(uuid: String) {
         if (!HypixelPackets.onHypixel) return
@@ -191,15 +191,23 @@ object AbyssStatsFetcher {
                 .whenComplete { _, _ -> pendingSkywars.remove(uuid) }
         }
 
-        if (wantsDuels && pendingDuels.add(uuid)) {
+        if (wantsDuels) {
             val duelsMode = HypixelPackets.duelsMode
-            getDuelsDivision(uuid, duelsMode)
-                .thenAccept { component ->
-                    if (component != null) {
-                        displayCache.compute(uuid) { _, old -> (old ?: CachedStats()).copy(duels = component) }
+            val pendingKey = "$uuid:$duelsMode"
+
+            if (pendingDuels.add(pendingKey)) {
+                getDuelsDivision(uuid, duelsMode)
+                    .thenAccept { component ->
+                        if (component != null && HypixelPackets.inDuels && HypixelPackets.duelsMode == duelsMode) {
+                            displayCache.compute(uuid) { _, old ->
+                                (old ?: CachedStats()).copy(duels = component, duelsMode = duelsMode)
+                            }
+                        }
                     }
-                }
-                .whenComplete { _, _ -> pendingDuels.remove(uuid) }
+                    .whenComplete { _, _ ->
+                        pendingDuels.remove(pendingKey)
+                    }
+            }
         }
 
         if (wantsLevel && pendingLevel.add(uuid)) {
@@ -794,16 +802,5 @@ object AbyssStatsFetcher {
                 result.append(Component.literal(char.toString()).withStyle(color))
         }
         return result
-    }
-
-    private fun clearCache() {
-        statsCache.clear()
-        pendingRequests.clear()
-
-        displayCache.clear()
-        pendingLevel.clear()
-        pendingBedwars.clear()
-        pendingSkywars.clear()
-        pendingDuels.clear()
     }
 }

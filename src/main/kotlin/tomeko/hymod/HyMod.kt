@@ -64,7 +64,6 @@ class HyMod
 
         HypixelPackets.register()
 
-        AbyssStatsFetcher.register()
         NametagStats.register()
         TablistStats.register()
 
