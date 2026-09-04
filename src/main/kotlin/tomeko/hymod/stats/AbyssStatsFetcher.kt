@@ -12,6 +12,7 @@ import tomeko.hymod.location.DuelsMode
 import tomeko.hymod.location.DuelsModeType
 import tomeko.hymod.location.HypixelPackets
 import tomeko.hymod.utils.Constants
+import tomeko.hymod.utils.Debug
 import tomeko.hymod.utils.toRoman
 import java.net.HttpURLConnection
 import java.net.URI
@@ -101,6 +102,8 @@ object AbyssStatsFetcher {
         return pendingRequests.computeIfAbsent(uuid) {
             CompletableFuture.supplyAsync({
                 try {
+                    Debug.log("Fetching Abyss player data for $uuid")
+
                     val connection =
                         URI.create(ABYSS_PLAYER_ENDPOINT + uuid).toURL().openConnection() as HttpURLConnection
 
@@ -110,18 +113,26 @@ object AbyssStatsFetcher {
                     connection.setRequestProperty("User-Agent", ABYSS_USER_AGENT)
                     connection.setRequestProperty("Accept", "application/json")
 
-                    val result = if (connection.responseCode != HttpURLConnection.HTTP_OK) {
+                    val responseCode = connection.responseCode
+
+                    if (responseCode == 429) {
+                        val retryAfter = connection.getHeaderField("Retry-After")
+
+                        Debug.log("Abyss API rate limited request for $uuid (HTTP 429)" + if (retryAfter != null) ", Retry-After: $retryAfter" else "")
+                        null
+                    } else if (responseCode != HttpURLConnection.HTTP_OK) {
+                        Debug.log("Abyss API request failed for $uuid (HTTP $responseCode)")
                         null
                     } else {
                         val body = connection.inputStream.bufferedReader().use { it.readText() }
                         val root = JsonParser.parseString(body).asJsonObject
-                        root.getAsJsonObject("player")
-                    }
+                        val result = root.getAsJsonObject("player")
+                        Debug.log("Abyss API request succeeded for $uuid")
 
-                    statsCache[uuid] = CachedRaw(System.currentTimeMillis(), result)
-                    result
-                } catch (_: Exception) {
-                    statsCache[uuid] = CachedRaw(System.currentTimeMillis(), null)
+                        result
+                    }
+                } catch (e: Exception) {
+                    Debug.log("Abyss API request failed for $uuid: ${e::class.simpleName}: ${e.message}")
                     null
                 }
             }, networkExecutor).whenComplete { _, _ ->
