@@ -372,6 +372,9 @@ object NametagStats {
                 val paddingY = 1
                 val textHeight = 9
 
+                GlStateManager.depthMask(false)
+                GlStateManager.disableDepth()
+
                 Gui.drawRect(
                     -width / 2 - paddingX,
                     (NAMETAG_OFFSET + offset - paddingY).toInt(),
@@ -379,6 +382,17 @@ object NametagStats {
                     (NAMETAG_OFFSET + offset + textHeight + paddingY).toInt(),
                     0x50000000
                 )
+
+                mc.fontRendererObj.drawString(
+                    text.formattedText,
+                    -width / 2.0f,
+                    NAMETAG_OFFSET + offset,
+                    0x66FFFFFF,
+                    false
+                )
+
+                GlStateManager.enableDepth()
+                GlStateManager.depthMask(true)
 
                 mc.fontRendererObj.drawString(
                     text.formattedText,
@@ -400,6 +414,19 @@ object NametagStats {
                     0x50000000,
                     0
                 )
+
+                submitNodeCollector.submitText(
+                    matrices,
+                    -width / 2.0f,
+                    NAMETAG_OFFSET + offset,
+                    text.visualOrderText,
+                    true,
+                    Font.DisplayMode.NORMAL,
+                    0xF000F0,
+                    -0x1,
+                    0,
+                    0
+                )
                 //?}
 
                 offset -= 11
@@ -407,7 +434,6 @@ object NametagStats {
 
             //? if = 1.8.9-forge {
             /*GlStateManager.depthMask(true)
-            GlStateManager.enableDepth()
             GlStateManager.disableBlend()
 
             GlStateManager.popMatrix()
