@@ -100,6 +100,7 @@ object HyModConfig : Config(
         title
             //?}
         = "Show BedWars Stars In Tablist",
+        description = "Show in tablist stars of every player while in Hypixel BedWars",
         category = CATEGORY_BEDWARS,
         subcategory = SUBCATEGORY_BEDWARS_STATS,
     )
@@ -112,6 +113,7 @@ object HyModConfig : Config(
         title
             //?}
         = "Show BedWars Stars Above Nametag",
+        description = "Show above nametag stars of every player while in Hypixel BedWars",
         category = CATEGORY_BEDWARS,
         subcategory = SUBCATEGORY_BEDWARS_STATS,
     )
@@ -168,6 +170,7 @@ object HyModConfig : Config(
         title
             //?}
         = "Show SkyWars Stars In TabList",
+        description = "Show in tablist stars of every player while in Hypixel SkyWars",
         category = CATEGORY_SKYWARS,
         subcategory = SUBCATEGORY_SKYWARS_STATS,
     )
@@ -180,6 +183,7 @@ object HyModConfig : Config(
         title
             //?}
         = "Show SkyWars Stars Above Nametag",
+        description = "Show above nametag stars of every player while in Hypixel SkyWars",
         category = CATEGORY_SKYWARS,
         subcategory = SUBCATEGORY_SKYWARS_STATS,
     )
@@ -215,6 +219,7 @@ object HyModConfig : Config(
         title
             //?}
         = "Show Duels Division In Tablist",
+        description = "Show in tablist division of every player while in Hypixel Duels",
         category = CATEGORY_DUELS,
         subcategory = SUBCATEGORY_DUELS_STATS,
     )
@@ -227,6 +232,7 @@ object HyModConfig : Config(
         title
             //?}
         = "Show Duels Division Above Nametag",
+        description = "Show above nametag division of every player while in Hypixel Duels",
         category = CATEGORY_DUELS,
         subcategory = SUBCATEGORY_DUELS_STATS,
     )
@@ -490,6 +496,7 @@ object HyModConfig : Config(
         title
             //?}
         = "Show Network Level Above Nametag",
+        description = "Show above nametag network level of every player while on Hypixel",
         category = CATEGORY_NETWORK,
         subcategory = SUBCATEGORY_NETWORK_STATS
     )
@@ -501,7 +508,8 @@ object HyModConfig : Config(
             *///?} else {
         title
             //?}
-        = "Show with Other Nametag Stats",
+        = "Show Network Level with Other Nametag Stats",
+        description = "Show Hypixel network level when other Hypixel stats are shown",
         category = CATEGORY_NETWORK,
         subcategory = SUBCATEGORY_NETWORK_STATS
     )
@@ -526,6 +534,7 @@ object HyModConfig : Config(
         title
             //?}
         = "Show Nicked Indicator In Tablist",
+        description = "Show indicator of a nicked player in tablist while on Hypixel",
         category = CATEGORY_NETWORK,
         subcategory = SUBCATEGORY_NETWORK_STATS
     )
@@ -538,6 +547,7 @@ object HyModConfig : Config(
         title
             //?}
         = "Show Nicked Indicator Above Nametag",
+        description = "Show indicator of a nicked player above nametag while on Hypixel",
         category = CATEGORY_NETWORK,
         subcategory = SUBCATEGORY_NETWORK_STATS
     )
