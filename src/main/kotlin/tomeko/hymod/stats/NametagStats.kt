@@ -54,6 +54,15 @@ object NametagStats {
         context: LevelRenderContext
         //?}
     ) {
+        if (!HypixelPackets.onHypixel
+            || (!HyModConfig.showNetworkLevelAboveNametag
+                    && !HyModConfig.showBedwarsStarsAboveNametag && !HyModConfig.showBedwarsStarsInTablist
+                    && !HyModConfig.showSkywarsStarsAboveNametag && !HyModConfig.showSkywarsStarsInTablist
+                    && !HyModConfig.showDuelsDivisionAboveNametag && !HyModConfig.showDuelsDivisionInTablist
+                    && !HyModConfig.showNickedIndicatorAboveNametag && !HyModConfig.showNickedIndicatorInTablist
+                    )
+        ) return
+
         val mc =
         //? if = 1.8.9-forge {
                 /*Minecraft.getMinecraft()
