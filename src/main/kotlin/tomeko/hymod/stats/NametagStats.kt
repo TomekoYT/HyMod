@@ -303,7 +303,7 @@ object NametagStats {
             matrices.scale(-scale, -scale, scale)
             val submitNodeCollector =
                 //? if >= 26.1-fabric {
-                context.submitNodeCollector()
+                context.submitNodeCollector().order(1)
             //?} else {
             /*context.commandQueue()
         *///?}
