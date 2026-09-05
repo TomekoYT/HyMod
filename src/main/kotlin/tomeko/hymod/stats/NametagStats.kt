@@ -12,7 +12,6 @@ import net.minecraftforge.common.MinecraftForge
 import org.lwjgl.opengl.GL11
 *///?} else {
 import com.mojang.math.Axis
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 //? if >= 26.1-fabric {
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents
@@ -25,6 +24,7 @@ import net.minecraft.client.gui.Font
 import net.minecraft.network.chat.Component
 //?}
 import tomeko.hymod.config.HyModConfig
+import tomeko.hymod.location.DuelsMode
 import tomeko.hymod.location.HypixelPackets
 import kotlin.math.sqrt
 
@@ -191,10 +191,10 @@ object NametagStats {
                 player.stringUUID
             //?}
 
-            val cached = AbyssStatsFetcher.getCachedStats(uuid)
+            val cached = HypixelStatsFetcher.getCachedStats(uuid)
             val lines = mutableListOf<Component>()
 
-            if (AbyssStatsFetcher.nickedPlayers.contains(uuid)) {
+            if (HypixelStatsFetcher.nickedPlayers.contains(uuid)) {
                 if (HyModConfig.showNickedIndicatorAboveNametag) {
                     lines.add(
                         //? if = 1.8.9-forge {
@@ -207,6 +207,21 @@ object NametagStats {
                     )
                 }
             } else {
+                if (HypixelPackets.inDuels && HyModConfig.showDuelsDivisionAboveNametag) {
+                    cached.duels?.let { division ->
+                        lines.add(
+                            //? if = 1.8.9-forge {
+                            /*ChatComponentText(HypixelPackets.duelsMode.modeName + HyModConfig.duelsTextAboveNametag).appendSibling(
+                            division
+                        )
+                        *///?} else {
+                            Component.literal(HypixelPackets.duelsMode.modeName + HyModConfig.duelsTextAboveNametag)
+                                .append(division)
+                            //?}
+                        )
+                    }
+                }
+
                 if (HypixelPackets.inBedwars && HyModConfig.showBedwarsStarsAboveNametag) {
                     cached.bedwars?.let { bedwars ->
                         lines.add(
@@ -226,21 +241,6 @@ object NametagStats {
                             /*ChatComponentText(HyModConfig.skywarsTextAboveNametag).appendSibling(skywars)
                         *///?} else {
                             Component.literal(HyModConfig.skywarsTextAboveNametag).append(skywars)
-                            //?}
-                        )
-                    }
-                }
-
-                if (HypixelPackets.inDuels && HyModConfig.showDuelsDivisionAboveNametag) {
-                    cached.duels?.let { division ->
-                        lines.add(
-                            //? if = 1.8.9-forge {
-                            /*ChatComponentText(HypixelPackets.duelsMode.modeName + HyModConfig.duelsTextAboveNametag).appendSibling(
-                            division
-                        )
-                        *///?} else {
-                            Component.literal(HypixelPackets.duelsMode.modeName + HyModConfig.duelsTextAboveNametag)
-                                .append(division)
                             //?}
                         )
                     }

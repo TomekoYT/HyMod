@@ -63,7 +63,7 @@ object TablistStats {
                     *///?} else {
                 info.profile.id.toString()
             //?}
-            AbyssStatsFetcher.requestStats(uuid)
+            HypixelStatsFetcher.requestStats(uuid)
         }
     }
 }

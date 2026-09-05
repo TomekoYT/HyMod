@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import kotlin.String
 import kotlin.math.sqrt
 
-object AbyssStatsFetcher {
+object HypixelStatsFetcher {
     private data class CachedRaw(
         val fetchedAt: Long,
         val json: JsonObject?
@@ -40,6 +40,8 @@ object AbyssStatsFetcher {
 
     private const val ABYSS_PLAYER_ENDPOINT = "http://api.abyssoverlay.com/player?uuid="
     private const val ABYSS_USER_AGENT = "node-ao/2.0.3"
+
+    private const val BORDIC_PLAYER_ENDPOINT = "https://api.bordic.xyz/v3/cache/hypixel?uuid="
 
     private const val CONNECT_TIMEOUT_MS = 3000
     private const val READ_TIMEOUT_MS = 3000
@@ -69,7 +71,7 @@ object AbyssStatsFetcher {
     private const val CACHE_TTL_MS = 120_000L
     private const val FAILURE_TTL_MS = 15_000L
 
-    private fun getRawPlayerData(uuid: String): CompletableFuture<JsonObject?> {
+    private fun getAbyssPlayerData(uuid: String): CompletableFuture<JsonObject?> {
         val now = System.currentTimeMillis()
 
         val cached = statsCache[uuid]
@@ -116,8 +118,39 @@ object AbyssStatsFetcher {
 
                         rateLimitedUntil[uuid] = retryUntil
 
-                        Debug.log("Abyss API rate limited request for $uuid (HTTP 429), retrying after ${retrySeconds}s")
-                        null
+                        Debug.log("Abyss API rate limited request for $uuid (HTTP 429), falling back to Bordic")
+
+                        val fallbackConnection =
+                            URI.create(BORDIC_PLAYER_ENDPOINT + uuid).toURL().openConnection() as HttpURLConnection
+
+                        fallbackConnection.requestMethod = "GET"
+                        fallbackConnection.connectTimeout = CONNECT_TIMEOUT_MS
+                        fallbackConnection.readTimeout = READ_TIMEOUT_MS
+                        fallbackConnection.setRequestProperty("User-Agent", ABYSS_USER_AGENT)
+                        fallbackConnection.setRequestProperty("Accept", "application/json")
+
+                        val fallbackResponseCode = fallbackConnection.responseCode
+
+                        if (fallbackResponseCode == HttpURLConnection.HTTP_NOT_FOUND) {
+                            nickedPlayers.add(uuid)
+
+                            Debug.log("Bordic API request not found for $uuid")
+                            null
+                        } else if (fallbackResponseCode != HttpURLConnection.HTTP_OK) {
+                            Debug.log("Bordic API request failed for $uuid (HTTP $fallbackResponseCode)")
+                            null
+                        } else {
+                            val body = fallbackConnection.inputStream.bufferedReader().use { it.readText() }
+                            val root =
+                            //? if = 1.8.9-forge {
+                                    /*JsonParser().parse(body).asJsonObject
+                                    *///?} else {
+                                JsonParser.parseString(body).asJsonObject
+                            //?}
+
+                            Debug.log("Bordic API fallback succeeded for $uuid")
+                            root.getAsJsonObject("player")
+                        }
                     } else if (responseCode == HttpURLConnection.HTTP_NOT_FOUND) {
                         nickedPlayers.add(uuid)
 
@@ -134,10 +167,9 @@ object AbyssStatsFetcher {
                                 *///?} else {
                             JsonParser.parseString(body).asJsonObject
                         //?}
-                        val result = root.getAsJsonObject("player")
 
                         Debug.log("Abyss API request succeeded for $uuid")
-                        result
+                        root.getAsJsonObject("player")
                     }
                 } catch (e: Exception) {
                     Debug.log("Abyss API request failed for $uuid: ${e::class.simpleName}: ${e.message}")
@@ -239,7 +271,7 @@ object AbyssStatsFetcher {
     }
 
     private fun getHypixelLevel(uuid: String): CompletableFuture<String?> {
-        return getRawPlayerData(uuid).thenApply { player ->
+        return getAbyssPlayerData(uuid).thenApply { player ->
             val exp = player?.get("networkExp")?.asDouble ?: return@thenApply null
 
             ((sqrt(exp + 15312.5) - 88.38834764831844) / 35.35533905932738).toInt().toString()
@@ -247,7 +279,7 @@ object AbyssStatsFetcher {
     }
 
     private fun getBedwarsStars(uuid: String): CompletableFuture<Component?> {
-        return getRawPlayerData(uuid).thenApply { player ->
+        return getAbyssPlayerData(uuid).thenApply { player ->
             val stars = player?.getAsJsonObject("achievements")?.get("bedwars_level")?.asInt ?: return@thenApply null
 
             when {
@@ -616,7 +648,7 @@ object AbyssStatsFetcher {
     }
 
     private fun getSkywarsStars(uuid: String): CompletableFuture<Component?> {
-        return getRawPlayerData(uuid).thenApply { player ->
+        return getAbyssPlayerData(uuid).thenApply { player ->
             val exp = player?.getAsJsonObject("stats")?.getAsJsonObject("SkyWars")?.get("skywars_experience")?.asLong
                 ?: return@thenApply null
 
@@ -718,7 +750,7 @@ object AbyssStatsFetcher {
     }
 
     private fun getDuelsDivision(uuid: String, duelsMode: DuelsMode): CompletableFuture<Component?> {
-        return getRawPlayerData(uuid).thenApply { player ->
+        return getAbyssPlayerData(uuid).thenApply { player ->
             val duels = player?.getAsJsonObject("stats")?.getAsJsonObject("Duels")
                 ?: return@thenApply null
 
@@ -776,7 +808,7 @@ object AbyssStatsFetcher {
             val divisionText = division(
                 duelsMode, when (duelsMode) {
                     DuelsMode.SKYWARS -> wins("sw_duel_wins") + wins("sw_doubles_wins")
-                    DuelsMode.THE_BRIDGE -> wins("bridgeMapWins")
+                    DuelsMode.THE_BRIDGE -> wins("bridge_duel_wins") + wins("bridge_doubles_wins") + wins("bridge_threes_wins") + wins("bridge_four_wins")
                     DuelsMode.BEDWARS -> wins("bedwars_two_one_duels_wins") + wins("bedwars_two_one_duels_rush_wins")
                     DuelsMode.CLASSIC -> wins("classic_duel_wins") + wins("classic_doubles_wins")
                     DuelsMode.UHC -> wins("uhc_duel_wins") + wins("uhc_doubles_wins") + wins("uhc_threes_wins") + wins("uhc_four_wins")

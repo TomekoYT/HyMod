@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import tomeko.hymod.config.HyModConfig;
 import tomeko.hymod.location.HypixelPackets;
-import tomeko.hymod.stats.AbyssStatsFetcher;
+import tomeko.hymod.stats.HypixelStatsFetcher;
 
 @Mixin(
         //? if = 1.8.9-forge {
@@ -62,7 +62,7 @@ public abstract class TablistStatsMixin {
                 info.getProfile().id().toString();
         //?}
 
-        AbyssStatsFetcher.CachedStats stats = AbyssStatsFetcher.INSTANCE.getCachedStats(uuid);
+        HypixelStatsFetcher.CachedStats stats = HypixelStatsFetcher.INSTANCE.getCachedStats(uuid);
 
         //? if = 1.8.9-forge {
         /*IChatComponent prefix
@@ -70,7 +70,7 @@ public abstract class TablistStatsMixin {
         Component prefix
                 //?}
                 = null;
-        if (AbyssStatsFetcher.INSTANCE.getNickedPlayers().contains(uuid)) {
+        if (HypixelStatsFetcher.INSTANCE.getNickedPlayers().contains(uuid)) {
             if (HyModConfig.INSTANCE.getShowNickedIndicatorInTablist()) {
                 prefix =
                         //? if = 1.8.9-forge {
