@@ -64,6 +64,8 @@ object AbyssStatsFetcher {
     private val pendingRequests = ConcurrentHashMap<String, CompletableFuture<JsonObject?>>()
     private val rateLimitedUntil = ConcurrentHashMap<String, Long>()
 
+    val nickedPlayers = ConcurrentHashMap.newKeySet<String>()
+
     private const val CACHE_TTL_MS = 120_000L
     private const val FAILURE_TTL_MS = 15_000L
 
@@ -116,17 +118,22 @@ object AbyssStatsFetcher {
 
                         Debug.log("Abyss API rate limited request for $uuid (HTTP 429), retrying after ${retrySeconds}s")
                         null
+                    } else if (responseCode == HttpURLConnection.HTTP_NOT_FOUND) {
+                        nickedPlayers.add(uuid)
+
+                        Debug.log("Abyss API request not found for $uuid")
+                        null
                     } else if (responseCode != HttpURLConnection.HTTP_OK) {
                         Debug.log("Abyss API request failed for $uuid (HTTP $responseCode)")
                         null
                     } else {
                         val body = connection.inputStream.bufferedReader().use { it.readText() }
                         val root =
-                            //? if = 1.8.9-forge {
-                            /*JsonParser().parse(body).asJsonObject
-                            *///?} else {
+                        //? if = 1.8.9-forge {
+                                /*JsonParser().parse(body).asJsonObject
+                                *///?} else {
                             JsonParser.parseString(body).asJsonObject
-                            //?}
+                        //?}
                         val result = root.getAsJsonObject("player")
 
                         Debug.log("Abyss API request succeeded for $uuid")
@@ -791,7 +798,7 @@ object AbyssStatsFetcher {
             //? if = 1.8.9-forge {
             /*ChatComponentText(
                 *///?} else {
-                Component.literal(
+            Component.literal(
                 //?}
                 divisionText
             )
@@ -800,10 +807,10 @@ object AbyssStatsFetcher {
 
     private fun formatStars(text: String, vararg colors: ChatFormatting): Component {
         val result =
-            //? if = 1.8.9-forge {
-            /*ChatComponentText("")
-        *///?} else {
-        Component.empty()
+        //? if = 1.8.9-forge {
+                /*ChatComponentText("")
+            *///?} else {
+            Component.empty()
         //?}
         text.forEachIndexed { i, char ->
             val color = if (i < colors.size) colors[i] else colors.last()
@@ -818,29 +825,29 @@ object AbyssStatsFetcher {
 
     private fun formatStarsObfuscated(text: String, vararg colors: ChatFormatting): Component {
         val result =
-            //? if = 1.8.9-forge {
-            /*ChatComponentText("")
-        *///?} else {
-        Component.empty()
+        //? if = 1.8.9-forge {
+                /*ChatComponentText("")
+            *///?} else {
+            Component.empty()
         //?}
         text.forEachIndexed { i, char ->
             val color = if (i < colors.size) colors[i] else colors.last()
 
             if (i == 0 || i == text.length - 1)
             //? if = 1.8.9-forge {
-                /*result.appendSibling(
-                    ChatComponentText(char.toString()).setChatStyle(
-                        ChatStyle().setColor(color).setObfuscated(true)
-                    )
+            /*result.appendSibling(
+                ChatComponentText(char.toString()).setChatStyle(
+                    ChatStyle().setColor(color).setObfuscated(true)
                 )
-            *///?} else {
-            result.append(Component.literal(char.toString()).withStyle(OBFUSCATED, color))
+            )
+        *///?} else {
+                result.append(Component.literal(char.toString()).withStyle(OBFUSCATED, color))
             //?}
             else
             //? if = 1.8.9-forge {
-                /*result.appendSibling(ChatComponentText(char.toString()).setChatStyle(ChatStyle().setColor(color)))
-            *///?} else {
-            result.append(Component.literal(char.toString()).withStyle(color))
+            /*result.appendSibling(ChatComponentText(char.toString()).setChatStyle(ChatStyle().setColor(color)))
+        *///?} else {
+                result.append(Component.literal(char.toString()).withStyle(color))
             //?}
         }
         return result

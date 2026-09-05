@@ -56,112 +56,112 @@ object NametagStats {
         //?}
     ) {
         val mc =
-            //? if = 1.8.9-forge {
-            /*Minecraft.getMinecraft()
-        *///?} else {
-        Minecraft.getInstance()
+        //? if = 1.8.9-forge {
+                /*Minecraft.getMinecraft()
+            *///?} else {
+            Minecraft.getInstance()
         //?}
         val level =
-            //? if = 1.8.9-forge {
-            /*mc.theWorld
-            *///?} else {
+        //? if = 1.8.9-forge {
+                /*mc.theWorld
+                *///?} else {
             mc.level
             //?}
                 ?: return
 
         val players =
-            //? if = 1.8.9-forge {
-            /*level.playerEntities
-        *///?} else {
-        level.players()
+        //? if = 1.8.9-forge {
+                /*level.playerEntities
+            *///?} else {
+            level.players()
         //?}
 
         for (player in players) {
             if (//? if = 1.8.9-forge {
-                /*!player.isEntityAlive
-                *///?} else {
+            /*!player.isEntityAlive
+            *///?} else {
                 !player.isAlive
                 //?}
                 || player.isInvisible
             ) continue
 
             val playerX =
-                //? if = 1.8.9-forge {
-                /*player.posX
-            *///?} else {
-            player.x
+            //? if = 1.8.9-forge {
+                    /*player.posX
+                *///?} else {
+                player.x
             //?}
 
             val playerY =
-                //? if = 1.8.9-forge {
-                /*player.posY
-            *///?} else {
-            player.y
+            //? if = 1.8.9-forge {
+                    /*player.posY
+                *///?} else {
+                player.y
             //?}
 
             val playerZ =
-                //? if = 1.8.9-forge {
-                /*player.posZ
-            *///?} else {
-            player.z
+            //? if = 1.8.9-forge {
+                    /*player.posZ
+                *///?} else {
+                player.z
             //?}
 
             val playerLastX =
-                //? if = 1.8.9-forge {
-                /*player.lastTickPosX
-            *///?} else {
-            player.xo
+            //? if = 1.8.9-forge {
+                    /*player.lastTickPosX
+                *///?} else {
+                player.xo
             //?}
 
             val playerLastY =
-                //? if = 1.8.9-forge {
-                /*player.lastTickPosY
-            *///?} else {
-            player.yo
+            //? if = 1.8.9-forge {
+                    /*player.lastTickPosY
+                *///?} else {
+                player.yo
             //?}
 
             val playerLastZ =
-                //? if = 1.8.9-forge {
-                /*player.lastTickPosZ
-            *///?} else {
-            player.zo
+            //? if = 1.8.9-forge {
+                    /*player.lastTickPosZ
+                *///?} else {
+                player.zo
             //?}
 
             val camera =
-                //? if = 1.8.9-forge {
-                /*mc.renderManager
-            *///?} elif >= 26.1-fabric {
-            context.levelState().cameraRenderState
+            //? if = 1.8.9-forge {
+                    /*mc.renderManager
+                *///?} elif >= 26.1-fabric {
+                context.levelState().cameraRenderState
             //?} else {
             //context.worldState().cameraRenderState
             //?}
 
             val cameraX =
-                //? if = 1.8.9-forge {
-                /*camera.viewerPosX
-            *///?} else {
-            camera.pos.x
+            //? if = 1.8.9-forge {
+                    /*camera.viewerPosX
+                *///?} else {
+                camera.pos.x
             //?}
 
             val cameraY =
-                //? if = 1.8.9-forge {
-                /*camera.viewerPosY
-            *///?} else {
-            camera.pos.y
+            //? if = 1.8.9-forge {
+                    /*camera.viewerPosY
+                *///?} else {
+                camera.pos.y
             //?}
 
             val cameraZ =
-                //? if = 1.8.9-forge {
-                /*camera.viewerPosZ
-            *///?} else {
-            camera.pos.z
+            //? if = 1.8.9-forge {
+                    /*camera.viewerPosZ
+                *///?} else {
+                camera.pos.z
             //?}
 
             val tickDelta =
-                //? if = 1.8.9-forge {
-                /*event.partialTicks
-            *///?} else {
-            mc.deltaTracker.getGameTimeDeltaPartialTick(false)
+            //? if = 1.8.9-forge {
+                    /*event.partialTicks
+                *///?} else {
+                mc.deltaTracker.getGameTimeDeltaPartialTick(false)
             //?}
 
             val x = playerLastX + (playerX - playerLastX) * tickDelta - cameraX
@@ -174,10 +174,10 @@ object NametagStats {
             val distance = sqrt(distanceSquared)
 
             val playerHeight =
-                //? if = 1.8.9-forge {
-                /*player.height
-            *///?} else {
-            player.bbHeight
+            //? if = 1.8.9-forge {
+                    /*player.height
+                *///?} else {
+                player.bbHeight
             //?}
             val y = relativeY + playerHeight + HEIGHT_OFFSET
 
@@ -185,67 +185,85 @@ object NametagStats {
                 (BASE_SCALE * (0.75 + 0.25 * (1.0 - 1.0.coerceAtMost(0.0.coerceAtLeast((distance - MIN_DISTANCE) / (MAX_DISTANCE - MIN_DISTANCE)))))).toFloat()
 
             val uuid =
-                //? if = 1.8.9-forge {
-                /*player.uniqueID.toString()
-            *///?} else {
-            player.stringUUID
+            //? if = 1.8.9-forge {
+                    /*player.uniqueID.toString()
+                *///?} else {
+                player.stringUUID
             //?}
 
             val cached = AbyssStatsFetcher.getCachedStats(uuid)
             val lines = mutableListOf<Component>()
 
-            if (HypixelPackets.inBedwars && HyModConfig.showBedwarsStarsAboveNametag) {
-                cached.bedwars?.let { bedwars ->
+            if (AbyssStatsFetcher.nickedPlayers.contains(uuid)) {
+                if (HyModConfig.showNickedIndicatorAboveNametag) {
                     lines.add(
                         //? if = 1.8.9-forge {
-                        /*ChatComponentText(HyModConfig.bedwarsTextAboveNametag).appendSibling(bedwars)
-                        *///?} else {
-                        Component.literal(HyModConfig.bedwarsTextAboveNametag).append(bedwars)
-                        //?}
+                        //ChatComponentText(
+                        //?} else {
+                        Component.literal(
+                            //?}
+                            HyModConfig.nickedIndicatorTextAboveNametag
+                        )
                     )
                 }
-            }
-
-            if (HypixelPackets.inSkywars && HyModConfig.showSkywarsStarsAboveNametag) {
-                cached.skywars?.let { skywars ->
-                    lines.add(
-                        //? if = 1.8.9-forge {
-                        /*ChatComponentText(HyModConfig.skywarsTextAboveNametag).appendSibling(skywars)
+            } else {
+                if (HypixelPackets.inBedwars && HyModConfig.showBedwarsStarsAboveNametag) {
+                    cached.bedwars?.let { bedwars ->
+                        lines.add(
+                            //? if = 1.8.9-forge {
+                            /*ChatComponentText(HyModConfig.bedwarsTextAboveNametag).appendSibling(bedwars)
                         *///?} else {
-                        Component.literal(HyModConfig.skywarsTextAboveNametag).append(skywars)
-                        //?}
-                    )
+                            Component.literal(HyModConfig.bedwarsTextAboveNametag).append(bedwars)
+                            //?}
+                        )
+                    }
                 }
-            }
 
-            if (HypixelPackets.inDuels && HyModConfig.showDuelsDivisionAboveNametag) {
-                cached.duels?.let { division ->
-                    lines.add(
-                        //? if = 1.8.9-forge {
-                        /*ChatComponentText(HypixelPackets.duelsMode.modeName + HyModConfig.duelsTextAboveNametag).appendSibling(
+                if (HypixelPackets.inSkywars && HyModConfig.showSkywarsStarsAboveNametag) {
+                    cached.skywars?.let { skywars ->
+                        lines.add(
+                            //? if = 1.8.9-forge {
+                            /*ChatComponentText(HyModConfig.skywarsTextAboveNametag).appendSibling(skywars)
+                        *///?} else {
+                            Component.literal(HyModConfig.skywarsTextAboveNametag).append(skywars)
+                            //?}
+                        )
+                    }
+                }
+
+                if (HypixelPackets.inDuels && HyModConfig.showDuelsDivisionAboveNametag) {
+                    cached.duels?.let { division ->
+                        lines.add(
+                            //? if = 1.8.9-forge {
+                            /*ChatComponentText(HypixelPackets.duelsMode.modeName + HyModConfig.duelsTextAboveNametag).appendSibling(
                             division
                         )
                         *///?} else {
-                        Component.literal(HypixelPackets.duelsMode.modeName + HyModConfig.duelsTextAboveNametag).append(division)
-                        //?}
-                    )
+                            Component.literal(HypixelPackets.duelsMode.modeName + HyModConfig.duelsTextAboveNametag)
+                                .append(division)
+                            //?}
+                        )
+                    }
                 }
-            }
 
-            val shouldCheckNetworkLevel = lines.isNotEmpty()
+                val shouldCheckNetworkLevelWithOtherNametagStats =
+                    (HypixelPackets.inBedwars && HyModConfig.showBedwarsStarsAboveNametag)
+                            || (HypixelPackets.inSkywars && HyModConfig.showSkywarsStarsAboveNametag)
+                            || (HypixelPackets.inDuels && HyModConfig.showDuelsDivisionAboveNametag)
 
-            if (HypixelPackets.onHypixel
-                && HyModConfig.showNetworkLevelAboveNametag
-                && (!shouldCheckNetworkLevel || HyModConfig.showNetworkLevelWithOtherNametagStats)
-            ) {
-                cached.level?.let { networkLevel ->
-                    lines.add(
-                        //? if = 1.8.9-forge {
-                        /*ChatComponentText(HyModConfig.networkLevelTextAboveNametag + networkLevel)
+                if (HypixelPackets.onHypixel
+                    && HyModConfig.showNetworkLevelAboveNametag
+                    && (!shouldCheckNetworkLevelWithOtherNametagStats || HyModConfig.showNetworkLevelWithOtherNametagStats)
+                ) {
+                    cached.level?.let { networkLevel ->
+                        lines.add(
+                            //? if = 1.8.9-forge {
+                            /*ChatComponentText(HyModConfig.networkLevelTextAboveNametag + networkLevel)
                         *///?} else {
-                        Component.literal(HyModConfig.networkLevelTextAboveNametag + networkLevel)
-                        //?}
-                    )
+                            Component.literal(HyModConfig.networkLevelTextAboveNametag + networkLevel)
+                            //?}
+                        )
+                    }
                 }
             }
 
@@ -268,11 +286,11 @@ object NametagStats {
             )
             *///?} else {
             val matrices =
-            //? if >= 26.1-fabric {
-                    context.poseStack()
-                //?} else {
-                /*context.matrices()
-            *///?}
+                //? if >= 26.1-fabric {
+                context.poseStack()
+            //?} else {
+            /*context.matrices()
+        *///?}
 
             matrices.pushPose()
 
@@ -281,22 +299,22 @@ object NametagStats {
             matrices.mulPose(Axis.YP.rotationDegrees(180.0f))
             matrices.scale(-scale, -scale, scale)
             val submitNodeCollector =
-            //? if >= 26.1-fabric {
-                    context.submitNodeCollector()
-                //?} else {
-                /*context.commandQueue()
-            *///?}
+                //? if >= 26.1-fabric {
+                context.submitNodeCollector()
+            //?} else {
+            /*context.commandQueue()
+        *///?}
             //?}
 
             var offset = 0
 
             for (text in lines) {
                 val width =
-                    //? if = 1.8.9-forge {
-                    /*mc.fontRendererObj.getStringWidth(text.formattedText)
-                *///?} else {
-                mc.font.width(text)
-            //?}
+                //? if = 1.8.9-forge {
+                        /*mc.fontRendererObj.getStringWidth(text.formattedText)
+                    *///?} else {
+                    mc.font.width(text)
+                //?}
 
                 //? if = 1.8.9-forge {
                 /*val paddingX = 2

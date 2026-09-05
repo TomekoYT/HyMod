@@ -43,9 +43,9 @@ object TablistStats {
         ) return
 
         val connection =
-            //? if = 1.8.9-forge {
-            /*Minecraft.getMinecraft().thePlayer?.sendQueue
-            *///?} else {
+        //? if = 1.8.9-forge {
+                /*Minecraft.getMinecraft().thePlayer?.sendQueue
+                *///?} else {
             Minecraft.getInstance().connection
             //?}
                 ?: return
@@ -58,11 +58,11 @@ object TablistStats {
         //?}
         ) {
             val uuid =
-                //? if = 1.8.9-forge {
-                /*info.gameProfile.id.toString()
-                *///?} else {
+            //? if = 1.8.9-forge {
+                    /*info.gameProfile.id.toString()
+                    *///?} else {
                 info.profile.id.toString()
-                //?}
+            //?}
             AbyssStatsFetcher.requestStats(uuid)
         }
     }

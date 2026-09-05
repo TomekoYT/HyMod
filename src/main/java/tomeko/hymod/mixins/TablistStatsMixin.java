@@ -31,8 +31,8 @@ public abstract class TablistStatsMixin {
             method =
                     //? if = 1.8.9-forge {
                     /*"getPlayerName",
-            *///?} else {
-            "getNameForDisplay",
+                     *///?} else {
+                    "getNameForDisplay",
             //?}
             at = @At("RETURN"),
             cancellable = true
@@ -50,38 +50,49 @@ public abstract class TablistStatsMixin {
 
         //? if = 1.8.9-forge {
         /*String original
-                *///?} else {
-                Component original
+         *///?} else {
+        Component original
                 //?}
                 = cir.getReturnValue();
 
         String uuid =
                 //? if = 1.8.9-forge {
                 /*info.getGameProfile().getId().toString();
-        *///?} else {
-        info.getProfile().id().toString();
+                 *///?} else {
+                info.getProfile().id().toString();
         //?}
 
         AbyssStatsFetcher.CachedStats stats = AbyssStatsFetcher.INSTANCE.getCachedStats(uuid);
 
         //? if = 1.8.9-forge {
         /*IChatComponent prefix
-                *///?} else {
-                Component prefix
+         *///?} else {
+        Component prefix
                 //?}
                 = null;
-        if (HypixelPackets.INSTANCE.getInBedwars() && HyModConfig.INSTANCE.getShowBedwarsStarsInTablist()) {
-            prefix = stats.getBedwars();
-        } else if (HypixelPackets.INSTANCE.getInSkywars() && HyModConfig.INSTANCE.getShowSkywarsStarsInTablist()) {
-            prefix = stats.getSkywars();
-        } else if (HypixelPackets.INSTANCE.getInDuels() && HyModConfig.INSTANCE.getShowDuelsDivisionInTablist()) {
-            prefix = stats.getDuels();
+        if (AbyssStatsFetcher.INSTANCE.getNickedPlayers().contains(uuid)) {
+            if (HyModConfig.INSTANCE.getShowNickedIndicatorInTablist()) {
+                prefix =
+                        //? if = 1.8.9-forge {
+                        //new ChatComponentText(HyModConfig.INSTANCE.getNickedIndicatorTextAboveNametag());
+                        //?} else {
+                        Component.literal(HyModConfig.INSTANCE.getNickedIndicatorTextAboveNametag());
+                //?}
+            }
+        } else {
+            if (HypixelPackets.INSTANCE.getInBedwars() && HyModConfig.INSTANCE.getShowBedwarsStarsInTablist()) {
+                prefix = stats.getBedwars();
+            } else if (HypixelPackets.INSTANCE.getInSkywars() && HyModConfig.INSTANCE.getShowSkywarsStarsInTablist()) {
+                prefix = stats.getSkywars();
+            } else if (HypixelPackets.INSTANCE.getInDuels() && HyModConfig.INSTANCE.getShowDuelsDivisionInTablist()) {
+                prefix = stats.getDuels();
+            }
         }
 
         if (prefix != null) cir.setReturnValue(
                 //? if = 1.8.9-forge {
                 /*prefix.createCopy().appendSibling(new ChatComponentText(" ")).appendText(original).getFormattedText()
-                *///?} else {
+                 *///?} else {
                 prefix.copy().append(Component.literal(" ")).append(original)
                 //?}
         );

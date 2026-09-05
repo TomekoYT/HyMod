@@ -519,6 +519,42 @@ object HyModConfig : Config(
     )
     var networkLevelTextAboveNametag = "§9Level§f: §e"
 
+    @Switch(
+        //? if = 1.8.9-forge {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Show Nicked Indicator In Tablist",
+        category = CATEGORY_NETWORK,
+        subcategory = SUBCATEGORY_NETWORK_STATS
+    )
+    var showNickedIndicatorInTablist = true
+
+    @Switch(
+        //? if = 1.8.9-forge {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Show Nicked Indicator Above Nametag",
+        category = CATEGORY_NETWORK,
+        subcategory = SUBCATEGORY_NETWORK_STATS
+    )
+    var showNickedIndicatorAboveNametag = true
+
+    @Text(
+        //? if = 1.8.9-forge {
+        /*name
+            *///?} else {
+        title
+            //?}
+        = "Nicked Indicator Text Above Nametag",
+        category = CATEGORY_NETWORK,
+        subcategory = SUBCATEGORY_NETWORK_STATS
+    )
+    var nickedIndicatorTextAboveNametag = "§5[NICKED]"
+
 
     //? if = 1.8.9-forge {
     /*@Exclude
