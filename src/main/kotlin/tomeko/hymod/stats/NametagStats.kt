@@ -22,6 +22,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents as Le
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font
 import net.minecraft.network.chat.Component
+import net.minecraft.world.scores.DisplaySlot
 //?}
 import tomeko.hymod.config.HyModConfig
 import tomeko.hymod.location.HypixelPackets
@@ -39,7 +40,7 @@ object NametagStats {
     }
 
     private const val MAX_DISTANCE = 32.0
-    private const val HEIGHT_OFFSET = 0.35
+    private const val HEIGHT_OFFSET = 0.1
     private const val BASE_SCALE = 0.025f
     private const val MIN_DISTANCE = 1.0
     const val NAMETAG_OFFSET = -15f
@@ -225,7 +226,18 @@ object NametagStats {
                 *///?} else {
                 player.bbHeight
             //?}
-            val y = relativeY + playerHeight + HEIGHT_OFFSET
+
+            val hasBelowNameObjective =
+            //? if = 1.8.9-forge {
+                    /*player.worldScoreboard.getObjectiveInDisplaySlot(2) != null
+                *///?} else {
+                level.scoreboard.getDisplayObjective(DisplaySlot.BELOW_NAME) != null
+            //?}
+
+            var objectiveCorrection = 0.3
+            if (hasBelowNameObjective && distanceSquared < 100.0) objectiveCorrection *= 2
+
+            val y = relativeY + HEIGHT_OFFSET + playerHeight + objectiveCorrection
 
             val scale =
                 (BASE_SCALE * (0.75 + 0.25 * (1.0 - 1.0.coerceAtMost(0.0.coerceAtLeast((distance - MIN_DISTANCE) / (MAX_DISTANCE - MIN_DISTANCE)))))).toFloat()
@@ -390,7 +402,7 @@ object NametagStats {
                 )
                 //?}
 
-                offset -= 10
+                offset -= 11
             }
 
             //? if = 1.8.9-forge {
