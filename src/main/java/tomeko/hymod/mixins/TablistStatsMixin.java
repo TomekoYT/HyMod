@@ -18,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import tomeko.hymod.config.HyModConfig;
 import tomeko.hymod.location.HypixelPackets;
 import tomeko.hymod.stats.HypixelStatsFetcher;
+import java.util.UUID;
 
 @Mixin(
         //? if = 1.8.9-forge {
@@ -55,14 +56,14 @@ public abstract class TablistStatsMixin {
                 //?}
                 = cir.getReturnValue();
 
-        String uuid =
+        UUID uuid =
                 //? if = 1.8.9-forge {
-                /*info.getGameProfile().getId().toString();
+                /*info.getGameProfile().getId();
                  *///?} else {
-                info.getProfile().id().toString();
+                info.getProfile().id();
         //?}
 
-        HypixelStatsFetcher.CachedStats stats = HypixelStatsFetcher.INSTANCE.getCachedStats(uuid);
+        HypixelStatsFetcher.CachedStats stats = HypixelStatsFetcher.INSTANCE.getCachedStats(uuid.toString());
 
         //? if = 1.8.9-forge {
         /*IChatComponent prefix
@@ -70,7 +71,7 @@ public abstract class TablistStatsMixin {
         Component prefix
                 //?}
                 = null;
-        if (HypixelStatsFetcher.INSTANCE.getNickedPlayers().contains(uuid)) {
+        if (uuid.version() == 1) {
             if (HyModConfig.INSTANCE.getShowNickedIndicatorInTablist()) {
                 prefix =
                         //? if = 1.8.9-forge {

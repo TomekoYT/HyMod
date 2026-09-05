@@ -59,11 +59,13 @@ object TablistStats {
         ) {
             val uuid =
             //? if = 1.8.9-forge {
-                    /*info.gameProfile.id.toString()
+                    /*info.gameProfile.id
                     *///?} else {
-                info.profile.id.toString()
+                info.profile.id
             //?}
-            HypixelStatsFetcher.requestStats(uuid)
+
+            if (uuid.version() == 4)
+                HypixelStatsFetcher.requestStats(uuid.toString())
         }
     }
 }

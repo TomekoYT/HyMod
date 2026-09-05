@@ -66,8 +66,6 @@ object HypixelStatsFetcher {
     private val pendingRequests = ConcurrentHashMap<String, CompletableFuture<JsonObject?>>()
     private val rateLimitedUntil = ConcurrentHashMap<String, Long>()
 
-    val nickedPlayers = ConcurrentHashMap.newKeySet<String>()
-
     private const val CACHE_TTL_MS = 120_000L
     private const val FAILURE_TTL_MS = 15_000L
 
@@ -128,11 +126,6 @@ object HypixelStatsFetcher {
                         Debug.log("Abyss API rate limited request for $uuid (HTTP 429), falling back to Bordic")
 
                         getBordicPlayerData(uuid)
-                    } else if (responseCode == HttpURLConnection.HTTP_NOT_FOUND) {
-                        nickedPlayers.add(uuid)
-
-                        Debug.log("Abyss API request not found for $uuid")
-                        null
                     } else if (responseCode != HttpURLConnection.HTTP_OK) {
                         Debug.log("Abyss API request failed for $uuid (HTTP $responseCode)")
                         null
@@ -174,10 +167,7 @@ object HypixelStatsFetcher {
 
             val responseCode = connection.responseCode
 
-            if (responseCode == HttpURLConnection.HTTP_NOT_FOUND) {
-                Debug.log("Bordic API request not found for $uuid")
-                null
-            } else if (responseCode != HttpURLConnection.HTTP_OK) {
+            if (responseCode != HttpURLConnection.HTTP_OK) {
                 Debug.log("Bordic API request failed for $uuid (HTTP $responseCode)")
                 null
             } else {

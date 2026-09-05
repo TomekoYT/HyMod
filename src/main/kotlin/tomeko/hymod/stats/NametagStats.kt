@@ -186,15 +186,15 @@ object NametagStats {
 
             val uuid =
             //? if = 1.8.9-forge {
-                    /*player.uniqueID.toString()
+                    /*player.uniqueID
                 *///?} else {
-                player.stringUUID
+                player.uuid
             //?}
 
-            val cached = HypixelStatsFetcher.getCachedStats(uuid)
+            val cached = HypixelStatsFetcher.getCachedStats(uuid.toString())
             val lines = mutableListOf<Component>()
 
-            if (HypixelStatsFetcher.nickedPlayers.contains(uuid)) {
+            if (uuid.version() == 1) {
                 if (HyModConfig.showNickedIndicatorAboveNametag) {
                     lines.add(
                         //? if = 1.8.9-forge {
