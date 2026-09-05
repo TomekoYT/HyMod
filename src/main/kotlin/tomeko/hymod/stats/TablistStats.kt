@@ -1,7 +1,14 @@
 package tomeko.hymod.stats
 
+//? if = 1.8.9-forge {
+/*import net.minecraft.client.Minecraft
+import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import net.minecraftforge.fml.common.gameevent.TickEvent
+*///?} else {
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.minecraft.client.Minecraft
+//?}
 import tomeko.hymod.config.HyModConfig
 import tomeko.hymod.location.HypixelPackets
 
@@ -35,10 +42,27 @@ object TablistStats {
                     )
         ) return
 
-        val connection = Minecraft.getInstance().connection ?: return
+        val connection =
+            //? if = 1.8.9-forge {
+            /*Minecraft.getMinecraft().thePlayer?.sendQueue
+            *///?} else {
+            Minecraft.getInstance().connection
+            //?}
+                ?: return
 
-        for (info in connection.onlinePlayers) {
-            val uuid = info.profile.id.toString()
+        for (info in
+        //? if = 1.8.9-forge {
+        /*connection.playerInfoMap
+        *///?} else {
+        connection.onlinePlayers
+        //?}
+        ) {
+            val uuid =
+                //? if = 1.8.9-forge {
+                /*info.gameProfile.id.toString()
+                *///?} else {
+                info.profile.id.toString()
+                //?}
             AbyssStatsFetcher.requestStats(uuid)
         }
     }

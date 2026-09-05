@@ -2,9 +2,17 @@ package tomeko.hymod.stats
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+//? if = 1.8.9-forge {
+/*import net.minecraft.util.ChatComponentText
+import net.minecraft.util.ChatStyle
+import net.minecraft.util.EnumChatFormatting as ChatFormatting
+import net.minecraft.util.EnumChatFormatting.*
+import net.minecraft.util.IChatComponent as Component
+*///?} else {
 import net.minecraft.ChatFormatting
 import net.minecraft.ChatFormatting.*
 import net.minecraft.network.chat.Component
+//?}
 import tomeko.hymod.config.HyModConfig
 import tomeko.hymod.location.DuelsMode
 import tomeko.hymod.location.DuelsModeType
@@ -68,11 +76,9 @@ object AbyssStatsFetcher {
             val ttl = if (cached.json != null) CACHE_TTL_MS else FAILURE_TTL_MS
 
             if (now - cached.fetchedAt < ttl) {
-                Debug.log("Abyss cache hit for $uuid")
                 return CompletableFuture.completedFuture(cached.json)
             }
 
-            Debug.log("Abyss cache expired for $uuid")
             statsCache.remove(uuid, cached)
         }
 
@@ -115,7 +121,12 @@ object AbyssStatsFetcher {
                         null
                     } else {
                         val body = connection.inputStream.bufferedReader().use { it.readText() }
-                        val root = JsonParser.parseString(body).asJsonObject
+                        val root =
+                            //? if = 1.8.9-forge {
+                            /*JsonParser().parse(body).asJsonObject
+                            *///?} else {
+                            JsonParser.parseString(body).asJsonObject
+                            //?}
                         val result = root.getAsJsonObject("player")
 
                         Debug.log("Abyss API request succeeded for $uuid")
@@ -777,28 +788,60 @@ object AbyssStatsFetcher {
                 }
             )
 
-            Component.literal(divisionText)
+            //? if = 1.8.9-forge {
+            /*ChatComponentText(
+                *///?} else {
+                Component.literal(
+                //?}
+                divisionText
+            )
         }
     }
 
     private fun formatStars(text: String, vararg colors: ChatFormatting): Component {
-        val result = Component.empty()
+        val result =
+            //? if = 1.8.9-forge {
+            /*ChatComponentText("")
+        *///?} else {
+        Component.empty()
+        //?}
         text.forEachIndexed { i, char ->
             val color = if (i < colors.size) colors[i] else colors.last()
+            //? if = 1.8.9-forge {
+            /*result.appendSibling(ChatComponentText(char.toString()).setChatStyle(ChatStyle().setColor(color)))
+            *///?} else {
             result.append(Component.literal(char.toString()).withStyle(color))
+            //?}
         }
         return result
     }
 
     private fun formatStarsObfuscated(text: String, vararg colors: ChatFormatting): Component {
-        val result = Component.empty()
+        val result =
+            //? if = 1.8.9-forge {
+            /*ChatComponentText("")
+        *///?} else {
+        Component.empty()
+        //?}
         text.forEachIndexed { i, char ->
             val color = if (i < colors.size) colors[i] else colors.last()
 
             if (i == 0 || i == text.length - 1)
-                result.append(Component.literal(char.toString()).withStyle(OBFUSCATED, color))
+            //? if = 1.8.9-forge {
+                /*result.appendSibling(
+                    ChatComponentText(char.toString()).setChatStyle(
+                        ChatStyle().setColor(color).setObfuscated(true)
+                    )
+                )
+            *///?} else {
+            result.append(Component.literal(char.toString()).withStyle(OBFUSCATED, color))
+            //?}
             else
-                result.append(Component.literal(char.toString()).withStyle(color))
+            //? if = 1.8.9-forge {
+                /*result.appendSibling(ChatComponentText(char.toString()).setChatStyle(ChatStyle().setColor(color)))
+            *///?} else {
+            result.append(Component.literal(char.toString()).withStyle(color))
+            //?}
         }
         return result
     }

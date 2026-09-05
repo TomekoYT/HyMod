@@ -478,6 +478,9 @@ object HyModConfig : Config(
     *///?}
     private const val CATEGORY_NETWORK = "Network"
 
+    //? if = 1.8.9-forge {
+    /*@Exclude
+    *///?}
     private const val SUBCATEGORY_NETWORK_STATS = "Stats"
 
     @Switch(

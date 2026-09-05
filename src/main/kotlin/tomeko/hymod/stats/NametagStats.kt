@@ -1,5 +1,16 @@
 package tomeko.hymod.stats
 
+//? if = 1.8.9-forge {
+/*import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.Gui
+import net.minecraft.client.renderer.GlStateManager
+import net.minecraft.util.ChatComponentText
+import net.minecraft.util.IChatComponent as Component
+import net.minecraftforge.client.event.RenderWorldLastEvent
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import net.minecraftforge.common.MinecraftForge
+import org.lwjgl.opengl.GL11
+*///?} else {
 import com.mojang.math.Axis
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 //? if >= 26.1-fabric {
@@ -12,92 +23,211 @@ import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents as Le
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font
 import net.minecraft.network.chat.Component
+//?}
 import tomeko.hymod.config.HyModConfig
 import tomeko.hymod.location.HypixelPackets
 import kotlin.math.sqrt
 
 object NametagStats {
     fun register() {
-        //? if >= 26.1-fabric {
+        //? if = 1.8.9-forge {
+        /*MinecraftForge.EVENT_BUS.register(this)
+        *///?} elif >= 26.1-fabric {
         LevelRenderEvents.COLLECT_SUBMITS.register(::render)
         //?} else {
-        /*LevelRenderEvents.AFTER_ENTITIES.register(::render)
-        *///?}
+        //LevelRenderEvents.AFTER_ENTITIES.register(::render)
+        //?}
     }
 
     private const val MAX_DISTANCE = 32.0
     private const val HEIGHT_OFFSET = 0.35
     private const val BASE_SCALE = 0.025f
     private const val MIN_DISTANCE = 1.0
+    const val NAMETAG_OFFSET = -15f
 
-    private fun render(context: LevelRenderContext) {
-        val mc = Minecraft.getInstance()
-        val level = mc.level ?: return
+    //? if = 1.8.9-forge {
+    /*@SubscribeEvent
+    *///?}
+    fun render(
+        //? if = 1.8.9-forge {
+        /*event: RenderWorldLastEvent,
+        *///?} else {
+        context: LevelRenderContext
+        //?}
+    ) {
+        val mc =
+            //? if = 1.8.9-forge {
+            /*Minecraft.getMinecraft()
+        *///?} else {
+        Minecraft.getInstance()
+        //?}
+        val level =
+            //? if = 1.8.9-forge {
+            /*mc.theWorld
+            *///?} else {
+            mc.level
+            //?}
+                ?: return
 
-        val camera =
-            //? if >= 26.1-fabric {
+        val players =
+            //? if = 1.8.9-forge {
+            /*level.playerEntities
+        *///?} else {
+        level.players()
+        //?}
+
+        for (player in players) {
+            if (//? if = 1.8.9-forge {
+                /*!player.isEntityAlive
+                *///?} else {
+                !player.isAlive
+                //?}
+                || player.isInvisible
+            ) continue
+
+            val playerX =
+                //? if = 1.8.9-forge {
+                /*player.posX
+            *///?} else {
+            player.x
+            //?}
+
+            val playerY =
+                //? if = 1.8.9-forge {
+                /*player.posY
+            *///?} else {
+            player.y
+            //?}
+
+            val playerZ =
+                //? if = 1.8.9-forge {
+                /*player.posZ
+            *///?} else {
+            player.z
+            //?}
+
+            val playerLastX =
+                //? if = 1.8.9-forge {
+                /*player.lastTickPosX
+            *///?} else {
+            player.xo
+            //?}
+
+            val playerLastY =
+                //? if = 1.8.9-forge {
+                /*player.lastTickPosY
+            *///?} else {
+            player.yo
+            //?}
+
+            val playerLastZ =
+                //? if = 1.8.9-forge {
+                /*player.lastTickPosZ
+            *///?} else {
+            player.zo
+            //?}
+
+            val camera =
+                //? if = 1.8.9-forge {
+                /*mc.renderManager
+            *///?} elif >= 26.1-fabric {
             context.levelState().cameraRenderState
-        //?} else {
-        /*context.worldState().cameraRenderState
-        *///?}
+            //?} else {
+            //context.worldState().cameraRenderState
+            //?}
 
-        for (player in level.players()) {
-            val uuid = player.stringUUID
+            val cameraX =
+                //? if = 1.8.9-forge {
+                /*camera.viewerPosX
+            *///?} else {
+            camera.pos.x
+            //?}
 
-            if (!player.isAlive || player.isInvisible) {
-                continue
-            }
+            val cameraY =
+                //? if = 1.8.9-forge {
+                /*camera.viewerPosY
+            *///?} else {
+            camera.pos.y
+            //?}
 
-            val tickDelta = mc.deltaTracker.getGameTimeDeltaPartialTick(false)
+            val cameraZ =
+                //? if = 1.8.9-forge {
+                /*camera.viewerPosZ
+            *///?} else {
+            camera.pos.z
+            //?}
 
-            val x = player.xo + (player.x - player.xo) * tickDelta - camera.pos.x
-            val relativeY = player.yo + (player.y - player.yo) * tickDelta - camera.pos.y
-            val z = player.zo + (player.z - player.zo) * tickDelta - camera.pos.z
+            val tickDelta =
+                //? if = 1.8.9-forge {
+                /*event.partialTicks
+            *///?} else {
+            mc.deltaTracker.getGameTimeDeltaPartialTick(false)
+            //?}
+
+            val x = playerLastX + (playerX - playerLastX) * tickDelta - cameraX
+            val relativeY = playerLastY + (playerY - playerLastY) * tickDelta - cameraY
+            val z = playerLastZ + (playerZ - playerLastZ) * tickDelta - cameraZ
 
             val distanceSquared = x * x + relativeY * relativeY + z * z
             if (distanceSquared > MAX_DISTANCE * MAX_DISTANCE) continue
 
             val distance = sqrt(distanceSquared)
 
-            val y = relativeY + player.bbHeight + HEIGHT_OFFSET
+            val playerHeight =
+                //? if = 1.8.9-forge {
+                /*player.height
+            *///?} else {
+            player.bbHeight
+            //?}
+            val y = relativeY + playerHeight + HEIGHT_OFFSET
 
             val scale =
                 (BASE_SCALE * (0.75 + 0.25 * (1.0 - 1.0.coerceAtMost(0.0.coerceAtLeast((distance - MIN_DISTANCE) / (MAX_DISTANCE - MIN_DISTANCE)))))).toFloat()
 
-            val matrices =
-                //? if >= 26.1-fabric {
-                context.poseStack()
-            //?} else {
-            /*context.matrices()
-            *///?}
-
-            matrices.pushPose()
-
-            matrices.translate(x, y, z)
-            matrices.mulPose(camera.orientation)
-            matrices.mulPose(Axis.YP.rotationDegrees(180.0f))
-            matrices.scale(-scale, -scale, scale)
+            val uuid =
+                //? if = 1.8.9-forge {
+                /*player.uniqueID.toString()
+            *///?} else {
+            player.stringUUID
+            //?}
 
             val cached = AbyssStatsFetcher.getCachedStats(uuid)
             val lines = mutableListOf<Component>()
 
             if (HypixelPackets.inBedwars && HyModConfig.showBedwarsStarsAboveNametag) {
                 cached.bedwars?.let { bedwars ->
-                    lines.add(Component.literal(HyModConfig.bedwarsTextAboveNametag).append(bedwars))
+                    lines.add(
+                        //? if = 1.8.9-forge {
+                        /*ChatComponentText(HyModConfig.bedwarsTextAboveNametag).appendSibling(bedwars)
+                        *///?} else {
+                        Component.literal(HyModConfig.bedwarsTextAboveNametag).append(bedwars)
+                        //?}
+                    )
                 }
             }
 
             if (HypixelPackets.inSkywars && HyModConfig.showSkywarsStarsAboveNametag) {
                 cached.skywars?.let { skywars ->
-                    lines.add(Component.literal(HyModConfig.skywarsTextAboveNametag).append(skywars))
+                    lines.add(
+                        //? if = 1.8.9-forge {
+                        /*ChatComponentText(HyModConfig.skywarsTextAboveNametag).appendSibling(skywars)
+                        *///?} else {
+                        Component.literal(HyModConfig.skywarsTextAboveNametag).append(skywars)
+                        //?}
+                    )
                 }
             }
 
             if (HypixelPackets.inDuels && HyModConfig.showDuelsDivisionAboveNametag) {
                 cached.duels?.let { division ->
                     lines.add(
-                        Component.literal(HypixelPackets.duelsMode.modeName + HyModConfig.duelsTextAboveNametag)
-                            .append(division)
+                        //? if = 1.8.9-forge {
+                        /*ChatComponentText(HypixelPackets.duelsMode.modeName + HyModConfig.duelsTextAboveNametag).appendSibling(
+                            division
+                        )
+                        *///?} else {
+                        Component.literal(HypixelPackets.duelsMode.modeName + HyModConfig.duelsTextAboveNametag).append(division)
+                        //?}
                     )
                 }
             }
@@ -109,24 +239,90 @@ object NametagStats {
                 && (!shouldCheckNetworkLevel || HyModConfig.showNetworkLevelWithOtherNametagStats)
             ) {
                 cached.level?.let { networkLevel ->
-                    lines.add(Component.literal(HyModConfig.networkLevelTextAboveNametag + networkLevel))
+                    lines.add(
+                        //? if = 1.8.9-forge {
+                        /*ChatComponentText(HyModConfig.networkLevelTextAboveNametag + networkLevel)
+                        *///?} else {
+                        Component.literal(HyModConfig.networkLevelTextAboveNametag + networkLevel)
+                        //?}
+                    )
                 }
             }
 
-            val submitNodeCollector =
-                //? if >= 26.1-fabric {
-                context.submitNodeCollector()
-            //?} else {
-            /*context.commandQueue()
+            //? if = 1.8.9-forge {
+            /*GlStateManager.pushMatrix()
+            GlStateManager.translate(x, y, z)
+
+            GlStateManager.rotate(-camera.playerViewY, 0.0f, 1.0f, 0.0f)
+            GlStateManager.rotate(camera.playerViewX, 1.0f, 0.0f, 0.0f)
+            GlStateManager.scale(-scale, -scale, scale)
+
+            GlStateManager.disableDepth()
+            GlStateManager.depthMask(false)
+            GlStateManager.enableBlend()
+            GlStateManager.tryBlendFuncSeparate(
+                GL11.GL_SRC_ALPHA,
+                GL11.GL_ONE_MINUS_SRC_ALPHA,
+                GL11.GL_ONE,
+                GL11.GL_ZERO
+            )
+            *///?} else {
+            val matrices =
+            //? if >= 26.1-fabric {
+                    context.poseStack()
+                //?} else {
+                /*context.matrices()
             *///?}
+
+            matrices.pushPose()
+
+            matrices.translate(x, y, z)
+            matrices.mulPose(camera.orientation)
+            matrices.mulPose(Axis.YP.rotationDegrees(180.0f))
+            matrices.scale(-scale, -scale, scale)
+            val submitNodeCollector =
+            //? if >= 26.1-fabric {
+                    context.submitNodeCollector()
+                //?} else {
+                /*context.commandQueue()
+            *///?}
+            //?}
 
             var offset = 0
 
             for (text in lines) {
+                val width =
+                    //? if = 1.8.9-forge {
+                    /*mc.fontRendererObj.getStringWidth(text.formattedText)
+                *///?} else {
+                mc.font.width(text)
+            //?}
+
+                //? if = 1.8.9-forge {
+                /*val paddingX = 2
+                val paddingY = 1
+                val textHeight = 9
+
+                Gui.drawRect(
+                    -width / 2 - paddingX,
+                    (NAMETAG_OFFSET + offset - paddingY).toInt(),
+                    width / 2 + paddingX,
+                    (NAMETAG_OFFSET + offset + textHeight + paddingY).toInt(),
+                    0x50000000
+                )
+
+                mc.fontRendererObj.drawString(
+                    text.formattedText,
+                    -width / 2.0f,
+                    NAMETAG_OFFSET + offset,
+                    0xFFFFFFFF.toInt(),
+                    true
+                )
+                *///?} else {
                 submitNodeCollector.submitText(
                     matrices,
-                    -mc.font.width(text) / 2.0f,
-                    -15f + offset,
+                    -width / 2.0f,
+                    NAMETAG_OFFSET + offset,
                     text.visualOrderText,
                     true,
                     Font.DisplayMode.SEE_THROUGH,
@@ -135,10 +331,20 @@ object NametagStats {
                     0x50000000,
                     0
                 )
+                //?}
+
                 offset -= 10
             }
 
+            //? if = 1.8.9-forge {
+            /*GlStateManager.depthMask(true)
+            GlStateManager.enableDepth()
+            GlStateManager.disableBlend()
+
+            GlStateManager.popMatrix()
+            *///?} else {
             matrices.popPose()
+            //?}
         }
     }
 }
