@@ -1,7 +1,7 @@
 package tomeko.hymod.hud
 
 import net.minecraft.client.Minecraft
-//? if = 1.8.9 {
+//? if = 1.8.9-forge {
 /*import cc.polyfrost.oneconfig.config.annotations.*
 import cc.polyfrost.oneconfig.config.core.OneColor
 import cc.polyfrost.oneconfig.hud.BasicHud
@@ -13,7 +13,7 @@ import net.minecraft.init.Items
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 *///?} else {
-//? if >= 26.1 {
+//? if >= 26.1-fabric {
 import net.minecraft.client.gui.GuiGraphicsExtractor
 //?} else {
 /*import net.minecraft.client.gui.GuiGraphics as GuiGraphicsExtractor
@@ -32,63 +32,63 @@ import tomeko.hymod.location.HypixelPackets
 import tomeko.hymod.utils.ItemTracker
 
 class BedwarsResourceDisplay
-//? if = 1.8.9 {
+//? if = 1.8.9-forge {
 /*: BasicHud(true)
 *///?} else {
     : LegacyHud("${Constants.MOD_ID}_bedwars_resource_display.json", "BedWars Resource Display", Category.COMBAT)
 //?}
 {
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@Exclude
     *///?}
     companion object {
-        //? if >= 1.21.11 {
+        //? if >= 1.21.11-fabric {
         fun register() {
             HudManager.register(BedwarsResourceDisplay(), Constants.MOD_ID, Constants.MOD_ICON)
         }
         //?}
 
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*@Exclude
         *///?}
         private val IRON: Item =
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
                 /*Items.iron_ingot
             *///?} else {
             Items.IRON_INGOT
         //?}
 
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*@Exclude
         *///?}
         private val GOLD: Item =
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
                 /*Items.gold_ingot
             *///?} else {
             Items.GOLD_INGOT
         //?}
 
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*@Exclude
         *///?}
         private val DIAMOND: Item =
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
                 /*Items.diamond
             *///?} else {
             Items.DIAMOND
         //?}
 
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*@Exclude
         *///?}
         private val EMERALD: Item =
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
                 /*Items.emerald
             *///?} else {
             Items.EMERALD
         //?}
 
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*@Exclude
         *///?}
         val items = mutableListOf(
@@ -98,7 +98,7 @@ class BedwarsResourceDisplay
             EMERALD
         )
 
-        //? if >= 1.21.11 {
+        //? if >= 1.21.11-fabric {
         private const val CATEGORY_GENERAL = "General"
         private const val SUBCATEGORY_GENERAL = "General"
         private const val SUBCATEGORY_RESOURCES = "Resources"
@@ -106,7 +106,7 @@ class BedwarsResourceDisplay
         //?}
     }
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@Dropdown(
         name = "Text Type",
         options = ["No Shadow", "Shadow", "Full Shadow"]
@@ -139,7 +139,7 @@ class BedwarsResourceDisplay
     //?}
 
     @Slider(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -147,7 +147,7 @@ class BedwarsResourceDisplay
         = "Item Padding",
         min = 0f,
         max = 10f
-        //? if >= 1.21.11 {
+        //? if >= 1.21.11-fabric {
         , step = 0.1f,
         category = CATEGORY_GENERAL,
         subcategory = SUBCATEGORY_GENERAL
@@ -156,7 +156,7 @@ class BedwarsResourceDisplay
     var itemPadding = 5f
 
     @Slider(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -164,7 +164,7 @@ class BedwarsResourceDisplay
         = "Icon Padding",
         min = 0f,
         max = 10f
-        //? if >= 1.21.11 {
+        //? if >= 1.21.11-fabric {
         , step = 0.1f,
         category = CATEGORY_GENERAL,
         subcategory = SUBCATEGORY_GENERAL
@@ -173,13 +173,13 @@ class BedwarsResourceDisplay
     var iconPadding = 5f
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
             //?}
         = "Show Iron"
-        //? if >= 1.21.11 {
+        //? if >= 1.21.11-fabric {
         , category = CATEGORY_GENERAL,
         subcategory = SUBCATEGORY_RESOURCES
         //?}
@@ -187,13 +187,13 @@ class BedwarsResourceDisplay
     var showIron = true
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
             //?}
         = "Show Gold"
-        //? if >= 1.21.11 {
+        //? if >= 1.21.11-fabric {
         , category = CATEGORY_GENERAL,
         subcategory = SUBCATEGORY_RESOURCES
         //?}
@@ -201,13 +201,13 @@ class BedwarsResourceDisplay
     var showGold = true
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
             //?}
         = "Show Diamond"
-        //? if >= 1.21.11 {
+        //? if >= 1.21.11-fabric {
         , category = CATEGORY_GENERAL,
         subcategory = SUBCATEGORY_RESOURCES
         //?}
@@ -215,13 +215,13 @@ class BedwarsResourceDisplay
     var showDiamond = true
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
             //?}
         = "Show Emerald"
-        //? if >= 1.21.11 {
+        //? if >= 1.21.11-fabric {
         , category = CATEGORY_GENERAL,
         subcategory = SUBCATEGORY_RESOURCES
         //?}
@@ -229,13 +229,13 @@ class BedwarsResourceDisplay
     var showEmerald = true
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
             //?}
         = "Show Inventory"
-        //? if >= 1.21.11 {
+        //? if >= 1.21.11-fabric {
         , category = CATEGORY_GENERAL,
         subcategory = SUBCATEGORY_RESOURCES
         //?}
@@ -243,13 +243,13 @@ class BedwarsResourceDisplay
     var showInventory = true
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
             //?}
         = "Show Ender Chest"
-        //? if >= 1.21.11 {
+        //? if >= 1.21.11-fabric {
         , category = CATEGORY_GENERAL,
         subcategory = SUBCATEGORY_RESOURCES
         //?}
@@ -257,20 +257,20 @@ class BedwarsResourceDisplay
     var showEnderChest = true
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
             //?}
         = "Show Total"
-        //? if >= 1.21.11 {
+        //? if >= 1.21.11-fabric {
         , category = CATEGORY_GENERAL,
         subcategory = SUBCATEGORY_RESOURCES
         //?}
     )
     var showTotal = true
 
-    //? if >= 1.21.11 {
+    //? if >= 1.21.11-fabric {
     @Switch(
         title = "Show Background",
         category = CATEGORY_BACKGROUND
@@ -293,17 +293,17 @@ class BedwarsResourceDisplay
     var backgroundRadius = 5f
     //?}
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@Exclude
     *///?}
     private var actualWidth = 1f
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@Exclude
     *///?}
     private var actualHeight = 1f
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*override fun draw(
         matrices: UMatrixStack,
         x: Float,
@@ -316,7 +316,7 @@ class BedwarsResourceDisplay
     //?}
     {
         if (
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*!example
         *///?} else {
             !HudManager.isEditing
@@ -327,7 +327,7 @@ class BedwarsResourceDisplay
         ) return
 
         val mc =
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
                 /*Minecraft.getMinecraft()
             *///?} else {
             Minecraft.getInstance()
@@ -342,7 +342,7 @@ class BedwarsResourceDisplay
 
             longestWidth = maxOf(
                 longestWidth,
-                //? if = 1.8.9 {
+                //? if = 1.8.9-forge {
                 /*mc.fontRendererObj.getStringWidth(
                     *///?} else {
                 mc.font.width(
@@ -357,7 +357,7 @@ class BedwarsResourceDisplay
             if (showItem(item)) size++
         }
 
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*UGraphics.GL.pushMatrix()
         UGraphics.GL.scale(scale, scale, 1f)
         UGraphics.GL.translate(x / scale, y / scale, 0f)
@@ -365,7 +365,7 @@ class BedwarsResourceDisplay
         mcCtx.pose().pushMatrix()
         //?}
 
-        //? if >= 1.21.11 {
+        //? if >= 1.21.11-fabric {
         if (background) {
             mcCtx.fill(
                 -backgroundRadius.toInt(),
@@ -386,12 +386,12 @@ class BedwarsResourceDisplay
             val iconX = 0
             val textX = (iconSize + iconPadding).toInt()
 
-            //? if = 1.8.9 {
+            //? if = 1.8.9-forge {
             /*RenderHelper.enableGUIStandardItemLighting()
             mc.renderItem.zLevel = 200f
             *///?}
 
-            //? if = 1.8.9 {
+            //? if = 1.8.9-forge {
             /*mc.renderItem.renderItemAndEffectIntoGUI(stack, iconX, itemY)
             mc.renderItem.renderItemOverlayIntoGUI(
                 mc.fontRendererObj,
@@ -401,7 +401,7 @@ class BedwarsResourceDisplay
                 ""
             )
             *///?} else {
-            //? if >= 26.1 {
+            //? if >= 26.1-fabric {
             mcCtx.item(
             //?} else {
             /*mcCtx.renderItem(
@@ -412,11 +412,11 @@ class BedwarsResourceDisplay
             )
             //?}
 
-            //? if = 1.8.9 {
+            //? if = 1.8.9-forge {
             /*RenderHelper.disableStandardItemLighting()
             *///?}
 
-            //? if = 1.8.9 {
+            //? if = 1.8.9-forge {
             /*TextRenderer.drawScaledString(
                 getText(item),
                 textX.toFloat(),
@@ -429,7 +429,7 @@ class BedwarsResourceDisplay
             val textY = itemY + (16 - mc.font.lineHeight) / 2
 
             if (textShadow) {
-                //? if >= 26.1 {
+                //? if >= 26.1-fabric {
                 mcCtx.text(
                 //?} else {
                 /*mcCtx.drawString(
@@ -443,7 +443,7 @@ class BedwarsResourceDisplay
                 )
             }
 
-            //? if >= 26.1 {
+            //? if >= 26.1-fabric {
             mcCtx.text(
             //?} else {
             /*mcCtx.drawString(
@@ -460,7 +460,7 @@ class BedwarsResourceDisplay
             i++
         }
 
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*UGraphics.GL.popMatrix()
         *///?} else {
         mcCtx.pose().popMatrix()
@@ -470,7 +470,7 @@ class BedwarsResourceDisplay
         actualHeight = size * offset - itemPadding
     }
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*override fun getWidth(scale: Float, example: Boolean): Float =
         actualWidth * scale
 

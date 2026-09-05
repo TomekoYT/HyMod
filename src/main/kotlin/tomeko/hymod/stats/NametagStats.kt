@@ -2,7 +2,7 @@ package tomeko.hymod.stats
 
 import com.mojang.math.Axis
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
-//? if >= 26.1 {
+//? if >= 26.1-fabric {
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext
 import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents
 //?} else {
@@ -18,7 +18,7 @@ import kotlin.math.sqrt
 
 object NametagStats {
     fun register() {
-        //? if >= 26.1 {
+        //? if >= 26.1-fabric {
         LevelRenderEvents.COLLECT_SUBMITS.register(::render)
         //?} else {
         /*LevelRenderEvents.AFTER_ENTITIES.register(::render)
@@ -35,7 +35,7 @@ object NametagStats {
         val level = mc.level ?: return
 
         val camera =
-            //? if >= 26.1 {
+            //? if >= 26.1-fabric {
             context.levelState().cameraRenderState
         //?} else {
         /*context.worldState().cameraRenderState
@@ -65,7 +65,7 @@ object NametagStats {
                 (BASE_SCALE * (0.75 + 0.25 * (1.0 - 1.0.coerceAtMost(0.0.coerceAtLeast((distance - MIN_DISTANCE) / (MAX_DISTANCE - MIN_DISTANCE)))))).toFloat()
 
             val matrices =
-                //? if >= 26.1 {
+                //? if >= 26.1-fabric {
                 context.poseStack()
             //?} else {
             /*context.matrices()
@@ -114,7 +114,7 @@ object NametagStats {
             }
 
             val submitNodeCollector =
-                //? if >= 26.1 {
+                //? if >= 26.1-fabric {
                 context.submitNodeCollector()
             //?} else {
             /*context.commandQueue()

@@ -1,6 +1,6 @@
 package tomeko.hymod.config
 
-//? if = 1.8.9 {
+//? if = 1.8.9-forge {
 /*import cc.polyfrost.oneconfig.config.Config
 import cc.polyfrost.oneconfig.config.annotations.*
 import cc.polyfrost.oneconfig.config.core.OneColor
@@ -12,13 +12,13 @@ import org.polyfrost.compose.render.PolyColor
 import org.polyfrost.oneconfig.api.config.v1.Config
 import org.polyfrost.oneconfig.api.config.v1.annotations.*
 //?}
-//? if = 1.8.9 {
-//import tomeko.hymod.hud.BedwarsResourceDisplay
-//?}
+//? if = 1.8.9-forge {
+/*import tomeko.hymod.hud.BedwarsResourceDisplay
+*///?}
 import tomeko.hymod.utils.Constants
 
 object HyModConfig : Config(
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*Mod(
         Constants.MOD_NAME,
         ModType.HYPIXEL,
@@ -32,7 +32,7 @@ object HyModConfig : Config(
     Category.HYPIXEL
     //?}
 ) {
-    //? if >= 1.21.11 {
+    //? if >= 1.21.11-fabric {
     val DEPENDENCIES: List<Pair<String, List<String>>> = listOf(
         "coordsWaypointsEnabled" to listOf(
             "coordsWaypointsBoxColor",
@@ -52,7 +52,7 @@ object HyModConfig : Config(
     //?}
 
     fun register() {
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*initialize()
         *///?} else {
         preload()
@@ -64,18 +64,18 @@ object HyModConfig : Config(
         //?}
     }
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@Exclude
     *///?}
     private const val CATEGORY_BEDWARS = "BedWars"
 
-    //? if = 1.8.9 {
-    //@Exclude
-    //?}
+    //? if = 1.8.9-forge {
+    /*@Exclude
+    *///?}
     private const val SUBCATEGORY_SHOP = "Shop"
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -88,13 +88,13 @@ object HyModConfig : Config(
     var middleClickInBedwarsShop = true
 
 
-    //? if = 1.8.9 {
-    //@Exclude
-    //?}
+    //? if = 1.8.9-forge {
+    /*@Exclude
+    *///?}
     private const val SUBCATEGORY_BEDWARS_STATS = "Stats"
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -106,7 +106,7 @@ object HyModConfig : Config(
     var showBedwarsStarsInTablist = true
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -118,7 +118,7 @@ object HyModConfig : Config(
     var showBedwarsStarsAboveNametag = true
 
     @Text(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -130,12 +130,12 @@ object HyModConfig : Config(
     var bedwarsTextAboveNametag = "§fBed§cWars§f: "
 
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@Exclude
     *///?}
     private const val SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY = "Resource Display"
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@HUD(
         name = SUBCATEGORY_BEDWARS_RESOURCE_DISPLAY,
         category = CATEGORY_BEDWARS
@@ -151,18 +151,18 @@ object HyModConfig : Config(
     //?}
 
 
-    //? if = 1.8.9 {
-    //@Exclude
-    //?}
+    //? if = 1.8.9-forge {
+    /*@Exclude
+    *///?}
     private const val CATEGORY_SKYWARS = "SkyWars"
 
-    //? if = 1.8.9 {
-    //@Exclude
-    //?}
+    //? if = 1.8.9-forge {
+    /*@Exclude
+    *///?}
     private const val SUBCATEGORY_SKYWARS_STATS = "Stats"
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -174,7 +174,7 @@ object HyModConfig : Config(
     var showSkywarsStarsInTablist = true
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -186,7 +186,7 @@ object HyModConfig : Config(
     var showSkywarsStarsAboveNametag = true
 
     @Text(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -198,18 +198,18 @@ object HyModConfig : Config(
     var skywarsTextAboveNametag = "§bSky§aWars§f: "
 
 
-    //? if = 1.8.9 {
-    //@Exclude
-    //?}
+    //? if = 1.8.9-forge {
+    /*@Exclude
+    *///?}
     private const val CATEGORY_DUELS = "Duels"
 
-    //? if = 1.8.9 {
-    //@Exclude
-    //?}
+    //? if = 1.8.9-forge {
+    /*@Exclude
+    *///?}
     private const val SUBCATEGORY_DUELS_STATS = "Stats"
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -221,7 +221,7 @@ object HyModConfig : Config(
     var showDuelsDivisionInTablist = true
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -233,7 +233,7 @@ object HyModConfig : Config(
     var showDuelsDivisionAboveNametag = true
 
     @Text(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -245,7 +245,7 @@ object HyModConfig : Config(
     var duelsTextAboveNametag = " §3Duels§f: "
 
     @Text(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -257,7 +257,7 @@ object HyModConfig : Config(
     var overallDuelsTextAboveNametag = "§eOverall"
 
     @Text(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -269,7 +269,7 @@ object HyModConfig : Config(
     var skywarsDuelsTextAboveNametag = "§bSky§aWars"
 
     @Text(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -281,7 +281,7 @@ object HyModConfig : Config(
     var theBridgeDuelsTextAboveNametag = "§5The Bridge"
 
     @Text(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -293,7 +293,7 @@ object HyModConfig : Config(
     var bedwarsDuelsTextAboveNametag = "§fBed§cWars"
 
     @Text(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -305,7 +305,7 @@ object HyModConfig : Config(
     var classicDuelsTextAboveNametag = "§fClassic"
 
     @Text(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -317,7 +317,7 @@ object HyModConfig : Config(
     var uhcDuelsTextAboveNametag = "§6UHC"
 
     @Text(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -329,7 +329,7 @@ object HyModConfig : Config(
     var sumoDuelsTextAboveNametag = "§bSumo"
 
     @Text(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -341,7 +341,7 @@ object HyModConfig : Config(
     var bowDuelsTextAboveNametag = "§6Bow"
 
     @Text(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -353,7 +353,7 @@ object HyModConfig : Config(
     var megaWallsDuelsTextAboveNametag = "§8Mega Walls"
 
     @Text(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -365,7 +365,7 @@ object HyModConfig : Config(
     var parkourDuelsTextAboveNametag = "§eParkour"
 
     @Text(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -377,7 +377,7 @@ object HyModConfig : Config(
     var quakecraftDuelsTextAboveNametag = "§7Quakecraft"
 
     @Text(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -389,7 +389,7 @@ object HyModConfig : Config(
     var spleefDuelsTextAboveNametag = "§9Spleef"
 
     @Text(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -401,7 +401,7 @@ object HyModConfig : Config(
     var opDuelsTextAboveNametag = "§5OP"
 
     @Text(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -413,7 +413,7 @@ object HyModConfig : Config(
     var blitzDuelsTextAboveNametag = "§6Blitz"
 
     @Text(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -425,7 +425,7 @@ object HyModConfig : Config(
     var comboDuelsTextAboveNametag = "§cCombo"
 
     @Text(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -437,7 +437,7 @@ object HyModConfig : Config(
     var boxingDuelsTextAboveNametag = "§4Boxing"
 
     @Text(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -449,18 +449,18 @@ object HyModConfig : Config(
     var noDebuffDuelsTextAboveNametag = "§dNoDebuff"
 
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@Exclude
     *///?}
     private const val CATEGORY_ARCADE = "Arcade"
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@Exclude
     *///?}
     private const val SUBCATEGORY_FARM_HUNT = "Farm Hunt"
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -473,7 +473,7 @@ object HyModConfig : Config(
     var dangerousTauntWaypointEnabled = true
 
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@Exclude
     *///?}
     private const val CATEGORY_NETWORK = "Network"
@@ -481,7 +481,7 @@ object HyModConfig : Config(
     private const val SUBCATEGORY_NETWORK_STATS = "Stats"
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -493,7 +493,7 @@ object HyModConfig : Config(
     var showNetworkLevelAboveNametag = true
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -505,7 +505,7 @@ object HyModConfig : Config(
     var showNetworkLevelWithOtherNametagStats = true
 
     @Text(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -517,13 +517,13 @@ object HyModConfig : Config(
     var networkLevelTextAboveNametag = "§9Level§f: §e"
 
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@Exclude
     *///?}
     private const val SUBCATEGORY_MIDDLE_CLICK_GUI_ITEMS = "Middle Click GUI Items in Lobby"
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -536,18 +536,18 @@ object HyModConfig : Config(
     var middleClickInLobby = true
 
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@Exclude
     *///?}
     private const val CATEGORY_CHAT = "Chat"
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@Exclude
     *///?}
     private const val SUBCATEGORY_WHITE_CHAT_MESSAGES = "White Chat Messages"
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -560,7 +560,7 @@ object HyModConfig : Config(
     var whitePrivateMessagesEnabled = true
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -572,13 +572,13 @@ object HyModConfig : Config(
     )
     var whiteNoRankMessagesEnabled = true
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@Exclude
     *///?}
     private const val SUBCATEGORY_HIDE_GUILD_MOTD = "Hide Guild MOTD"
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -590,13 +590,13 @@ object HyModConfig : Config(
     )
     var hideGuildMOTDEnabled = false
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@Exclude
     *///?}
     private const val SUBCATEGORY_MVP_EMOJIS = "MVP++ Emojis"
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -608,13 +608,13 @@ object HyModConfig : Config(
     )
     var mvpEmojisEnabled = true
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@Exclude
     *///?}
     private const val SUBCATEGORY_SENDCOORDS_COMMAND = "/sendcoords Command"
 
     @Dropdown(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -631,13 +631,13 @@ object HyModConfig : Config(
     )
     var sendcoordsMode = 1
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@Exclude
     *///?}
     private const val SUBCATEGORY_COORDS_WAYPOINTS = "Coords Waypoints"
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -650,20 +650,20 @@ object HyModConfig : Config(
     var coordsWaypointsEnabled = true
 
     @Color(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
             //?}
         = "Box Color",
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*allowAlpha = true,
         *///?}
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS
     )
     var coordsWaypointsBoxColor =
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
             /*OneColor(
             *///?} else {
         PolyColor(
@@ -672,20 +672,20 @@ object HyModConfig : Config(
         )
 
     @Color(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
             //?}
         = "Beam Color",
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*allowAlpha = true,
         *///?}
         category = CATEGORY_CHAT,
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS
     )
     var coordsWaypointsBeamColor =
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
             /*OneColor(
             *///?} else {
         PolyColor(
@@ -694,7 +694,7 @@ object HyModConfig : Config(
         )
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -706,13 +706,13 @@ object HyModConfig : Config(
     var coordsWaypointsRenderOwner = true
 
     @Color(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
             //?}
         = "Owner Color",
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*allowAlpha = false,
         *///?} else {
         alpha = false,
@@ -721,7 +721,7 @@ object HyModConfig : Config(
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS
     )
     var coordsWaypointsOwnerColor =
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
             /*OneColor(
             *///?} else {
         PolyColor(
@@ -730,7 +730,7 @@ object HyModConfig : Config(
         )
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -742,13 +742,13 @@ object HyModConfig : Config(
     var coordsWaypointsRenderText = true
 
     @Color(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
             //?}
         = "Text Color",
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*allowAlpha = false,
         *///?} else {
         alpha = false,
@@ -757,7 +757,7 @@ object HyModConfig : Config(
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS
     )
     var coordsWaypointsTextColor =
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
             /*OneColor(
             *///?} else {
         PolyColor(
@@ -766,7 +766,7 @@ object HyModConfig : Config(
         )
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -778,13 +778,13 @@ object HyModConfig : Config(
     var coordsWaypointsRenderDistance = true
 
     @Color(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
             //?}
         = "Distance Text Color",
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*allowAlpha = false,
         *///?} else {
         alpha = false,
@@ -793,7 +793,7 @@ object HyModConfig : Config(
         subcategory = SUBCATEGORY_COORDS_WAYPOINTS
     )
     var coordsWaypointsDistanceTextColor =
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
             /*OneColor(
             *///?} else {
         PolyColor(
@@ -802,7 +802,7 @@ object HyModConfig : Config(
         )
 
     @Slider(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title
@@ -811,7 +811,7 @@ object HyModConfig : Config(
         min = 0f,
         max = 120f,
         step =
-            //? if = 1.8.9{
+            //? if = 1.8.9-forge{
             /*1
         *///?} else {
             1f
@@ -822,19 +822,19 @@ object HyModConfig : Config(
     )
     var coordsWaypointsTime = 60
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@Exclude
     *///?}
     private const val CATEGORY_DEBUG = "Debug"
 
     @Info(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*text
             *///?} else {
         title
             //?}
         = "Probably should stay disabled",
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*type = InfoType.WARNING,
         *///?}
         category = CATEGORY_DEBUG
@@ -842,7 +842,7 @@ object HyModConfig : Config(
     var debugModeInfo: Nothing? = null
 
     @Switch(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*name
             *///?} else {
         title

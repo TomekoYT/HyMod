@@ -7,24 +7,24 @@ import tomeko.hymod.location.HypixelPackets
 
 object TablistStats {
     fun register() {
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*MinecraftForge.EVENT_BUS.register(this)
         *///?} else {
         ClientTickEvents.END_CLIENT_TICK.register(this::onTick)
         //?}
     }
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@SubscribeEvent
     *///?}
     fun onTick(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*event: TickEvent.ClientTickEvent
         *///?} else {
         mc: Minecraft
         //?}
     ) {
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*if (event.phase != TickEvent.Phase.END) return
         *///?}
 

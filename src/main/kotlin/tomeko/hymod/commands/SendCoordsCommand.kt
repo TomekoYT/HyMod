@@ -1,6 +1,6 @@
 package tomeko.hymod.commands
 
-//? if = 1.8.9 {
+//? if = 1.8.9-forge {
 /*import net.minecraft.client.Minecraft
 import net.minecraft.client.entity.EntityPlayerSP
 import net.minecraft.command.CommandBase
@@ -11,7 +11,7 @@ import com.mojang.brigadier.arguments.StringArgumentType
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
 import net.minecraft.client.Minecraft
 import net.minecraft.client.player.LocalPlayer
-//? if >= 26.1 {
+//? if >= 26.1-fabric {
 import net.fabricmc.fabric.api.client.command.v2.ClientCommands.argument
 import net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal
 //?} else {
@@ -23,14 +23,14 @@ import tomeko.hymod.config.HyModConfig
 import tomeko.hymod.location.HypixelPackets
 
 object SendCoordsCommand
-//? if = 1.8.9 {
+//? if = 1.8.9-forge {
 /*: CommandBase()
 *///?}
 {
     private const val COMMAND_NAME = "sendcoords"
 
     fun register() {
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*ClientCommandHandler.instance.registerCommand(this)
         *///?} else {
         ClientCommandRegistrationCallback.EVENT.register { dispatcher, _ ->
@@ -52,7 +52,7 @@ object SendCoordsCommand
         //?}
     }
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*override fun getCommandName(): String = COMMAND_NAME
 
     override fun getCommandUsage(sender: ICommandSender): String =
@@ -76,28 +76,28 @@ object SendCoordsCommand
             else convertToMode(HyModConfig.sendcoordsMode)
         )
 
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*val player: EntityPlayerSP = Minecraft.getMinecraft().thePlayer
         *///?} else {
         val player: LocalPlayer = Minecraft.getInstance().player!!
         //?}
 
         val x =
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
                 /*player.posX.toInt()
             *///?} else {
             player.x.toInt()
         //?}
 
         val y =
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
                 /*player.posY.toInt()
             *///?} else {
             player.y.toInt()
         //?}
 
         val z =
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
                 /*player.posZ.toInt()
             *///?} else {
             player.z.toInt()
@@ -110,7 +110,7 @@ object SendCoordsCommand
             message = "$prefix $message"
         }
 
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*player.sendChatMessage(message)
         *///?} else {
         player.connection.sendChat(message)

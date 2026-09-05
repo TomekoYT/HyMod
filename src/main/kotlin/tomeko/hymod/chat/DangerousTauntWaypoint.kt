@@ -1,7 +1,7 @@
 package tomeko.hymod.chat
 
 import net.minecraft.client.Minecraft
-//? if = 1.8.9 {
+//? if = 1.8.9-forge {
 /*import cc.polyfrost.oneconfig.config.core.OneColor
 import net.minecraft.block.Block
 import net.minecraft.client.multiplayer.WorldClient
@@ -28,7 +28,7 @@ import tomeko.hymod.utils.removeFormatting
 
 object DangerousTauntWaypoint {
     private val AIR: Block =
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
             /*Blocks.air
         *///?} else {
         Blocks.AIR
@@ -37,26 +37,26 @@ object DangerousTauntWaypoint {
     private const val SECONDS = 15
 
     fun register() {
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*MinecraftForge.EVENT_BUS.register(this)
         *///?} else {
         ClientReceiveMessageEvents.GAME.register(DangerousTauntWaypoint::onChat)
         //?}
     }
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@SubscribeEvent
 *///?}
 
     fun onChat(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*event: ClientChatReceivedEvent
         *///?} else {
         component: Component,
         fromActionBar: Boolean
         //?}
     ) {
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*if (event.type.toInt() == 2 || event.message == null)
         *///?} else {
         if (fromActionBar)
@@ -66,7 +66,7 @@ object DangerousTauntWaypoint {
         if (!HyModConfig.debugModeEnabled && (!HyModConfig.dangerousTauntWaypointEnabled || !HypixelPackets.inFarmHunt)) return
 
         val message =
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
                 /*event.message.unformattedText
                 *///?} else {
             component.string
@@ -90,7 +90,7 @@ object DangerousTauntWaypoint {
 
         val boxColor = when (animal) {
             "Chicken" ->
-                //? if = 1.8.9 {
+                //? if = 1.8.9-forge {
                 /*OneColor(
                 *///?} else {
                 PolyColor(
@@ -99,7 +99,7 @@ object DangerousTauntWaypoint {
                 )
 
             "Sheep" ->
-                //? if = 1.8.9 {
+                //? if = 1.8.9-forge {
                 /*OneColor(
                 *///?} else {
                 PolyColor(
@@ -108,7 +108,7 @@ object DangerousTauntWaypoint {
                 )
 
             "Pig" ->
-                //? if = 1.8.9 {
+                //? if = 1.8.9-forge {
                 /*OneColor(
                 *///?} else {
                 PolyColor(
@@ -117,7 +117,7 @@ object DangerousTauntWaypoint {
                 )
 
             "Cow" ->
-                //? if = 1.8.9 {
+                //? if = 1.8.9-forge {
                 /*OneColor(
                 *///?} else {
                 PolyColor(
@@ -126,7 +126,7 @@ object DangerousTauntWaypoint {
                 )
 
             "Horse" ->
-                //? if = 1.8.9 {
+                //? if = 1.8.9-forge {
                 /*OneColor(
                 *///?} else {
                 PolyColor(
@@ -135,7 +135,7 @@ object DangerousTauntWaypoint {
                 )
 
             "Ocelot" ->
-                //? if = 1.8.9 {
+                //? if = 1.8.9-forge {
                 /*OneColor(
                 *///?} else {
                 PolyColor(
@@ -144,7 +144,7 @@ object DangerousTauntWaypoint {
                 )
 
             "Wolf" ->
-                //? if = 1.8.9 {
+                //? if = 1.8.9-forge {
                 /*OneColor(
                 *///?} else {
                 PolyColor(
@@ -153,7 +153,7 @@ object DangerousTauntWaypoint {
                 )
 
             "Donkey" ->
-                //? if = 1.8.9 {
+                //? if = 1.8.9-forge {
                 /*OneColor(
                 *///?} else {
                 PolyColor(
@@ -162,7 +162,7 @@ object DangerousTauntWaypoint {
                 )
 
             else ->
-                //? if = 1.8.9 {
+                //? if = 1.8.9-forge {
                 /*OneColor(
                 *///?} else {
                 PolyColor(
@@ -173,7 +173,7 @@ object DangerousTauntWaypoint {
 
         val beamColor = when (animal) {
             "Chicken" ->
-                //? if = 1.8.9 {
+                //? if = 1.8.9-forge {
                 /*OneColor(
                 *///?} else {
                 PolyColor(
@@ -182,7 +182,7 @@ object DangerousTauntWaypoint {
                 )
 
             "Sheep" ->
-                //? if = 1.8.9 {
+                //? if = 1.8.9-forge {
                 /*OneColor(
                 *///?} else {
                 PolyColor(
@@ -191,7 +191,7 @@ object DangerousTauntWaypoint {
                 )
 
             "Pig" ->
-                //? if = 1.8.9 {
+                //? if = 1.8.9-forge {
                 /*OneColor(
                 *///?} else {
                 PolyColor(
@@ -200,7 +200,7 @@ object DangerousTauntWaypoint {
                 )
 
             "Cow" ->
-                //? if = 1.8.9 {
+                //? if = 1.8.9-forge {
                 /*OneColor(
                 *///?} else {
                 PolyColor(
@@ -209,7 +209,7 @@ object DangerousTauntWaypoint {
                 )
 
             "Horse" ->
-                //? if = 1.8.9 {
+                //? if = 1.8.9-forge {
                 /*OneColor(
                 *///?} else {
                 PolyColor(
@@ -218,7 +218,7 @@ object DangerousTauntWaypoint {
                 )
 
             "Ocelot" ->
-                //? if = 1.8.9 {
+                //? if = 1.8.9-forge {
                 /*OneColor(
                 *///?} else {
                 PolyColor(
@@ -227,7 +227,7 @@ object DangerousTauntWaypoint {
                 )
 
             "Wolf" ->
-                //? if = 1.8.9 {
+                //? if = 1.8.9-forge {
                 /*OneColor(
                 *///?} else {
                 PolyColor(
@@ -236,7 +236,7 @@ object DangerousTauntWaypoint {
                 )
 
             "Donkey" ->
-                //? if = 1.8.9 {
+                //? if = 1.8.9-forge {
                 /*OneColor(
                 *///?} else {
                 PolyColor(
@@ -245,7 +245,7 @@ object DangerousTauntWaypoint {
                 )
 
             else ->
-                //? if = 1.8.9 {
+                //? if = 1.8.9-forge {
                 /*OneColor(
                 *///?} else {
                 PolyColor(
@@ -262,7 +262,7 @@ object DangerousTauntWaypoint {
                 owner = animal,
                 renderOwner = true,
                 ownerColor =
-                    //? if = 1.8.9 {
+                    //? if = 1.8.9-forge {
                     /*OneColor(
                     *///?} else {
                     PolyColor(
@@ -272,7 +272,7 @@ object DangerousTauntWaypoint {
                 text = "",
                 renderText = false,
                 textColor =
-                    //? if = 1.8.9 {
+                    //? if = 1.8.9-forge {
                     /*OneColor(
                     *///?} else {
                     PolyColor(
@@ -281,7 +281,7 @@ object DangerousTauntWaypoint {
                     ),
                 renderDistance = true,
                 distanceTextColor =
-                    //? if = 1.8.9 {
+                    //? if = 1.8.9-forge {
                     /*OneColor(
                     *///?} else {
                     PolyColor(
@@ -294,7 +294,7 @@ object DangerousTauntWaypoint {
     }
 
     private fun getPos(x: Int, z: Int): BlockPos {
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*val world: WorldClient = Minecraft.getMinecraft().theWorld
         *///?} else {
         val world: ClientLevel = Minecraft.getInstance().level!!
@@ -314,7 +314,7 @@ object DangerousTauntWaypoint {
     }
 
     private fun oneHigher(pos: BlockPos): BlockPos =
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
             /*pos.up()
         *///?} else {
         pos.above()

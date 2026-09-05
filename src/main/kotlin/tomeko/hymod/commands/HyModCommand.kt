@@ -1,6 +1,6 @@
 package tomeko.hymod.commands
 
-//? if = 1.8.9 {
+//? if = 1.8.9-forge {
 /*import cc.polyfrost.oneconfig.utils.commands.CommandManager
 import cc.polyfrost.oneconfig.utils.commands.annotations.Command
 import cc.polyfrost.oneconfig.utils.commands.annotations.Main
@@ -12,7 +12,7 @@ import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.minecraft.commands.CommandBuildContext
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import org.polyfrost.oneconfig.utils.v1.dsl.openUI
-//? if >= 26.1 {
+//? if >= 26.1-fabric {
 import net.fabricmc.fabric.api.client.command.v2.ClientCommands.literal
 //?} else {
 /*import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.literal
@@ -22,16 +22,16 @@ import net.minecraft.client.Minecraft
 import tomeko.hymod.config.HyModConfig
 import tomeko.hymod.utils.Constants
 
-//? if = 1.8.9 {
+//? if = 1.8.9-forge {
 /*@Command(value = Constants.MOD_ID)
 *///?}
 object HyModCommand {
-    //? if >= 1.21.11 {
+    //? if >= 1.21.11-fabric {
     private var shouldOpenConfig: Boolean = false
     //?}
 
     fun register() {
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*CommandManager.INSTANCE.registerCommand(this)
         *///?} else {
         ClientCommandRegistrationCallback.EVENT.register { dispatcher: CommandDispatcher<FabricClientCommandSource>, _: CommandBuildContext ->
@@ -54,7 +54,7 @@ object HyModCommand {
         //?}
     }
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@Main
     fun handle() {
         HyModConfig.openGui()

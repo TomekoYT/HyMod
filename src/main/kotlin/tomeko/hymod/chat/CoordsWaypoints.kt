@@ -1,6 +1,6 @@
 package tomeko.hymod.chat
 
-//? if = 1.8.9 {
+//? if = 1.8.9-forge {
 /*import net.minecraft.util.BlockPos
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.common.MinecraftForge
@@ -17,26 +17,26 @@ import tomeko.hymod.utils.removeFormatting
 
 object CoordsWaypoints {
     fun register() {
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*MinecraftForge.EVENT_BUS.register(this)
         *///?} else {
         ClientReceiveMessageEvents.GAME.register(CoordsWaypoints::onChatReceive)
         //?}
     }
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@SubscribeEvent
     *///?} else {
     @JvmStatic
     //?}
     fun onChatReceive(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*event: ClientChatReceivedEvent
         *///?} else {
         component: Component, fromActionBar: Boolean
         //?}
     ) {
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*if (event.type.toInt() == 2 || event.message == null) return
         *///?} else {
         if (fromActionBar) return
@@ -45,7 +45,7 @@ object CoordsWaypoints {
         if (!HyModConfig.coordsWaypointsEnabled) return
 
         val message =
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
                 /*event.message.unformattedText
                 *///?} else {
             component.string

@@ -2,10 +2,8 @@ package tomeko.hymod.stats
 
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.minecraft.ChatFormatting
 import net.minecraft.ChatFormatting.*
-import net.minecraft.client.Minecraft
 import net.minecraft.network.chat.Component
 import tomeko.hymod.config.HyModConfig
 import tomeko.hymod.location.DuelsMode
@@ -48,7 +46,8 @@ object AbyssStatsFetcher {
     private val networkExecutor = ThreadPoolExecutor(
         NETWORK_POOL_SIZE,
         NETWORK_POOL_SIZE,
-        30L, TimeUnit.SECONDS,
+        30L,
+        TimeUnit.SECONDS,
         LinkedBlockingQueue(),
         networkThreadFactory
     ).apply { allowCoreThreadTimeOut(true) }

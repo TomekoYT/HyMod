@@ -1,6 +1,6 @@
 package tomeko.hymod.utils
 
-//? if = 1.8.9 {
+//? if = 1.8.9-forge {
 /*import net.minecraft.block.Block
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.inventory.GuiChest
@@ -35,7 +35,7 @@ import java.util.regex.Pattern
 
 object ItemTracker {
     private val mc =
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
             /*Minecraft.getMinecraft()
         *///?} else {
         Minecraft.getInstance()
@@ -43,7 +43,7 @@ object ItemTracker {
 
     private var lastServerName: String? = null
     private var lastBlock: Block =
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
             /*Blocks.chest
         *///?} else {
         Blocks.CHEST
@@ -60,7 +60,7 @@ object ItemTracker {
     )
 
     fun register() {
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*MinecraftForge.EVENT_BUS.register(this)
         *///?} else {
         ClientTickEvents.END_CLIENT_TICK.register { _ ->
@@ -76,15 +76,15 @@ object ItemTracker {
         resetTracker()
     }
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@SubscribeEvent
     *///?}
     fun scanInventory(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*event: TickEvent.ClientTickEvent
         *///?}
     ) {
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*if (event.phase != TickEvent.Phase.END || mc.thePlayer == null || mc.thePlayer.inventory == null) return
         *///?} else {
         if (mc.player == null) return
@@ -95,14 +95,14 @@ object ItemTracker {
             newInventory[item] = 0
         }
 
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*val mainInventory: Array<ItemStack?> = mc.thePlayer.inventory.mainInventory
         *///?} else {
         val mainInventory: Inventory = mc.player!!.inventory
         //?}
 
         for (stack in mainInventory) {
-            //? if = 1.8.9 {
+            //? if = 1.8.9-forge {
             /*if (stack == null) continue
             *///?} else {
             if (stack.isEmpty) continue
@@ -111,7 +111,7 @@ object ItemTracker {
             for (item in BedwarsResourceDisplay.items) {
                 if (item == stack.item) {
                     val count =
-                    //? if = 1.8.9 {
+                    //? if = 1.8.9-forge {
                             /*stack.stackSize
                         *///?} else {
                         stack.count
@@ -125,31 +125,31 @@ object ItemTracker {
         inventory = newInventory
     }
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@SubscribeEvent
     *///?}
     fun scanEnderChest(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*event: TickEvent.ClientTickEvent
         *///?}
     ) {
         val screen =
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
                 /*mc.currentScreen
-            *///?} else if >= 26.2 {
+            *///?} else if >= 26.2-fabric {
                 /*mc.gui.screen()
                 *///?} else {
             mc.screen
         //?}
 
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*if (event.phase != TickEvent.Phase.END || screen !is GuiChest || mc.thePlayer.openContainer !is ContainerChest) return
         *///?} else {
         if (screen !is ContainerScreen) return
         //?}
 
         if (lastBlock !=
-            //? if = 1.8.9 {
+            //? if = 1.8.9-forge {
             /*Blocks.ender_chest
         *///?} else {
             Blocks.ENDER_CHEST
@@ -157,7 +157,7 @@ object ItemTracker {
         ) return
 
         val containerInventory =
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
                 /*(mc.thePlayer.openContainer as ContainerChest).lowerChestInventory
             *///?} else {
             screen.menu.container
@@ -170,27 +170,27 @@ object ItemTracker {
 
         for (
         i in 0 until
-                //? if = 1.8.9 {
+                //? if = 1.8.9-forge {
                 /*containerInventory.sizeInventory
         *///?} else {
                 containerInventory.containerSize
 //?}
         ) {
             val stack =
-            //? if = 1.8.9 {
+            //? if = 1.8.9-forge {
                     /*containerInventory.getStackInSlot(i) ?: continue
                 *///?} else {
                 containerInventory.getItem(i)
             //?}
 
-            //? if >= 1.21.11 {
+            //? if >= 1.21.11-fabric {
             if (stack.isEmpty) continue
             //?}
 
             for (item in BedwarsResourceDisplay.items) {
                 if (item == stack.item) {
                     val count =
-                    //? if = 1.8.9 {
+                    //? if = 1.8.9-forge {
                             /*stack.stackSize
                         *///?} else {
                         stack.count
@@ -204,25 +204,25 @@ object ItemTracker {
         enderChest = newEnderChest
     }
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@SubscribeEvent
     *///?}
     fun scanMessage(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*event: ClientChatReceivedEvent
         *///?} else {
         component: Component,
         fromActionBar: Boolean
         //?}
     ) {
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*if (event.type.toInt() == 2 || event.message == null) return
         *///?} else {
         if (fromActionBar) return
         //?}
 
         val message =
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
                 /*event.message.unformattedText
                 *///?} else {
             component.string
@@ -243,7 +243,7 @@ object ItemTracker {
         val id = name.lowercase().replace(" ", "_")
 
         enderChest[
-            //? if = 1.8.9 {
+            //? if = 1.8.9-forge {
             /*Item.getByNameOrId("minecraft:$id")
             *///?} else {
             BuiltInRegistries.ITEM.getValue(
@@ -253,15 +253,15 @@ object ItemTracker {
         ] = amount
     }
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@SubscribeEvent
     *///?}
     fun stopTracking(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*event: TickEvent.ClientTickEvent
         *///?}
     ) {
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*if (event.phase != TickEvent.Phase.END) return
         *///?}
 
@@ -283,39 +283,39 @@ object ItemTracker {
         }
     }
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@SubscribeEvent
     *///?}
     fun trackBlock(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*event: TickEvent.ClientTickEvent
         *///?}
     ) {
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*if (event.phase != TickEvent.Phase.END) return
         *///?}
 
         val lookingAt =
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
                 /*mc.objectMouseOver ?: return
             *///?} else {
             mc.hitResult ?: return
         //?}
 
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*if (lookingAt.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) return
         *///?} else {
         if (lookingAt !is BlockHitResult) return
         //?}
 
         val block =
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
                 /*mc.theWorld?.getBlockState(lookingAt.blockPos)?.block ?: return
             *///?} else {
             mc.level?.getBlockState(lookingAt.blockPos)?.block ?: return
         //?}
 
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*if (block != Blocks.chest && block != Blocks.trapped_chest && block != Blocks.ender_chest) return
         *///?} else {
         if (block != Blocks.CHEST && block != Blocks.TRAPPED_CHEST && block != Blocks.ENDER_CHEST) return

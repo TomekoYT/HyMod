@@ -2,13 +2,13 @@ package tomeko.hymod.utils
 
 import tomeko.hymod.config.HyModConfig
 
-//? if >= 1.21.11 {
+//? if >= 1.21.11-fabric {
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 //?}
 
 object Debug {
-    //? if >= 1.21.11 {
+    //? if >= 1.21.11-fabric {
     private val LOGGER: Logger = LoggerFactory.getLogger(Constants.MOD_ID)
     //?}
 
@@ -19,7 +19,7 @@ object Debug {
     }
 
     fun forceLog(message: String) {
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*kotlin.io.println("[${Constants.MOD_NAME}] $message")
         *///?} else {
         LOGGER.info("[${Constants.MOD_NAME}] $message")

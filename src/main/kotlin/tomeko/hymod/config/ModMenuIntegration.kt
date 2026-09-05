@@ -1,6 +1,6 @@
 package tomeko.hymod.config
 
-//? if >= 1.21.11 {
+//? if >= 1.21.11-fabric {
 import com.terraformersmc.modmenu.api.ConfigScreenFactory
 import com.terraformersmc.modmenu.api.ModMenuApi
 import net.minecraft.client.gui.screens.Screen

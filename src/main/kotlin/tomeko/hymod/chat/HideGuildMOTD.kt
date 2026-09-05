@@ -1,6 +1,6 @@
 package tomeko.hymod.chat
 
-//? if = 1.8.9 {
+//? if = 1.8.9-forge {
 
 /*import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.common.MinecraftForge
@@ -18,28 +18,28 @@ object HideGuildMOTD {
     private var guildMOTD = false
 
     fun register() {
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*MinecraftForge.EVENT_BUS.register(this)
         *///?} else {
         ClientReceiveMessageEvents.ALLOW_GAME.register(HideGuildMOTD::onChatReceive)
         //?}
     }
 
-    //? if = 1.8.9 {
+    //? if = 1.8.9-forge {
     /*@SubscribeEvent
 *///?}
     fun onChatReceive(
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*event: ClientChatReceivedEvent
         *///?} else {
         message: Component, fromActionBar: Boolean
         //?}
     )
-//? if >= 1.21.11 {
+//? if >= 1.21.11-fabric {
             : Boolean
     //?}
     {
-        //? if = 1.8.9 {
+        //? if = 1.8.9-forge {
         /*if (event.type.toInt() == 2 || event.message == null) return
 
         if (shouldCancel(event.message.unformattedText)) {
