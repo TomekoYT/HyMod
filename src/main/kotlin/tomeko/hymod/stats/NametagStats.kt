@@ -95,6 +95,33 @@ object NametagStats {
 
             if (uuid.version() == 4) HypixelStatsFetcher.requestStats(uuid.toString())
 
+
+            if (
+            //? if = 1.8.9-forge {
+            //player.isSneaking
+            //?} else {
+                player.isCrouching
+            //?}
+            ) continue
+
+
+            val isLocalPlayer =
+                player ==
+                        //? if = 1.8.9-forge {
+                        /*mc.thePlayer
+                        *///?} else {
+                        mc.player
+            //?}
+
+            val isFirstPerson =
+            //? if = 1.8.9-forge {
+                    /*mc.gameSettings.thirdPersonView == 0
+                *///?} else {
+                mc.options.cameraType.isFirstPerson
+            //?}
+            if (isLocalPlayer && isFirstPerson) continue
+
+
             val playerX =
             //? if = 1.8.9-forge {
                     /*player.posX
