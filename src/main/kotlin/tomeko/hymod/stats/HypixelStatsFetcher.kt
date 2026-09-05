@@ -89,7 +89,14 @@ object HypixelStatsFetcher {
         val limitedUntil = rateLimitedUntil[uuid]
         if (limitedUntil != null) {
             if (now < limitedUntil) {
-                return CompletableFuture.completedFuture(null)
+                return pendingRequests.computeIfAbsent(uuid) {
+                    CompletableFuture.supplyAsync({
+                        getBordicPlayerData(uuid)
+                    }, networkExecutor).whenComplete { result, _ ->
+                        statsCache[uuid] = CachedRaw(System.currentTimeMillis(), result)
+                        pendingRequests.remove(uuid)
+                    }
+                }
             }
 
             rateLimitedUntil.remove(uuid, limitedUntil)
@@ -120,37 +127,7 @@ object HypixelStatsFetcher {
 
                         Debug.log("Abyss API rate limited request for $uuid (HTTP 429), falling back to Bordic")
 
-                        val fallbackConnection =
-                            URI.create(BORDIC_PLAYER_ENDPOINT + uuid).toURL().openConnection() as HttpURLConnection
-
-                        fallbackConnection.requestMethod = "GET"
-                        fallbackConnection.connectTimeout = CONNECT_TIMEOUT_MS
-                        fallbackConnection.readTimeout = READ_TIMEOUT_MS
-                        fallbackConnection.setRequestProperty("User-Agent", ABYSS_USER_AGENT)
-                        fallbackConnection.setRequestProperty("Accept", "application/json")
-
-                        val fallbackResponseCode = fallbackConnection.responseCode
-
-                        if (fallbackResponseCode == HttpURLConnection.HTTP_NOT_FOUND) {
-                            nickedPlayers.add(uuid)
-
-                            Debug.log("Bordic API request not found for $uuid")
-                            null
-                        } else if (fallbackResponseCode != HttpURLConnection.HTTP_OK) {
-                            Debug.log("Bordic API request failed for $uuid (HTTP $fallbackResponseCode)")
-                            null
-                        } else {
-                            val body = fallbackConnection.inputStream.bufferedReader().use { it.readText() }
-                            val root =
-                            //? if = 1.8.9-forge {
-                                    /*JsonParser().parse(body).asJsonObject
-                                    *///?} else {
-                                JsonParser.parseString(body).asJsonObject
-                            //?}
-
-                            Debug.log("Bordic API fallback succeeded for $uuid")
-                            root.getAsJsonObject("player")
-                        }
+                        getBordicPlayerData(uuid)
                     } else if (responseCode == HttpURLConnection.HTTP_NOT_FOUND) {
                         nickedPlayers.add(uuid)
 
@@ -179,6 +156,46 @@ object HypixelStatsFetcher {
                 statsCache[uuid] = CachedRaw(System.currentTimeMillis(), result)
                 pendingRequests.remove(uuid)
             }
+        }
+    }
+
+    private fun getBordicPlayerData(uuid: String): JsonObject? {
+        return try {
+            Debug.log("Fetching Bordic player data for $uuid")
+
+            val connection =
+                URI.create(BORDIC_PLAYER_ENDPOINT + uuid).toURL().openConnection() as HttpURLConnection
+
+            connection.requestMethod = "GET"
+            connection.connectTimeout = CONNECT_TIMEOUT_MS
+            connection.readTimeout = READ_TIMEOUT_MS
+            connection.setRequestProperty("User-Agent", ABYSS_USER_AGENT)
+            connection.setRequestProperty("Accept", "application/json")
+
+            val responseCode = connection.responseCode
+
+            if (responseCode == HttpURLConnection.HTTP_NOT_FOUND) {
+                Debug.log("Bordic API request not found for $uuid")
+                null
+            } else if (responseCode != HttpURLConnection.HTTP_OK) {
+                Debug.log("Bordic API request failed for $uuid (HTTP $responseCode)")
+                null
+            } else {
+                val body = connection.inputStream.bufferedReader().use { it.readText() }
+
+                val root =
+                //? if = 1.8.9-forge {
+                        /*JsonParser().parse(body).asJsonObject
+                        *///?} else {
+                    JsonParser.parseString(body).asJsonObject
+                //?}
+
+                Debug.log("Bordic API request succeeded for $uuid")
+                root.getAsJsonObject("player")
+            }
+        } catch (e: Exception) {
+            Debug.log("Bordic API request failed for $uuid: ${e::class.simpleName}: ${e.message}")
+            null
         }
     }
 
@@ -272,7 +289,7 @@ object HypixelStatsFetcher {
 
     private fun getHypixelLevel(uuid: String): CompletableFuture<String?> {
         return getAbyssPlayerData(uuid).thenApply { player ->
-            val exp = player?.get("networkExp")?.asDouble ?: return@thenApply null
+            val exp = player?.get("networkExp")?.asDouble ?: 0.0
 
             ((sqrt(exp + 15312.5) - 88.38834764831844) / 35.35533905932738).toInt().toString()
         }
@@ -280,7 +297,7 @@ object HypixelStatsFetcher {
 
     private fun getBedwarsStars(uuid: String): CompletableFuture<Component?> {
         return getAbyssPlayerData(uuid).thenApply { player ->
-            val stars = player?.getAsJsonObject("achievements")?.get("bedwars_level")?.asInt ?: return@thenApply null
+            val stars = player?.getAsJsonObject("achievements")?.get("bedwars_level")?.asInt ?: 0
 
             when {
                 stars >= 10000 -> formatStars("[$stars✥]", BLUE, AQUA, WHITE, WHITE, WHITE, WHITE, RED, DARK_RED)
@@ -649,8 +666,8 @@ object HypixelStatsFetcher {
 
     private fun getSkywarsStars(uuid: String): CompletableFuture<Component?> {
         return getAbyssPlayerData(uuid).thenApply { player ->
-            val exp = player?.getAsJsonObject("stats")?.getAsJsonObject("SkyWars")?.get("skywars_experience")?.asLong
-                ?: return@thenApply null
+            val exp =
+                player?.getAsJsonObject("stats")?.getAsJsonObject("SkyWars")?.get("skywars_experience")?.asLong ?: 0
 
             val stars = when {
                 exp >= 31800 -> 19 + (exp - 26800) / 5000
@@ -751,10 +768,8 @@ object HypixelStatsFetcher {
 
     private fun getDuelsDivision(uuid: String, duelsMode: DuelsMode): CompletableFuture<Component?> {
         return getAbyssPlayerData(uuid).thenApply { player ->
-            val duels = player?.getAsJsonObject("stats")?.getAsJsonObject("Duels")
-                ?: return@thenApply null
-
-            fun wins(field: String): Int = duels.get(field)?.asInt ?: 0
+            fun wins(field: String): Int =
+                player?.getAsJsonObject("stats")?.getAsJsonObject("Duels")?.get(field)?.asInt ?: 0
 
             fun division(duelsMode: DuelsMode, wins: Int): String {
                 return when (duelsMode.modeType) {
@@ -808,7 +823,10 @@ object HypixelStatsFetcher {
             val divisionText = division(
                 duelsMode, when (duelsMode) {
                     DuelsMode.SKYWARS -> wins("sw_duel_wins") + wins("sw_doubles_wins")
-                    DuelsMode.THE_BRIDGE -> wins("bridge_duel_wins") + wins("bridge_doubles_wins") + wins("bridge_threes_wins") + wins("bridge_four_wins")
+                    DuelsMode.THE_BRIDGE -> wins("bridge_duel_wins") + wins("bridge_doubles_wins") + wins("bridge_threes_wins") + wins(
+                        "bridge_four_wins"
+                    )
+
                     DuelsMode.BEDWARS -> wins("bedwars_two_one_duels_wins") + wins("bedwars_two_one_duels_rush_wins")
                     DuelsMode.CLASSIC -> wins("classic_duel_wins") + wins("classic_doubles_wins")
                     DuelsMode.UHC -> wins("uhc_duel_wins") + wins("uhc_doubles_wins") + wins("uhc_threes_wins") + wins("uhc_four_wins")
