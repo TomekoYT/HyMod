@@ -84,6 +84,17 @@ object NametagStats {
                 || player.isInvisible
             ) continue
 
+            val uuid =
+            //? if = 1.8.9-forge {
+                    /*player.uniqueID
+                *///?} else {
+                player.uuid
+            //?}
+
+            if (uuid.version() != 4 && uuid.version() != 1) continue
+
+            if (uuid.version() == 4) HypixelStatsFetcher.requestStats(uuid.toString())
+
             val playerX =
             //? if = 1.8.9-forge {
                     /*player.posX
@@ -182,13 +193,6 @@ object NametagStats {
 
             val scale =
                 (BASE_SCALE * (0.75 + 0.25 * (1.0 - 1.0.coerceAtMost(0.0.coerceAtLeast((distance - MIN_DISTANCE) / (MAX_DISTANCE - MIN_DISTANCE)))))).toFloat()
-
-            val uuid =
-            //? if = 1.8.9-forge {
-                    /*player.uniqueID
-                *///?} else {
-                player.uuid
-            //?}
 
             val cached = HypixelStatsFetcher.getCachedStats(uuid.toString())
             val lines = mutableListOf<Component>()

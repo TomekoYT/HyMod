@@ -64,7 +64,6 @@ class HyMod
         HypixelPackets.register()
 
         NametagStats.register()
-        TablistStats.register()
 
         ItemTracker.register()
         WaypointRenderer.register()
