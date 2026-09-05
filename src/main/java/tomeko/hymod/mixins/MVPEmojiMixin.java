@@ -1,6 +1,6 @@
 package tomeko.hymod.mixins;
 
-//? if = 1.8.9-forge-forge {
+//? if = 1.8.9-forge {
 /*import net.minecraft.client.gui.GuiScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
