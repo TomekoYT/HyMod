@@ -75,9 +75,9 @@ public abstract class TablistStatsMixin {
             if (HyModConfig.INSTANCE.getShowNickedIndicatorInTablist()) {
                 prefix =
                         //? if = 1.8.9-forge {
-                        //new ChatComponentText(HyModConfig.INSTANCE.getNickedIndicatorTextAboveNametag());
+                        //new ChatComponentText(HyModConfig.INSTANCE.getNickedIndicatorText());
                         //?} else {
-                        Component.literal(HyModConfig.INSTANCE.getNickedIndicatorTextAboveNametag());
+                        Component.literal(HyModConfig.INSTANCE.getNickedIndicatorText());
                 //?}
             }
         } else {

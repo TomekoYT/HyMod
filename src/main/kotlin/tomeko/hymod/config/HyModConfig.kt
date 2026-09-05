@@ -549,11 +549,11 @@ object HyModConfig : Config(
             *///?} else {
         title
             //?}
-        = "Nicked Indicator Text Above Nametag",
+        = "Nicked Indicator Text",
         category = CATEGORY_NETWORK,
         subcategory = SUBCATEGORY_NETWORK_STATS
     )
-    var nickedIndicatorTextAboveNametag = "§5[NICKED]"
+    var nickedIndicatorText = "§5[NICKED]"
 
 
     //? if = 1.8.9-forge {

@@ -24,7 +24,6 @@ import net.minecraft.client.gui.Font
 import net.minecraft.network.chat.Component
 //?}
 import tomeko.hymod.config.HyModConfig
-import tomeko.hymod.location.DuelsMode
 import tomeko.hymod.location.HypixelPackets
 import kotlin.math.sqrt
 
@@ -202,7 +201,7 @@ object NametagStats {
                         //?} else {
                         Component.literal(
                             //?}
-                            HyModConfig.nickedIndicatorTextAboveNametag
+                            HyModConfig.nickedIndicatorText
                         )
                     )
                 }
