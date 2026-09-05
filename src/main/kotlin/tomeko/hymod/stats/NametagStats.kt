@@ -43,7 +43,7 @@ object NametagStats {
     private const val HEIGHT_OFFSET = 0.1
     private const val BASE_SCALE = 0.025f
     private const val MIN_DISTANCE = 1.0
-    const val NAMETAG_OFFSET = -15f
+    private const val NAMETAG_OFFSET = -15f
 
     //? if = 1.8.9-forge {
     /*@SubscribeEvent
@@ -420,7 +420,7 @@ object NametagStats {
                     -width / 2.0f,
                     NAMETAG_OFFSET + offset,
                     text.visualOrderText,
-                    true,
+                    false,
                     Font.DisplayMode.NORMAL,
                     0xF000F0,
                     -0x1,
