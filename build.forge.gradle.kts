@@ -112,6 +112,8 @@ tasks.withType(JavaCompile::class) {
 tasks.withType(org.gradle.jvm.tasks.Jar::class) {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
+    exclude("fabric.mod.json")
+
     archiveBaseName.set("$modArchivesName-$modVersion-${minecraftVersion}_forge")
     manifest.attributes.run {
         this["FMLCorePluginContainsFMLMod"] = "true"
@@ -124,6 +126,8 @@ tasks.withType(org.gradle.jvm.tasks.Jar::class) {
 
 tasks.processResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    exclude("fabric.mod.json")
 
     val props = mapOf(
         "mod_id" to modId,
