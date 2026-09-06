@@ -2,8 +2,11 @@ package tomeko.hymod.stats
 
 //? if = 1.8.9-forge {
 /*import net.minecraft.client.Minecraft
+import net.minecraft.client.entity.EntityPlayerSP
 import net.minecraft.client.gui.Gui
 import net.minecraft.client.renderer.GlStateManager
+import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.scoreboard.Team
 import net.minecraft.util.ChatComponentText
 import net.minecraft.util.IChatComponent as Component
 import net.minecraftforge.client.event.RenderWorldLastEvent
@@ -21,8 +24,11 @@ import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents as Le
 *///?}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font
+import net.minecraft.client.player.LocalPlayer
 import net.minecraft.network.chat.Component
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.scores.DisplaySlot
+import net.minecraft.world.scores.Team
 //?}
 import tomeko.hymod.config.HyModConfig
 import tomeko.hymod.location.HypixelPackets
@@ -105,23 +111,23 @@ object NametagStats {
 
             if (uuid.version() == 4) HypixelStatsFetcher.requestStats(uuid.toString())
 
+            val localPlayer =
+            //? if = 1.8.9-forge {
+                    /*mc.thePlayer
+                *///?} else {
+                mc.player
+            //?}
+
 
             if (
-            //? if = 1.8.9-forge {
-            //player.isSneaking
-            //?} else {
+                isNametagHidden(player, localPlayer) ||
+                //? if = 1.8.9-forge {
+                /*player.isSneaking
+            *///?} else {
                 player.isCrouching
             //?}
             ) continue
 
-
-            val isLocalPlayer =
-                player ==
-                        //? if = 1.8.9-forge {
-                        /*mc.thePlayer
-                        *///?} else {
-                        mc.player
-            //?}
 
             val isFirstPerson =
             //? if = 1.8.9-forge {
@@ -129,7 +135,7 @@ object NametagStats {
                 *///?} else {
                 mc.options.cameraType.isFirstPerson
             //?}
-            if (isLocalPlayer && isFirstPerson) continue
+            if (player == localPlayer && isFirstPerson) continue
 
 
             val playerX =
@@ -249,8 +255,8 @@ object NametagStats {
                 if (HyModConfig.showNickedIndicatorAboveNametag) {
                     lines.add(
                         //? if = 1.8.9-forge {
-                        //ChatComponentText(
-                        //?} else {
+                        /*ChatComponentText(
+                            *///?} else {
                         Component.literal(
                             //?}
                             HyModConfig.nickedIndicatorText
@@ -263,9 +269,9 @@ object NametagStats {
                         lines.add(
                             //? if = 1.8.9-forge {
                             /*ChatComponentText(HypixelPackets.duelsMode.modeName + HyModConfig.duelsTextAboveNametag).appendSibling(
-                            division
-                        )
-                        *///?} else {
+                                division
+                            )
+                            *///?} else {
                             Component.literal(HypixelPackets.duelsMode.modeName + HyModConfig.duelsTextAboveNametag)
                                 .append(division)
                             //?}
@@ -278,7 +284,7 @@ object NametagStats {
                         lines.add(
                             //? if = 1.8.9-forge {
                             /*ChatComponentText(HyModConfig.bedwarsTextAboveNametag).appendSibling(bedwars)
-                        *///?} else {
+                            *///?} else {
                             Component.literal(HyModConfig.bedwarsTextAboveNametag).append(bedwars)
                             //?}
                         )
@@ -290,7 +296,7 @@ object NametagStats {
                         lines.add(
                             //? if = 1.8.9-forge {
                             /*ChatComponentText(HyModConfig.skywarsTextAboveNametag).appendSibling(skywars)
-                        *///?} else {
+                            *///?} else {
                             Component.literal(HyModConfig.skywarsTextAboveNametag).append(skywars)
                             //?}
                         )
@@ -310,7 +316,7 @@ object NametagStats {
                         lines.add(
                             //? if = 1.8.9-forge {
                             /*ChatComponentText(HyModConfig.networkLevelTextAboveNametag + networkLevel)
-                        *///?} else {
+                            *///?} else {
                             Component.literal(HyModConfig.networkLevelTextAboveNametag + networkLevel)
                             //?}
                         )
@@ -441,5 +447,56 @@ object NametagStats {
             matrices.popPose()
             //?}
         }
+    }
+
+    private fun isNametagHidden(
+        //? if = 1.8.9-forge {
+        /*player: EntityPlayer,
+        localPlayer: EntityPlayerSP?,
+        *///?} else {
+        player: Player,
+        localPlayer: LocalPlayer?,
+        //?}
+    ): Boolean {
+        val team = player.team ?: return false
+        val teamNametagVisibility = team.nameTagVisibility
+
+        if (teamNametagVisibility ==
+            //? if = 1.8.9-forge {
+            /*Team.EnumVisible.ALWAYS
+        *///?} else {
+            Team.Visibility.ALWAYS
+        //?}
+        ) return false
+
+        if (teamNametagVisibility ==
+            //? if = 1.8.9-forge {
+            /*Team.EnumVisible.NEVER
+        *///?} else {
+            Team.Visibility.NEVER
+        //?}
+        ) return true
+
+        if (localPlayer == null) return false
+
+        if (teamNametagVisibility ==
+            //? if = 1.8.9-forge {
+            /*Team.EnumVisible.HIDE_FOR_OWN_TEAM
+            *///?} else {
+            Team.Visibility.HIDE_FOR_OWN_TEAM
+            //?}
+            && team == localPlayer.team
+        ) return true
+
+        if (teamNametagVisibility ==
+            //? if = 1.8.9-forge {
+            /*Team.EnumVisible.HIDE_FOR_OTHER_TEAMS
+            *///?} else {
+            Team.Visibility.HIDE_FOR_OTHER_TEAMS
+            //?}
+            && team != localPlayer.team
+        ) return true
+
+        return false
     }
 }
