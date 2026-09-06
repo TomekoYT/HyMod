@@ -126,6 +126,14 @@ object NametagStats {
             *///?} else {
                 player.isCrouching
             //?}
+                ||
+                //? if = 1.8.9-forge {
+                //mc.gameSettings.hideGUI
+                //?} else if >= 26.2-fabric {
+                /*mc.gui.hud.isHidden
+                *///?} else {
+                mc.options.hideGui
+                //?}
             ) continue
 
 
